@@ -1,11 +1,12 @@
 <%- include("./partials/header") %>
 <% data.forEach((entry) => { %>
 <div>
-    <h2>
-        <%= entry.StimuliName %>
-    </h2>
+    <div>
+        <span> <%= entry.StimuliName %> </span>
+        <span> <%= entry.Timestamp %> </span>
 
-</div>
-<% }) %>
+    </div>
+    <% }) %>
+    <img src="/images/<%= data[0].StimuliName %>" alt="">
 
-<%- include("./partials/footer") %>
+    <%- include("./partials/footer") %>

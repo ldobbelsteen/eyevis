@@ -1,36 +1,16 @@
-const Client = require("pg").Client;
-const client = new Client({
-  user: "postgres",
-  password: "admin",
-  host: "localhost",
-  port: 5432,
-  database: "dbl",
-});
-
-var app = require("express")();
+var express = require("express");
+var app = express();
+var dataFetch = require("./data");
 const port = 3000;
-var data;
-
+app.use(express.static("public"));
 var bodyParser = require("body-parser");
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-async function execute(res) {
-  try {
-    await client.connect();
-    console.log("Connected succesfully");
-    const results = await client.query("select * from data limit 10");
-    data = results.rows;
-  } catch (err) {
-    console.log(`Something went wrong ${err}`);
-  } finally {
-    await client.end();
-    console.log("Disconnected succesfully");
-  }
-}
-execute();
-
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+  //res.send("banana");
+  var data = await dataFetch();
+  console.table(data);
   res.render("index", { data: data });
 });
 
