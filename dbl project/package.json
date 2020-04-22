@@ -1,0 +1,19 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "testing webapp on node",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js",
+    "table": "node printTable.js"
+  },
+  "author": "eric",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.3",
+    "pg": "^8.0.2"
+  }
+}
