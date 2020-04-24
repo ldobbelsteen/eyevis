@@ -7,7 +7,7 @@ var credentials = {
     user: "postgres",
     database: "postgres",
     password: "postgres",
-    host: "localhost",
+    host: "postgres",
     port: 5432,
 }
 
