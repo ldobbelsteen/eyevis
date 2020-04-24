@@ -1,0 +1,9 @@
+{
+  "name": "eyevis",
+  "main": "main.js",
+  "dependencies": {
+    "pg": "*",
+    "pg-copy-streams": "*",
+    "formidable": "*"
+  }
+}
