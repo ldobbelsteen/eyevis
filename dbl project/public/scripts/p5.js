@@ -4,15 +4,18 @@ function setup() {
 var primitivesToDraw = [];
 function draw() {
   primitivesToDraw.forEach((primitive) => {
+    console.log("biggest bananas");
     primitive.call(this);
   });
   primitivesToDraw = [];
 }
+
 $.get("/data", (data) => {
   console.log(data);
   data.forEach((element) => {
     $("#myContainer").append(`<h1> ${element.StimuliName} </h1>`);
     primitivesToDraw.push(() => {
+      console.log("big bananas");
       ellipse(
         element.MappedFixationPointX,
         element.MappedFixationPointY,
