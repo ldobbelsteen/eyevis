@@ -12,7 +12,7 @@ async function fetchDatabase() {
   const client = new Client(config);
   try {
     await client.connect();
-    res = await client.query(" select * from data limit 10");
+    res = await client.query(" select * from data");
   } catch (err) {
     console.log(err);
   } finally {
