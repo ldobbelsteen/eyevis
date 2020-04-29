@@ -12,6 +12,8 @@ createDirectory(dataDir)
 createDirectory(datasetsDir)
 createDirectory(stimuliDir)
 
+console.log(dataDir, datasetsDir, stimuliDir)
+
 // Create a directory if it doesn't already exist
 function createDirectory(dir) {
     if (! fs.existsSync(dir)) {
@@ -71,6 +73,7 @@ async function addDataset(zip, name) {
         stimuli.forEach((file) => {
             moveFile(file, path.join(stimuliDir, path.basename(file))) // Place the stimuli in the stimuli folder
         })
+        console.log(csv, stimuli)
         emptyDirectory(tmpDir.name) // Empty temporary directory of any remaining files
         tmpDir.removeCallback() // Release the temporary folder
     } catch (err) {
