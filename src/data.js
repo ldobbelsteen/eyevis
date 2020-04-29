@@ -63,9 +63,9 @@ function cutExtension(name) {
 async function addDataset(zip, name) {
     var tmpDir = tmp.dirSync() // Create temporary folder
     console.log(tmpDir.name)
+    console.log(zip)
     try {
         await extract(zip, {dir: tmpDir.name}) // Extract zip file into temporary folder
-        console.log(zip)
         deleteFile(zip) // Delete original zip file
         var csv = glob.sync(tmpDir.name + "/**/*.csv") // Look for csv file
         console.log(csv)
