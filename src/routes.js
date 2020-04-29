@@ -14,8 +14,8 @@ routes.post("/upload", (req, res) => {
     form.parse(req)
     form.on("file", (name, file) => { // When the file is done uploading
         data.addDataset(file.path, file.name) // Add the dataset to the data pool
+        res.redirect("back") // Send the client back to the page from which they uploaded
     })
-    res.redirect("back") // Send the client back to the page from which they uploaded
 })
 
 module.exports = routes
