@@ -1,0 +1,10 @@
+{
+    "dependencies": {
+        "express": "*",
+        "ejs": "*",
+        "formidable": "*",
+        "extract-zip": "*",
+        "tmp": "*",
+        "glob": "*"
+    }
+}

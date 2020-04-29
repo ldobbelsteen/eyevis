@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include("./partials/head") %>
+        <script type="text/javascript" src="/scripts/visualization.js"></script>
+    </head>
+    <body>
+        <header>
+            <%- include("./partials/header") %>
+        </header>
+        <main>
+            <p>Upload .zip file containing a .csv file for the dataset and jpg, png or jpeg files for the stimuli.</p>
+            <form action="/upload" enctype="multipart/form-data" method="post">
+                <input type="file" name="upload">
+                <input type="submit">
+            </form>
+            <br>
+            <div id="visualization"></div>
+        </main>
+        <footer>
+            <%- include("./partials/footer") %>
+        </footer>
+    </body>
+</html>
