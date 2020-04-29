@@ -1,5 +1,5 @@
 var dataset = "metro"
-var stimuli = "20_Paris_S2.jpg"
+var stimuli = "03b_Bordeaux_S2.jpg"
 
 // Download csv file and convert to json
 Papa.parse("/data/datasets/" + dataset, {
