@@ -7,6 +7,18 @@ routes.get("/", (req, res) => {
     res.render("index")
 })
 
+// Serve list of datasets
+routes.get("/datasets", (req, res) => {
+    var datasets = data.listDatasets()
+    res.send(datasets)
+})
+
+// Serve list of stimuli
+routes.get("/stimuli", (req, res) => {
+    var stimuli = data.listStimuli()
+    res.send(stimuli)
+})
+
 // Handle file uploads
 routes.post("/upload", (req, res) => {
     var form = new formidable.IncomingForm()

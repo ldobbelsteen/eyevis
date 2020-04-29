@@ -28,6 +28,18 @@ async function addDataset(name, file) {
     })
 }
 
+// List all datasets available
+function listDatasets() {
+    return fs.readdirSync(datasetsDir)
+}
+
+// List all stimuli available
+function listStimuli() {
+    return fs.readdirSync(stimuliDir)
+}
+
 module.exports = {
-    addDataset: addDataset
+    addDataset: addDataset,
+    listDatasets: listDatasets,
+    listStimuli: listStimuli
 }
