@@ -62,18 +62,20 @@ function cutExtension(name) {
 // The folder structure inside the zip file does not matter
 async function addDataset(zip, name) {
     var tmpDir = tmp.dirSync() // Create temporary folder
+    console.log(tmpDir.name)
     try {
         await extract(zip, {dir: tmpDir.name}) // Extract zip file into temporary folder
         deleteFile(zip) // Delete original zip file
         var csv = glob.sync(tmpDir.name + "/**/*.csv") // Look for csv file
+        console.log(csv)
         csv.forEach((file) => {
             moveFile(file, path.join(datasetsDir, cutExtension(name))) // Place the csv file in the datasets folder
         })
         var stimuli = glob.sync(tmpDir.name + "/**/*.{png,jpg,jpeg}") // Look for stimuli files
+        console.log(stimuli)
         stimuli.forEach((file) => {
             moveFile(file, path.join(stimuliDir, path.basename(file))) // Place the stimuli in the stimuli folder
         })
-        console.log(csv, stimuli)
         emptyDirectory(tmpDir.name) // Empty temporary directory of any remaining files
         tmpDir.removeCallback() // Release the temporary folder
     } catch (err) {
