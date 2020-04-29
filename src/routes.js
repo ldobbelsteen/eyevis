@@ -1,6 +1,6 @@
-var data = require("./data") // Set of functions to manipulate local data, see data.js
-var formidable = require("formidable") // Library for interaction with forms and file uploads
-var routes = require('express').Router() // Create router
+var data = require("./data")
+var formidable = require("formidable")
+var routes = require('express').Router()
 
 // Serve main page
 routes.get('/', (req, res) => {
@@ -13,7 +13,9 @@ routes.post("/upload", (req, res) => {
     form.maxFileSize = 128 * 1024 * 1024 // Maximum upload file size of 128MB
     form.parse(req)
     form.on("file", (name, file) => { // When the file is done uploading
-        data.addDataset(file.path, file.name) // Add the dataset to the data pool
+        var datasetName = file.name.split('.').slice(0, -1).join('.') // Copy the name of the zip file
+        var datasetPath = file.path // Path of the uploaded file
+        data.addDataset(datasetName, datasetPath) // Add the dataset
         res.redirect("back") // Send the client back to the page from which they uploaded
     })
 })

@@ -1,4 +1,5 @@
-var express = require("express") // Web framework for serving web requests
+var express = require("express")
+
 var app = require('express')() // Create an Express instance
 app.set("view engine", "ejs") // Set modular HTML builder
 app.use(express.static("public")) // Default directory for serving files
