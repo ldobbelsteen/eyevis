@@ -4,3 +4,16 @@
 body {
   background: pink;
 }
+
+div.output {
+  position: absolute;
+  text-align: center;
+  width: 80px;
+  height: 75px;
+  padding: 4px;
+  font: 18px comic-sans;
+  background-color: palevioletred;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
