@@ -10,8 +10,9 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 //ROUTES
-app.get("/", (req, res) => {
-  res.render("index");
+app.get("/", async (req, res) => {
+  var data = await dataFetch();
+  res.render("index", { data: data });
 });
 
 app.get("/data", async (req, res) => {
