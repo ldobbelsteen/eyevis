@@ -12,6 +12,8 @@ $.get("/data", (data) => {
     console.log("BANANA NATION");
     $("#dropdown-menu").append(`<option value="#"> ${stimuli}</option>`);
   });
-  //$("#dropdown-menu").selectize();
+  //   $("#dropdown-menu").selectize({
+  //     create: true,
+  //   });
   console.log($(".dropdown-menu"));
 });
