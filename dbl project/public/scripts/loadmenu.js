@@ -10,10 +10,16 @@ $.get("/data", (data) => {
   console.log($(".dropdown-menu"));
   distinct.forEach((stimuli) => {
     console.log("BANANA NATION");
-    $("#dropdown-menu").append(`<option value="#"> ${stimuli}</option>`);
+    $("#dropdown-menu").append(
+      `<option value="${stimuli}"> ${stimuli}</option>`
+    );
   });
   //   $("#dropdown-menu").selectize({
   //     create: true,
   //   });
-  console.log($(".dropdown-menu"));
+  //   $("#dropdown-menu").on("change", function () {
+  //     console.log($(this)[0].value);
+  //   });
+
+  //console.log($(".dropdown-menu"));
 });
