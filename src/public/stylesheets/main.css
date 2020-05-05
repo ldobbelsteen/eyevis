@@ -26,12 +26,16 @@ main {
 }
 
 nav {
-    width: 300px;
+    width: 250px;
     left: 5vw;
     background-color: black;
+    color: white;
+    font-size: 12px;
     position: absolute;
     top: 136px;
+    border-radius: 4px;
     padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .darker-blue {
@@ -56,4 +60,32 @@ select {
     margin-bottom:3px;
 }
 
+.blue-btn {
+    background-color: #AADADD;
+    color: black;
+    width: 100%;
+    text-align: left;
+    margin-top:2px;
+}
 
+.blue-brd {
+    border: 1px solid #AADADD;
+    width: 100%;
+    text-align: left;
+    margin-top: 2.3px;
+}
+
+.menulinks {
+    margin-left: 0;
+    margin-top: 6px; 
+    padding-bottom: 6px;
+}
+
+.invisibleLink {
+    text-decoration: none;
+    color: black;
+}
+.invisibleLink:hover{
+    text-decoration: none;
+    color: black;
+}
