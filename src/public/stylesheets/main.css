@@ -24,11 +24,6 @@ main {
     margin-left: calc(10vw + 220px);
 }
 
-footer {
-    width: 80vw;
-    margin-left: 10vw;
-}
-
 nav {
     width: 200px;
     left: 10vw;
@@ -39,3 +34,12 @@ nav {
     color: #AADADD;
 }
 
+div.info {
+    font-family: inherit;
+    background: palevioletred;
+    position: absolute;
+    text-align: center;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    pointer-events: none;
+}

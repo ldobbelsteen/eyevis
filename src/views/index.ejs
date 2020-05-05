@@ -37,16 +37,20 @@
           </nav>
 
         <main>
-            <p>Upload .zip file containing a .csv file for the dataset and jpg, png or jpeg files for the stimuli.</p>
-            <form action="/upload" enctype="multipart/form-data" method="post">
-                <input type="file" name="upload">
-                <input type="submit">
-            </form>
+            <div>
+                <p>Upload a .zip file containing a .csv file for the dataset and .jpg files for the stimuli. The dataset takes on the name of the .zip file.</p>
+                <form action="/upload" enctype="multipart/form-data" method="post">
+                    <input type="file" name="upload">
+                    <input type="submit">
+                </form>
+            </div>
+            <div>
+                <p>Visualization</p>
+                <select id="datasetsMenu"></select>
+                <select id="stimuliMenu"></select>
+            </div>
             <br>
             <div id="visualization"></div>
         </main>
-        <footer>
-            <%- include("./partials/footer") %>
-        </footer>
     </body>
 </html>
