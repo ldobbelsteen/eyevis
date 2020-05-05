@@ -14,6 +14,21 @@ $.get("/data", (data) => {
       `<option  value="${stimuli}"> ${stimuli}</option>`
     );
   });
+
+  //   var unique2 = [];
+  //   var distinct2 = [];
+  //   data.forEach((element) => {
+  //     if (!unique2[element.user]) {
+  //       distinct2.push(element.user);
+  //       unique2[element.user] = 1;
+  //     }
+  //   });
+  //   console.log($("#person-dropdown"));
+  //   distinct2.forEach((user) => {
+  //     console.log("ORANGE GOOD");
+  //     $("#person-dropdown").append(`<option  value="${user}"> ${user}</option>`);
+  //   });
+
   //   $("#dropdown-menu").selectize({
   //     create: true,
   //   });
