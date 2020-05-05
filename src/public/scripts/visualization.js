@@ -1,5 +1,3 @@
-function visualize(dataset, stimulus) {
-    Papa.parse("/data/datasets/" + dataset, {
 // Global variable for all the data of the current dataset
 var data
 
