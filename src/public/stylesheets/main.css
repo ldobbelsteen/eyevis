@@ -59,7 +59,9 @@ div.info {
 select {
     margin-bottom:3px;
 }
-
+button:focus {
+    outline: 0;
+}
 .blue-btn {
     background-color: #AADADD;
     color: black;
@@ -88,4 +90,12 @@ select {
 .invisibleLink:hover{
     text-decoration: none;
     color: black;
+}
+
+#about {
+    background-color: #D9EDEE;
+    border: 5px solid black;
+    padding:25px;
+    padding-bottom: 20px;
+    text-align: center;
 }

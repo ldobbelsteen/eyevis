@@ -77,12 +77,17 @@
           </nav>
 
         <main id="main">
-            <div>
-                <p>Upload a .zip file containing a .csv file for the dataset and .jpg files for the stimuli. The dataset takes on the name of the .zip file.</p>
+            
+            <div id="about">
+                <p>This tool helps you analyze your eyetracking data by providing four different visualizations you can choose from. <br>
+                    To get started, upload a .zip file containing a .csv file for the dataset and jpg, png or jpeg files for the stimuli.
+                </p>
                 <form action="/upload" enctype="multipart/form-data" method="post">
                     <input type="file" name="upload">
                     <input type="submit">
                 </form>
+                <br>
+                <p>Use the menu to choose your stimulus, navigate between the various types of visualizations, or export a visualization.</p>
             </div>
         
             <br>
