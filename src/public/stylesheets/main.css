@@ -99,3 +99,10 @@ button:focus {
     padding-bottom: 20px;
     text-align: center;
 }
+
+[data-toggle="collapse"][aria-expanded="true"] > .js-rotate-if-collapsed
+        {
+            -webkit-transform: rotate(90deg);
+            -moz-transform:    rotate(90deg);
+            transform:         rotate(90deg);
+        }

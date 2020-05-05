@@ -6,8 +6,8 @@ $(document).ready(function(){
         $main.toggleClass('moveRight')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = $(window).width() * 0.05 + 270
-        var newWidth = $(window).width() * 0.9 - 270
-        $main.animate({width: moveRight ? newWidth : '90vw'}, { duration: 250, queue: false})
+        var smallerWidth = $(window).width() * 0.9 - 270
+        $main.animate({width: moveRight ? smallerWidth : '90vw'}, { duration: 250, queue: false})
         $main.animate({marginLeft: moveRight ? margLeft : '5vw'}, { duration: 250, queue: false})
     })
 
