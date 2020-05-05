@@ -1,6 +1,41 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 
 html, body {
     font-family: 'Montserrat', sans-serif;
-    background-color: gainsboro;
+    background-color: #F0E9ED;
 }
+
+header {
+    display: flex;
+    width: 80vw;
+    background-color: #AADADD;
+    text-align: center;
+    height: 160px;
+    margin-left: 10vw;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid black;
+    margin-top: 10px;
+}
+
+main {
+    width: 80vw;
+    margin-left: calc(10vw + 220px);
+}
+
+footer {
+    width: 80vw;
+    margin-left: 10vw;
+}
+
+nav {
+    width: 200px;
+    left: 10vw;
+    background-color: black;
+}
+
+.darker-blue {
+    color: #AADADD;
+}
+
