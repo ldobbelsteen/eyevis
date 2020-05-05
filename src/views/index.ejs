@@ -16,10 +16,10 @@
             <%- include("./partials/header") %>
         </header>
         
-        <nav class="navbar navbar-inverse position-absolute" role="navigation">
-            <div class="container">
+        <nav class="navbar position-absolute" role="navigation">
+            <div class="container-fluid">
               <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-1" id="menu">
                     <span class="glyphicon glyphicon-align-justify darker-blue"></span> <span class="darker-blue" style="margin-left: 5px;"> Menu</span>
                           </button>
               </div>
@@ -76,7 +76,7 @@
             </div>
           </nav>
 
-        <main>
+        <main id="main">
             <div>
                 <p>Upload a .zip file containing a .csv file for the dataset and .jpg files for the stimuli. The dataset takes on the name of the .zip file.</p>
                 <form action="/upload" enctype="multipart/form-data" method="post">

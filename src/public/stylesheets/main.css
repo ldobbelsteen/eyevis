@@ -17,11 +17,13 @@ header {
     justify-content: center;
     border: 5px solid black;
     margin-top: 10px;
+    font-weight: bolder;
 }
 
 main {
     width: 90vw;
-    margin-left: calc(5vw + 320px);
+    margin-left: 5vw;
+    margin-top: 20px;
 }
 
 nav {
@@ -30,6 +32,7 @@ nav {
     background-color: black;
     position: absolute;
     top: 136px;
+    padding-left: 0 !important;
 }
 
 .darker-blue {
@@ -51,5 +54,7 @@ div.info {
 }
 
 select {
-    margin-botton:3px;
+    margin-bottom:3px;
 }
+
+
