@@ -5,6 +5,8 @@ var data
 // When an entry of the menu is selected, load and process the dataset
 window.onload = () => {
     var menu = $("#datasetsMenu")
+    menu.empty() // Empty any previous entries
+    menu.append($("<option>Loading datasets...</option>")) // Add simple loading text
     $.get("/datasets", (list) => { // Fetch list of datasets
         menu.empty() // Empty loading text
         menu.append($("<option disabled selected value> -- select a dataset -- </option>")) // Default entry
@@ -22,6 +24,8 @@ window.onload = () => {
 // Also put all the stimuli in the dropdown menu
 function fetchDataset(dataset) {
     var menu = $("#stimuliMenu")
+    menu.empty() // Empty any previous entries
+    menu.append($("<option>Loading stimuli...</option>")) // Add simple loading text
     Papa.parse("/data/datasets/" + dataset, { // Download and parse the dataset
         download: true,
         header: true,
