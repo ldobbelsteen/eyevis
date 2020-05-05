@@ -1,5 +1,5 @@
 function setChangeListenger(data) {
-  $("#dropdown-menu").on("change", function () {
+  $("#dropdown-item").on("change", function () {
     filteredData = data.filter(
       (value) => value.StimuliName == $(this)[0].value
     );
@@ -27,7 +27,7 @@ $.get("/data", (data) => {
     .append("div")
     .attr("class", "output")
     .style("opacity", 0);
-
+  console.log("BANONE");
   //DEFAULT START
 
   var filteredData = data.filter(

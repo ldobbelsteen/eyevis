@@ -1,5 +1,5 @@
-$("#dropdown-menu").on("change", function () {
-  console.log(copyData);
+$("#dropdown-item").on("change", function () {
+  // console.log(copyData);
   filteredData = copyData.filter(
     (value) => value.StimuliName == $(this)[0].value
   );

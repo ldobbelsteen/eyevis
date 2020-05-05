@@ -10,8 +10,8 @@ $.get("/data", (data) => {
   console.log($(".dropdown-menu"));
   distinct.forEach((stimuli) => {
     console.log("BANANA NATION");
-    $("#dropdown-menu").append(
-      `<option value="${stimuli}"> ${stimuli}</option>`
+    $(" #dropdown-item").append(
+      `<option  value="${stimuli}"> ${stimuli}</option>`
     );
   });
   //   $("#dropdown-menu").selectize({

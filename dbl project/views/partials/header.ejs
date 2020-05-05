@@ -20,16 +20,48 @@
     <script type="text/javascript" src="/scripts/banana.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+
+    <script type="text/javascript" src="/scripts/loadmenu.js"> </script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
 </head>
 
 <body>
-    <div class="dropdown"></div>
-    <select id="dropdown-menu" placeholder="Select Stimuli">
-        <option value="a">Default</option>
-    </select>
 
+    <nav class="navbar navbar-expand-lg navbar-light  " style="background-color:darkturquoise;">
+        <a class="navbar-brand" href="#">Eyetracking tool</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Visualizations
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/vis/1">Vis1</a>
+                        <a class="dropdown-item" href="/vis/2">Vis2</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/vis/3">Vis3</a>
+                    </div>
+                </li>
+                <li class="nav-item ">
+                    <!-- <a class="btn btn-primary" href="/vis/1" role="button">Link</a> -->
+                    <select class="custom-select" id="dropdown-item">
+                        <option selected>Select Stimuli</option>
+                    </select>
+
+                </li>
+            </ul>
+        </div>
+    </nav>
     </div>
-
     <div id="myContainer">
 
     </div>
