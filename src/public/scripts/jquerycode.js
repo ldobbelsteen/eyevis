@@ -1,11 +1,14 @@
 $(document).ready(function(){
-    var $div1 = $('#main')
+
+    // main body moves right or goes back to normal position depending on menu
+    var $main = $('#main')
     $('#menu').click(function() {
-        $div1.toggleClass('isOut')
-        var isOut = $div1.hasClass('isOut')
+        $main.toggleClass('moveRight')
+        var moveRight = $main.hasClass('moveRight')
         var margLeft = $(window).width() * 0.05 + 270
         var newWidth = $(window).width() * 0.9 - 270
-        $div1.animate({width: isOut ? newWidth : '90vw'}, { duration: 300, queue: false})
-        $div1.animate({marginLeft: isOut ? margLeft : '5vw'}, { duration: 300, queue: false})
+        $main.animate({width: moveRight ? newWidth : '90vw'}, { duration: 250, queue: false})
+        $main.animate({marginLeft: moveRight ? margLeft : '5vw'}, { duration: 250, queue: false})
     })
+
 });
