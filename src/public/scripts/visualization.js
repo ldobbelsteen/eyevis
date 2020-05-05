@@ -7,6 +7,11 @@ function visualize(dataset, stimulus) {
                 (value) => value.StimuliName == stimulus
             )
             var stim = new Image()
+            var info = d3
+                .select("body")
+                .append("div")
+                .attr("class", "info")
+                .style("opacity", 0)
             
             stim.onload = () => {
                 d3.select("#visualization")
@@ -23,6 +28,19 @@ function visualize(dataset, stimulus) {
                     .attr("cy", (row) => row.MappedFixationPointY)
                     .attr("r", 10)
                     .style("fill", "steelblue")
+                    .on("mouseover", function (data) {
+                        info.transition().duration(200).style("opacity", "1")
+                        info.html(
+                            "x: " + data.MappedFixationPointX + "<br>" +
+                            "y: " + data.MappedFixationPointY + "<br>" +
+                            "User: " + data.user
+                        )
+                        info.style("left", d3.event.pageX + 8 + "px");
+                        info.style("top", d3.event.pageY - 80 + "px");
+                    })
+                    .on("mouseout", function (data) {
+                        info.transition().duration(200).style("opacity", 0);
+                    })
             }
             stim.src = "/data/stimuli/" + stimulus
         }
