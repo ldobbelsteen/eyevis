@@ -2,7 +2,8 @@
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 
 <html lang="en">
@@ -15,22 +16,61 @@
             <%- include("./partials/header") %>
         </header>
         
-        <nav class="navbar navbar-inverse" role="navigation">
+        <nav class="navbar navbar-inverse position-absolute" role="navigation">
             <div class="container">
               <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-1">
                     <span class="glyphicon glyphicon-align-justify darker-blue"></span> <span class="darker-blue" style="margin-left: 5px;"> Menu</span>
                           </button>
               </div>
           
               <!-- Collect the nav links, forms, and other content for toggling -->
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                  <li><a href="#">Files</a></li>
-                  <li><a href="#">Vis #1</a></li>
-                  <li><a href="#">Vis #2</a></li>
-                  <li><a href="#">Vis #3</a></li>
-                  <li><a href="#">Vis #4</a></li>
+              <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                <ul class="nav navbar-nav" style="margin-left: 12px;">
+                    <li>
+                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-files">
+                            <span class="glyphicon glyphicon-chevron-right darker-blue xsicon"></span> <span class="darker-blue" style="margin-left: 5px;"> Files</span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbar-collapse-files">
+                            <div>
+                                <p>Visualization</p>
+                                <select id="datasetsMenu"></select> <br>
+                                <select id="stimuliMenu"></select>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-vis1">
+                            <span class="glyphicon glyphicon-chevron-right darker-blue xsicon"></span> <span class="darker-blue" style="margin-left: 5px;"> Vis 1</span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
+                            <p>something</p>
+                        </div>
+                    </li>
+                    <li>
+                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-vis2">
+                            <span class="glyphicon glyphicon-chevron-right darker-blue xsicon"></span> <span class="darker-blue" style="margin-left: 5px;"> Vis 2</span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
+                            <p>something</p>
+                        </div>
+                    </li>
+                    <li>
+                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-vis3">
+                            <span class="glyphicon glyphicon-chevron-right darker-blue xsicon"></span> <span class="darker-blue" style="margin-left: 5px;"> Vis 3</span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
+                            <p>something</p>
+                        </div>
+                    </li>
+                    <li>
+                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-vis4">
+                            <span class="glyphicon glyphicon-chevron-right darker-blue xsicon"></span> <span class="darker-blue" style="margin-left: 5px;"> Vis 4</span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbar-collapse-vis4">
+                            <p>something</p>
+                        </div>
+                    </li>
                 </ul>
               </div>
             </div>
@@ -44,11 +84,7 @@
                     <input type="submit">
                 </form>
             </div>
-            <div>
-                <p>Visualization</p>
-                <select id="datasetsMenu"></select>
-                <select id="stimuliMenu"></select>
-            </div>
+        
             <br>
             <div id="visualization"></div>
         </main>

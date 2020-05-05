@@ -8,11 +8,11 @@ html, body {
 
 header {
     display: flex;
-    width: 80vw;
+    width: 90vw;
     background-color: #AADADD;
     text-align: center;
     height: 160px;
-    margin-left: 10vw;
+    margin-left: 5vw;
     align-items: center;
     justify-content: center;
     border: 5px solid black;
@@ -20,14 +20,16 @@ header {
 }
 
 main {
-    width: 80vw;
-    margin-left: calc(10vw + 220px);
+    width: 90vw;
+    margin-left: calc(5vw + 320px);
 }
 
 nav {
-    width: 200px;
-    left: 10vw;
+    width: 300px;
+    left: 5vw;
     background-color: black;
+    position: absolute;
+    top: 136px;
 }
 
 .darker-blue {
@@ -42,4 +44,12 @@ div.info {
     border-radius: 0.5em;
     padding: 0.5em;
     pointer-events: none;
+}
+
+.xsicon {
+    font-size: 10px;
+}
+
+select {
+    margin-botton:3px;
 }
