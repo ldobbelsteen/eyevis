@@ -1,4 +1,4 @@
-// Global variable for all the data of the current dataset
+// Global data variable
 var data
 
 // List datasets and add them to the dropdown menu once the page has loaded
