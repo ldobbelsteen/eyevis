@@ -4,40 +4,40 @@ var data
 // List datasets and add them to the dropdown menu once the page has loaded
 // When an entry of the menu is selected, load and process the dataset
 window.onload = () => {
+    var menu = $("#datasetsMenu")
     $.get("/datasets", (list) => { // Fetch list of datasets
-        var menu = $("#datasetsMenu") // Select menu
-        menu.empty() // Empty any previous entries
+        menu.empty() // Empty loading text
         menu.append($("<option disabled selected value> -- select a dataset -- </option>")) // Default entry
         list.forEach((element) => { // Add datasets to menu
             menu.append($("<option></option>").text(element))
         })
-        menu.on("change", () => { // Load dataset when one has been selected
-            var selected = menu.children("option").filter(":selected").text()
-            fetchDataset(selected)
-        })
+    })
+    menu.on("change", () => { // Load dataset when one has been selected
+        var selected = menu.children("option").filter(":selected").text()
+        fetchDataset(selected)
     })
 }
 
 // Fetch dataset and put it into the global data variable
 // Also put all the stimuli in the dropdown menu
 function fetchDataset(dataset) {
+    var menu = $("#stimuliMenu")
     Papa.parse("/data/datasets/" + dataset, { // Download and parse the dataset
         download: true,
         header: true,
         complete: (result) => {
             data = result.data // Write result to the global data variable
-            var menu = $("#stimuliMenu") // Select menu
-            menu.empty() // Empty any previous entries
-            menu.append($("<option disabled selected value> -- select a stimulus -- </option>")) // Default entry
             var uniqueStimuli = [...new Set(data.map(item => item.StimuliName))] // List all unique stimuli
+            menu.empty() // Empty loading text
+            menu.append($("<option disabled selected value> -- select a stimulus -- </option>")) // Default entry
             uniqueStimuli.forEach((element) => { // Add them to the stimuli menu
                 menu.append($("<option></option>").text(element))
             })
-            menu.on("change", () => { // Visualize when stimulus has been selected
-                var selected = menu.children("option").filter(":selected").text()
-                visualize(selected)
-            })
         }
+    })
+    menu.on("change", () => { // Visualize when stimulus has been selected
+        var selected = menu.children("option").filter(":selected").text()
+        visualize(selected)
     })
 }
 
