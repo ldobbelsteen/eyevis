@@ -1,5 +1,25 @@
 function visualize(dataset, stimulus) {
     Papa.parse("/data/datasets/" + dataset, {
+// Global variable for all the data of the current dataset
+var data
+
+// List datasets and add them to the dropdown menu once the page has loaded
+// When an entry of the menu is selected, load and process the dataset
+window.onload = () => {
+    $.get("/datasets", (list) => { // Fetch list of datasets
+        var menu = $("#datasetsMenu") // Select menu
+        menu.empty() // Empty any previous entries
+        menu.append($("<option disabled selected value> -- select a dataset -- </option>")) // Default entry
+        list.forEach((element) => { // Add datasets to menu
+            menu.append($("<option></option>").text(element))
+        })
+        menu.on("change", () => { // Load dataset when one has been selected
+            var selected = menu.children("option").filter(":selected").text()
+            fetchDataset(selected)
+        })
+    })
+}
+
 // Fetch dataset and put it into the global data variable
 // Also put all the stimuli in the dropdown menu
 function fetchDataset(dataset) {
