@@ -23,6 +23,7 @@ main {
     width: 90vw;
     margin-left: 5vw;
     margin-top: 20px;
+    padding:0;
 }
 
 nav {
@@ -96,8 +97,6 @@ button:focus {
 #about {
     background-color: #D9EDEE;
     border: 5px solid black;
-    padding:25px;
-    padding-bottom: 20px;
     text-align: center;
 }
 
@@ -108,3 +107,13 @@ button:focus {
             -moz-transform:    rotate(90deg);
             transform:         rotate(90deg);
         }
+[data-toggle="collapse"][aria-expanded="false"] > .js-rotate-opposite
+        {
+            -webkit-transform: rotate(-90deg);
+            -moz-transform:    rotate(-90deg);
+            transform:         rotate(-90deg);
+        }
+
+#hide-btn {
+    text-align: left;
+}
