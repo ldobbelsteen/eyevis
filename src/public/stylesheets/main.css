@@ -23,7 +23,6 @@ main {
     width: 90vw;
     margin-left: 5vw;
     margin-top: 20px;
-    padding:0;
 }
 
 nav {
@@ -98,6 +97,7 @@ button:focus {
     background-color: #D9EDEE;
     border: 5px solid black;
     text-align: center;
+    padding: 5px 20px 10px 20px;
 }
 
 /* rotates glyphicons when the menu links are expanded */
