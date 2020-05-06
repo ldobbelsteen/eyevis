@@ -38,10 +38,6 @@ nav {
     padding-right: 0 !important;
 }
 
-.darker-blue {
-    color: #AADADD;
-}
-
 div.info {
     font-family: inherit;
     background: palevioletred;
@@ -59,8 +55,13 @@ div.info {
 select {
     margin-bottom:3px;
 }
+
 button:focus {
     outline: 0;
+}
+
+.blue-clr {
+    color: #AADADD;
 }
 .blue-btn {
     background-color: #AADADD;
@@ -69,9 +70,9 @@ button:focus {
     text-align: left;
     margin-top:2px;
 }
-
 .blue-brd {
     border: 1px solid #AADADD;
+    color: #AADADD;
     width: 100%;
     text-align: left;
     margin-top: 2.3px;
@@ -100,6 +101,7 @@ button:focus {
     text-align: center;
 }
 
+/* rotates glyphicons when the menu links are expanded */
 [data-toggle="collapse"][aria-expanded="true"] > .js-rotate-if-collapsed
         {
             -webkit-transform: rotate(90deg);

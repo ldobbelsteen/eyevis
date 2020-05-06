@@ -18,66 +18,69 @@
         
         <nav class="navbar position-absolute" role="navigation">
             <div class="container-fluid">
-              <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#navbar-collapse-1" id="menu">
-                    <span class="glyphicon glyphicon-align-justify darker-blue"></span> <span class="darker-blue" style="margin-left: 5px;"> Menu</span>
-                          </button>
-              </div>
+
+                <!-- Menu header  -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-clr" data-toggle="collapse" data-target="#navbar-collapse-1" id="menu">
+                        <span class="glyphicon glyphicon-align-justify"></span> <span style="margin-left: 5px;"> Menu</span>
+                    </button>
+                </div>
           
-              <!-- Collect the nav links, forms, and other content for toggling -->
-              <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                <ul class="nav navbar-nav menulinks">
-                    <li>
-                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-files">
-                            <span class="glyphicon glyphicon-chevron-right xsicon  js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Files</span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbar-collapse-files">
-                            <div>
-                                <p>Visualization</p>
-                                <select id="datasetsMenu"></select> <br>
-                                <select id="stimuliMenu"></select>
+                <!-- Menu links  -->
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    <ul class="nav navbar-nav menulinks">
+                        <li>
+                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-files">
+                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Files</span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbar-collapse-files">
+                                <div>
+                                    <p>Visualization</p>
+                                    <select id="datasetsMenu"></select> <br>
+                                    <select id="stimuliMenu"></select>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis1">
-                            <span class="glyphicon glyphicon-chevron-right darker-blue xsicon js-rotate-if-collapsed"></span> <span class="darker-blue" style="margin-left: 5px;"> Vis 1</span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
-                            <p>something</p>
-                        </div>
-                    </li>
-                    <li>
-                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis2">
-                            <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span  style="margin-left: 5px;"> Vis 2</span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
-                            <p>something</p>
-                        </div>
-                    </li>
-                    <li>
-                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis3">
-                            <span class="glyphicon glyphicon-chevron-right darker-blue xsicon js-rotate-if-collapsed"></span> <span class="darker-blue" style="margin-left: 5px;"> Vis 3</span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
-                            <p>something</p>
-                        </div>
-                    </li>
-                    <li>
-                        <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis4">
-                            <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Vis 4</span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbar-collapse-vis4">
-                            <p>something</p>
-                        </div>
-                    </li>
-                </ul>
-              </div>
+                        </li>
+                        <li>
+                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis1">
+                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Vis 1</span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
+                                <p>something</p>
+                            </div>
+                        </li>
+                        <li>
+                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis2">
+                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span  style="margin-left: 5px;"> Vis 2</span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
+                                <p>something</p>
+                            </div>
+                        </li>
+                        <li>
+                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis3">
+                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Vis 3</span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
+                                <p>something</p>
+                            </div>
+                        </li>
+                        <li>
+                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis4">
+                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Vis 4</span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbar-collapse-vis4">
+                                <p>something</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </nav>
+        </nav>
 
         <main id="main">
             
+            <!-- main section, this will need to decrease in size when visualization is chosen + need to add the option to hide it-->
             <div id="about">
                 <p>This tool helps you analyze your eyetracking data by providing four different visualizations you can choose from. <br>
                     To get started, upload a .zip file containing a .csv file for the dataset and jpg, png or jpeg files for the stimuli.
@@ -92,6 +95,7 @@
         
             <br>
             <div id="visualization"></div>
+            
         </main>
     </body>
 </html>
