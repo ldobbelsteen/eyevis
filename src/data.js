@@ -26,6 +26,7 @@ async function addDataset(name, file) {
             zip.extractEntryTo(entry, stimuliDir, false, true) // Copy to the stimuli folder
         }
     })
+    fs.unlinkSync(file) // Remove .zip file once it has been extracted
 }
 
 // List all datasets available
