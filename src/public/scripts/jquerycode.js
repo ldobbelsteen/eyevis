@@ -1,45 +1,53 @@
 $(document).ready(function(){
 
     var $main = $('#main')
+    var $menu = $("#menu")
+    var $about = $("#about")
+    var standardW = '90vw' //of main/about section
+    var standardMarg = '5px' // of main/about section
+    var hiddenW = '45px' //width when about section is hidden
+    var standardPadding = '5px 20px 10px 20px' //of about section
+    var hiddenPadding = '0 0 0 0' //of about section when hidden
     
     //hide about section
     $("#hide").click(function () {
-        $("#hidden1").toggle();
-        $("#main-collapse").toggle();
-        $("#about").toggleClass('hide')
-        var hide = $("#about").hasClass('hide')
+        $("#hidden1").toggle(); // "hide" text in button
+        $("#main-collapse").toggle(); // text in section
+        $about.toggleClass('hide')
+        var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
         var smallerWidth = $(window).width() * 0.9 - 270
-        $("#about").animate({width: hide ? '45px' : moveRight ? smallerWidth : '90vw' }, { duration: 0, queue: false})
-        $("#about").animate({padding: hide ? '0 0 0 0' : '5px 20px 10px 20px' }, { duration: 0, queue: false})
-        $("#about").toggleClass('float-right')
+        $about.animate({width: hide ? hiddenW : moveRight ? smallerWidth : standardW }, { duration: 0, queue: false})
+        $about.animate({padding: hide ? hiddenPadding : standardPadding }, { duration: 0, queue: false})
+        $about.toggleClass('float-right')
     });
 
     // main body moves right or goes back to normal position depending on menu
-    $("#menu").on('click dblclick',function(e){
+    $menu.on('click dblclick',function(e){
         $main.toggleClass('moveRight')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = $(window).width() * 0.05 + 270
         var smallerWidth = $(window).width() * 0.9 - 270
-        var hide = $("#about").hasClass('hide')
-        $main.animate({width: moveRight ? smallerWidth : '90vw'}, { duration: 250, queue: false})
-        $main.animate({marginLeft: moveRight ? margLeft : '5vw'}, { duration: 250, queue: false})
+        var hide = $about.hasClass('hide')
+        $main.animate({width: moveRight ? smallerWidth : standardW }, { duration: 250, queue: false})
+        $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
         if (!hide) {
-            $("#about").animate({width: moveRight ? smallerWidth : '90vw'}, { duration: 250, queue: false})
+            $about.animate({width: moveRight ? smallerWidth : standardW }, { duration: 250, queue: false})
         }
     });
 
+    //support window resizing for elements involved in jQuery animations
     window.onresize = function(event) {
-        var hide = $("#about").hasClass('hide')
+        var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
         var smallerWidth = $(window).width() * 0.9 - 270
         var margLeft = $(window).width() * 0.05 + 270
         if (!hide) {
-            $("#about").animate({width: moveRight ? smallerWidth : '90vw'}, { duration: 250, queue: false})
+            $about.animate({width: moveRight ? smallerWidth : standardW}, { duration: 250, queue: false})
         }
-        $("#about").animate({width: hide ? '45px' : moveRight ? smallerWidth : '90vw' }, { duration: 0, queue: false})
-        $main.animate({width: moveRight ? smallerWidth : '90vw'}, { duration: 250, queue: false})
-        $main.animate({marginLeft: moveRight ? margLeft : '5vw'}, { duration: 250, queue: false})
+        $about.animate({width: hide ? hiddenW : moveRight ? smallerWidth : standardW }, { duration: 0, queue: false})
+        $main.animate({width: moveRight ? smallerWidth : standardW}, { duration: 250, queue: false})
+        $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
     }
 
 });
