@@ -1,5 +1,5 @@
 var data = require("./data")
-var formidable = require("formidable")
+var upload = require("express-fileupload")
 var routes = require("express").Router()
 
 // Serve main page
@@ -19,17 +19,17 @@ routes.get("/stimuli", (req, res) => {
     res.send(stimuli)
 })
 
+// Enable file uploads
+routes.use(upload({
+    limits: { fileSize: 128 * 1024 * 1024 }
+}))
+
 // Handle file uploads
 routes.post("/upload", (req, res) => {
-    var form = new formidable.IncomingForm()
-    form.maxFileSize = 128 * 1024 * 1024 // Maximum upload file size of 128MB
-    form.parse(req)
-    form.on("file", (name, file) => { // When the file is done uploading
-        var datasetName = file.name.split(".").slice(0, -1).join(".") // Copy the name of the zip file
-        var datasetPath = file.path // Path of the uploaded file
-        data.addDataset(datasetName, datasetPath) // Add the dataset
-        res.redirect("back") // Send the client back to the page from which they uploaded
-    })
+    var name = req.files.upload.name
+    var buffer = req.files.upload.data
+    data.addDataset(name, buffer)
+    res.render("upload")
 })
 
 module.exports = routes

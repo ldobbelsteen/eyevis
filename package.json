@@ -2,7 +2,7 @@
     "dependencies": {
         "ejs": "*",
         "express": "*",
-        "adm-zip": "*",
-        "formidable": "*"
+        "express-fileupload": "*",
+        "adm-zip": "*"
     }
 }
