@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+    
     <head>
         <%- include("./partials/head") %>
         <script type="text/javascript" src="/scripts/visualization.js"></script>
@@ -11,31 +12,38 @@
             <%- include("./partials/header") %>
         </header>
 
+        <!--menu-->
         <div id="nav">
             <%- include("./partials/nav") %>
         </div>
 
         <main id="main">
             
-            <!-- main section, option to hide it, this will need to decrease in size when visualization is chosen-->
+            <!-- about section, option to hide it-->
             <div id="about">
+
+                <!--button to hide section-->
                 <div id="hide-btn">
                     <button type="button" id="hide" class="navbar-toggle navbar-toggler .collapse.navbar-collapse" data-toggle="collapse" data-target="#main-collapse">
                         <span class="glyphicon glyphicon-collapse-down js-rotate-opposite"></span> <span style="margin-left: 5px;" id="hidden1"> Hide</span>
                     </button>
                 </div>
-
+                
+                <!--actual content of section-->
                 <div class="collapse navbar-collapse show" id="main-collapse">
 
                     <p>This tool helps you analyze your eyetracking data by providing four different visualizations you can choose from. <br>
                         To get started, upload a .zip file containing a .csv file for the dataset and jpg, png or jpeg files for the stimuli.
                     </p>
+
+                    <!--uploading dataset and stimuli-->
                     <form action="/upload" enctype="multipart/form-data" method="post">
                         <input type="file" name="upload">
                         <input type="submit">
                     </form>
+
                     <br>
-                    <p>Use the menu to choose your stimulus, navigate between the various types of visualizations, or export a visualization.</p>
+                    <p>Use the menu to choose your dataset, your stimulus, navigate between the various types of visualizations, or export a visualization.</p>
                 </div>
             </div>
         
