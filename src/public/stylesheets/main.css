@@ -83,6 +83,9 @@ button:focus {
     margin-top: 6px; 
     padding-bottom: 6px;
 }
+.menuText {
+    margin-left: 5px;
+}
 
 .invisibleLink {
     text-decoration: none;

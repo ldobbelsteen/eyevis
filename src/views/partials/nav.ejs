@@ -1,61 +1,72 @@
-        <nav class="navbar position-absolute" role="navigation">
-            <div class="container-fluid">
+<nav class="navbar position-absolute" role="navigation">
 
-                <!-- Menu header  -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-clr" data-toggle="collapse" data-target="#navbar-collapse-1" id="menu">
-                        <span class="glyphicon glyphicon-align-justify"></span> <span style="margin-left: 5px;"> Menu</span>
-                    </button>
-                </div>
+    <div class="container-fluid">
+
+        <!-- Menu header  -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-clr" data-toggle="collapse" data-target="#navbar-collapse-1" id="menu">
+                <span class="glyphicon glyphicon-align-justify"></span> <span class="menuText"> Menu</span>
+            </button>
+        </div>
           
-                <!-- Menu links  -->
-                <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                    <ul class="nav navbar-nav menulinks">
-                        <li>
-                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-files">
-                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Files</span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbar-collapse-files">
-                                <div>
-                                    <p>Visualization</p>
-                                    <select id="datasetsMenu"></select> <br>
-                                    <select id="stimuliMenu"></select>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis1">
-                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Vis 1</span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
-                                <p>something</p>
-                            </div>
-                        </li>
-                        <li>
-                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis2">
-                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span  style="margin-left: 5px;"> Vis 2</span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
-                                <p>something</p>
-                            </div>
-                        </li>
-                        <li>
-                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis3">
-                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Vis 3</span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
-                                <p>something</p>
-                            </div>
-                        </li>
-                        <li>
-                            <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis4">
-                                <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span style="margin-left: 5px;"> Vis 4</span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbar-collapse-vis4">
-                                <p>something</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <!-- Menu links  -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav menulinks">
+                <li>
+                    <!--Files-->
+                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-files">
+                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span class="menuText"> Files</span>
+                    </button>
+                    <!--Files: tools-->
+                    <div class="collapse navbar-collapse" id="navbar-collapse-files">
+                        <div>
+                            <p>Visualization</p>
+                            <select id="datasetsMenu"></select> <br>
+                            <select id="stimuliMenu"></select>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <!--Visualization #1-->
+                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis1">
+                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span class="menuText"> Vis 1</span>
+                    </button>
+                    <!--Visualization #1: tools-->
+                    <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
+                        <p>something</p>
+                    </div>
+                </li>
+                <li>
+                    <!--Visualization #2-->
+                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis2">
+                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span class="menuText"> Vis 2</span>
+                    </button>
+                    <!--Visualization #2: tools-->
+                    <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
+                        <p>something</p>
+                    </div>
+                </li>
+                <li>
+                    <!--Visualization #3-->
+                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd" data-toggle="collapse" data-target="#navbar-collapse-vis3">
+                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span class="menuText"> Vis 3</span>
+                    </button>
+                    <!--Visualization #3: tools-->
+                    <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
+                        <p>something</p>
+                    </div>
+                </li>
+                <li>
+                    <!--Visualization #4-->
+                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn" data-toggle="collapse" data-target="#navbar-collapse-vis4">
+                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span class="menuText"> Vis 4</span>
+                    </button>
+                    <!--Visualization #4: tools-->
+                    <div class="collapse navbar-collapse" id="navbar-collapse-vis4">
+                        <p>something</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
