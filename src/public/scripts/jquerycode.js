@@ -4,7 +4,7 @@ $(document).ready(function(){
     var $menu = $("#menu")
     var $about = $("#about")
     var standardW = '90vw' //of main/about section
-    var standardMarg = '5px' // of main/about section
+    var standardMarg = '5vw' // of main/about section
     var hiddenW = '45px' //width when about section is hidden
     var standardPadding = '5px 20px 10px 20px' //of about section
     var hiddenPadding = '0 0 0 0' //of about section when hidden
