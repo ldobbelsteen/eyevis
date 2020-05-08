@@ -31,13 +31,13 @@ function addDataset(name, buffer) {
 }
 
 // List all datasets available
-async function listDatasets() {
-    return await fs.readdir(datasetsDir)
+function listDatasets() {
+    return fs.readdirSync(datasetsDir)
 }
 
 // List all stimuli available
-async function listStimuli() {
-    return await fs.readdir(stimuliDir)
+function listStimuli() {
+    return fs.readdirSync(stimuliDir)
 }
 
 module.exports = {
