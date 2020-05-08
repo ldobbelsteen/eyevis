@@ -36,4 +36,9 @@ routes.post("/upload", (req, res) => {
     res.render("upload")
 })
 
+// Handle non-existing URLs
+routes.get("*", (req, res) => {
+    res.status(404).end()
+})
+
 module.exports = routes
