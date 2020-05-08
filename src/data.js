@@ -6,9 +6,16 @@ var AdmZip = require("adm-zip")
 var dataDir = path.join(__dirname, "/public/data/")
 var datasetsDir = path.join(dataDir, "/datasets/")
 var stimuliDir = path.join(dataDir, "/stimuli/")
-if (! fs.existsSync(dataDir)) { fs.mkdirSync(dataDir) }
-if (! fs.existsSync(stimuliDir)) { fs.mkdirSync(stimuliDir) }
-if (! fs.existsSync(datasetsDir)) { fs.mkdirSync(datasetsDir) }
+
+if (! fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir)
+}
+if (! fs.existsSync(stimuliDir)) {
+    fs.mkdirSync(stimuliDir)
+}
+if (! fs.existsSync(datasetsDir)) {
+    fs.mkdirSync(datasetsDir)
+}
 
 // Add a dataset to the data pool given the desired name and the .zip file in buffer form
 function addDataset(name, buffer) {

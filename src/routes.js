@@ -21,7 +21,9 @@ routes.get("/stimuli", (req, res) => {
 
 // Enable file uploads
 routes.use(upload({
-    limits: { fileSize: 128 * 1024 * 1024 }
+    limits: { 
+        fileSize: 128 * 1024 * 1024
+    }
 }))
 
 // Handle file uploads
