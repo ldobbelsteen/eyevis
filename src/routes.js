@@ -9,14 +9,16 @@ routes.get("/", (req, res) => {
 
 // Serve list of datasets
 routes.get("/datasets", (req, res) => {
-    var datasets = data.listDatasets()
-    res.send(datasets)
+    data.listDatasets((list) => {
+        res.send(list)
+    })
 })
 
 // Serve list of stimuli
 routes.get("/stimuli", (req, res) => {
-    var stimuli = data.listStimuli()
-    res.send(stimuli)
+    data.listStimuli((list) => {
+        res.send(list)
+    })
 })
 
 // Enable file uploads
