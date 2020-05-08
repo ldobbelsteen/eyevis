@@ -1,8 +1,8 @@
 {
     "dependencies": {
-        "ejs": "*",
-        "express": "*",
-        "express-fileupload": "*",
-        "adm-zip": "*"
+        "adm-zip": "^0.4.14",
+        "ejs": "^3.1.2",
+        "express": "^4.17.1",
+        "express-fileupload": "^1.1.6"
     }
 }
