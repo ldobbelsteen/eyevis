@@ -18,7 +18,7 @@ if (! fs.existsSync(datasetsDir)) {
 }
 
 // Add a dataset to the data pool given the desired name and the .zip file in buffer form
-function addDataset(name, buffer) {
+async function addDataset(name, buffer) {
     var datasetName = path.basename(name, path.extname(name))
     var zip = new AdmZip(buffer)
     var entries = zip.getEntries()
@@ -29,7 +29,9 @@ function addDataset(name, buffer) {
             zip.extractEntryTo(entry, datasetsDir, false, true) // Copy to the datasets folder
             var oldName = path.join(datasetsDir, fileName)
             var newName = path.join(datasetsDir, datasetName)
-            fs.renameSync(oldName, newName) // Rename the csv file with the desired name
+            fs.rename(oldName, newName, (err) => { // Rename the csv file with the desired name
+                if (err) throw err
+            })
         }
         if (fileExt == ".jpg") { // If it's a stimulus file
             zip.extractEntryTo(entry, stimuliDir, false, true) // Copy to the stimuli folder
