@@ -2,19 +2,20 @@ var fs = require("fs")
 var path = require("path")
 var AdmZip = require("adm-zip")
 
-// Set and create the data directories if they don't already exist
-var dataDir = path.join(__dirname, "/public/data/")
-var datasetsDir = path.join(dataDir, "/datasets/")
-var stimuliDir = path.join(dataDir, "/stimuli/")
+// Paths of storage location of datasets and stimuli
+var datasetsDir = path.join(__dirname, "/public/datasets/")
+var stimuliDir = path.join(__dirname, "/public/stimuli/")
 
-if (! fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir)
+// Create storage locations if they don't yet exist
+if (!fs.existsSync(datasetsDir)) {
+    fs.mkdir(datasetsDir, (err) => {
+        if (err) throw err
+    })
 }
-if (! fs.existsSync(stimuliDir)) {
-    fs.mkdirSync(stimuliDir)
-}
-if (! fs.existsSync(datasetsDir)) {
-    fs.mkdirSync(datasetsDir)
+if (!fs.existsSync(stimuliDir)) {
+    fs.mkdir(stimuliDir, (err) => {
+        if (err) throw err
+    })
 }
 
 // Add a dataset to the data pool given the desired name and the .zip file in buffer form

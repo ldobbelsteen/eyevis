@@ -26,7 +26,7 @@ function fetchDataset(dataset) {
     var menu = $("#stimuliMenu")
     menu.empty() // Empty any previous entries
     menu.append($("<option>Loading stimuli...</option>")) // Add simple loading text
-    Papa.parse("/data/datasets/" + dataset, { // Download and parse the dataset
+    Papa.parse("/datasets/" + dataset, { // Download and parse the dataset
         download: true,
         header: true,
         complete: (result) => {
@@ -84,5 +84,5 @@ function visualize(stimulus) {
                 info.transition().duration(200).style("opacity", 0);
             })
     }
-    stim.src = "/data/stimuli/" + stimulus // Load the image
+    stim.src = "/stimuli/" + stimulus // Load the image
 }
