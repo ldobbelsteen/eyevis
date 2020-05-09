@@ -3,119 +3,119 @@
 
 html,
 body {
-  font-family: "Montserrat", sans-serif;
-  background-color: #f0e9ed;
+    font-family: "Montserrat", sans-serif;
+    background-color: #f0e9ed;
 }
 
 header {
-  display: flex;
-  width: 90vw;
-  background-color: #aadadd;
-  text-align: center;
-  height: 160px;
-  margin-left: 5vw;
-  align-items: center;
-  justify-content: center;
-  border: 5px solid black;
-  margin-top: 10px;
+    display: flex;
+    width: 90vw;
+    background-color: #aadadd;
+    text-align: center;
+    height: 160px;
+    margin-left: 5vw;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid black;
+    margin-top: 10px;
 }
 
 main {
-  width: 90vw;
-  margin-left: 5vw;
-  margin-top: 20px;
+    width: 90vw;
+    margin-left: 5vw;
+    margin-top: 20px;
 }
 
 nav {
-  width: 250px;
-  left: 5vw;
-  background-color: black;
-  color: white;
-  font-size: 12px;
-  position: absolute;
-  top: 136px;
-  border-radius: 4px;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+    width: 250px;
+    left: 5vw;
+    background-color: black;
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    top: 136px;
+    border-radius: 4px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 div.output {
-  font-family: inherit;
-  background: palevioletred;
-  position: absolute;
-  text-align: center;
-  border-radius: 0.5em;
-  padding: 0.5em;
-  pointer-events: none;
+    font-family: inherit;
+    background: palevioletred;
+    position: absolute;
+    text-align: center;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    pointer-events: none;
 }
 
 .xsicon {
-  font-size: 10px;
+    font-size: 10px;
 }
 
 select {
-  margin-bottom: 3px;
+    margin-bottom: 3px;
 }
 
 button:focus {
-  outline: 0;
+    outline: 0;
 }
 
 .blue-clr {
-  color: #aadadd;
+    color: #aadadd;
 }
 .blue-btn {
-  background-color: #aadadd;
-  color: black;
-  width: 100%;
-  text-align: left;
-  margin-top: 2px;
+    background-color: #aadadd;
+    color: black;
+    width: 100%;
+    text-align: left;
+    margin-top: 2px;
 }
 .blue-brd {
-  border: 1px solid #aadadd;
-  color: #aadadd;
-  width: 100%;
-  text-align: left;
-  margin-top: 2.3px;
+    border: 1px solid #aadadd;
+    color: #aadadd;
+    width: 100%;
+    text-align: left;
+    margin-top: 2.3px;
 }
 
 .menulinks {
-  margin-left: 0;
-  margin-top: 6px;
-  padding-bottom: 6px;
+    margin-left: 0;
+    margin-top: 6px;
+    padding-bottom: 6px;
 }
 .menuText {
-  margin-left: 5px;
+    margin-left: 5px;
 }
 
 .invisibleLink {
-  text-decoration: none;
-  color: black;
+    text-decoration: none;
+    color: black;
 }
 .invisibleLink:hover {
-  text-decoration: none;
-  color: black;
+    text-decoration: none;
+    color: black;
 }
 
 #about {
-  background-color: #d9edee;
-  border: 5px solid black;
-  text-align: center;
-  padding: 5px 20px 10px 20px;
+    background-color: #d9edee;
+    border: 5px solid black;
+    text-align: center;
+    padding: 5px 20px 10px 20px;
 }
 
 /* rotates glyphicons when the menu links are expanded */
 [data-toggle="collapse"][aria-expanded="true"] > .js-rotate-if-collapsed {
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 [data-toggle="collapse"][aria-expanded="false"] > .js-rotate-opposite {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    transform: rotate(-90deg);
 }
 
 #hide-btn {
-  text-align: left;
+    text-align: left;
 }
