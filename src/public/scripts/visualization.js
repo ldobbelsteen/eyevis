@@ -3,8 +3,9 @@ var SelectedStimuli;
 var data;
 var svg = d3.selectAll("#visualization svg");
 var info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
-var height = 1400;
-var width = 1200;
+// var height = 1400;
+// var width = 1200;
+var scalingFactor = 1;
 // List datasets and add them to the dropdown menu once the page has loaded
 // When an entry of the menu is selected, load and process the dataset
 window.onload = () => {
@@ -72,12 +73,19 @@ function datasetListener(dataset) {
 function drawStuff(filteredData) {
     //ADDS INVISIBLE DIV WHICH WILL BE USED TO OUTPUT EXTRA INFO FOR EACH POINT
     let img = new Image();
-    let imgWidth;
-    let imgHeight;
+    let imgHeight = 800;
+    let imgWidth = 600;
     img.onload = function () {
         imgHeight = this.height;
         imgWidth = this.width;
-        d3.selectAll("#visualization svg").attr("width", width).attr("height", height);
+        d3.selectAll("#visualization svg")
+            .attr("width", this.width * scalingFactor)
+            .attr("height", this.height * scalingFactor)
+            .insert("image", ":first-child")
+            .attr("width", imgWidth)
+            .attr("height", imgHeight)
+            .attr("xlink:href", `/stimuli/${SelectedStimuli}`)
+            .attr("class", "img");
     };
     img.src = `/stimuli/${SelectedStimuli}`;
 
@@ -89,12 +97,8 @@ function drawStuff(filteredData) {
 
     svg.selectAll("g").remove();
     svg.selectAll(".img").remove();
-    svg.call(zoomObject)
-        .append("image")
-        .attr("width", imgWidth)
-        .attr("height", imgHeight)
-        .attr("xlink:href", `/stimuli/${SelectedStimuli}`)
-        .attr("class", "img");
+    svg.call(zoomObject);
+
     var view = svg.append("g").attr("class", "view");
     view.selectAll("dot")
         .data(filteredData)
