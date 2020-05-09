@@ -2,16 +2,24 @@ var fs = require("fs")
 var path = require("path")
 var AdmZip = require("adm-zip")
 
-// Set and create the data directories if they don't already exist
-var dataDir = path.join(__dirname, "/public/data/")
-var datasetsDir = path.join(dataDir, "/datasets/")
-var stimuliDir = path.join(dataDir, "/stimuli/")
-if (! fs.existsSync(dataDir)) { fs.mkdirSync(dataDir) }
-if (! fs.existsSync(stimuliDir)) { fs.mkdirSync(stimuliDir) }
-if (! fs.existsSync(datasetsDir)) { fs.mkdirSync(datasetsDir) }
+// Paths of storage location of datasets and stimuli
+var datasetsDir = path.join(__dirname, "/public/datasets/")
+var stimuliDir = path.join(__dirname, "/public/stimuli/")
+
+// Create storage locations if they don't yet exist
+if (!fs.existsSync(datasetsDir)) {
+    fs.mkdir(datasetsDir, (err) => {
+        if (err) throw err
+    })
+}
+if (!fs.existsSync(stimuliDir)) {
+    fs.mkdir(stimuliDir, (err) => {
+        if (err) throw err
+    })
+}
 
 // Add a dataset to the data pool given the desired name and the .zip file in buffer form
-function addDataset(name, buffer) {
+async function addDataset(name, buffer) {
     var datasetName = path.basename(name, path.extname(name))
     var zip = new AdmZip(buffer)
     var entries = zip.getEntries()
@@ -22,7 +30,9 @@ function addDataset(name, buffer) {
             zip.extractEntryTo(entry, datasetsDir, false, true) // Copy to the datasets folder
             var oldName = path.join(datasetsDir, fileName)
             var newName = path.join(datasetsDir, datasetName)
-            fs.renameSync(oldName, newName) // Rename the csv file with the desired name
+            fs.rename(oldName, newName, (err) => { // Rename the csv file with the desired name
+                if (err) throw err
+            })
         }
         if (fileExt == ".jpg") { // If it's a stimulus file
             zip.extractEntryTo(entry, stimuliDir, false, true) // Copy to the stimuli folder
@@ -31,13 +41,19 @@ function addDataset(name, buffer) {
 }
 
 // List all datasets available
-function listDatasets() {
-    return fs.readdirSync(datasetsDir)
+async function listDatasets(callback) {
+    fs.readdir(datasetsDir, (err, list) => {
+        if (err) throw err
+        return callback(list)
+    })
 }
 
 // List all stimuli available
-function listStimuli() {
-    return fs.readdirSync(stimuliDir)
+async function listStimuli(callback) {
+    fs.readdir(stimuliDir, (err, list) => {
+        if (err) throw err
+        return callback(list)
+    })
 }
 
 module.exports = {

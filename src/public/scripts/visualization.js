@@ -34,7 +34,7 @@ function datasetListener(dataset) {
   var menu = $("#stimuliMenu");
   menu.empty(); // Empty any previous entries
   menu.append($("<option>Loading stimuli...</option>")); // Add simple loading text
-  Papa.parse("/data/datasets/" + dataset, {
+  Papa.parse("/datasets/" + dataset, {
     // Download and parse the dataset
     download: true,
     header: true,

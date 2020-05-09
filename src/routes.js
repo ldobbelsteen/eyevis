@@ -9,19 +9,23 @@ routes.get("/", (req, res) => {
 
 // Serve list of datasets
 routes.get("/datasets", (req, res) => {
-    var datasets = data.listDatasets()
-    res.send(datasets)
+    data.listDatasets((list) => {
+        res.send(list)
+    })
 })
 
 // Serve list of stimuli
 routes.get("/stimuli", (req, res) => {
-    var stimuli = data.listStimuli()
-    res.send(stimuli)
+    data.listStimuli((list) => {
+        res.send(list)
+    })
 })
 
 // Enable file uploads
 routes.use(upload({
-    limits: { fileSize: 128 * 1024 * 1024 }
+    limits: { 
+        fileSize: 128 * 1024 * 1024
+    }
 }))
 
 // Handle file uploads
@@ -30,6 +34,11 @@ routes.post("/upload", (req, res) => {
     var buffer = req.files.upload.data
     data.addDataset(name, buffer)
     res.render("upload")
+})
+
+// Handle non-existing URLs
+routes.get("*", (req, res) => {
+    res.status(404).end()
 })
 
 module.exports = routes
