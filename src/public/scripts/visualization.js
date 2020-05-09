@@ -94,7 +94,7 @@ function drawStuff(filteredData) {
             .attr("width", this.width)
             .attr("height", this.height);
     };
-    img.src = `/data/stimuli/${SelectedStimuli}`;
+    img.src = `/stimuli/${SelectedStimuli}`;
     var info = d3
         .select("body")
         .append("div")
@@ -105,7 +105,7 @@ function drawStuff(filteredData) {
 
     d3.selectAll("#visualization svg").selectAll("g").remove();
     d3.selectAll("#visualization svg")
-        .style("background-image", `url("/data/stimuli/${SelectedStimuli}")`)
+        .style("background-image", `url("/stimuli/${SelectedStimuli}")`)
         .append("g")
         .selectAll("dot")
         .data(filteredData)
