@@ -119,3 +119,11 @@ button:focus {
 #hide-btn {
     text-align: left;
 }
+
+.img {
+    z-index: -1;
+}
+
+.view {
+    z-index: 100;
+}
