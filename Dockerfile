@@ -1,6 +1,6 @@
 FROM node
 WORKDIR /data
-COPY package.json ./
+COPY package.json .
 RUN npm install
-COPY /src ./
+COPY src .
 CMD node main.js
