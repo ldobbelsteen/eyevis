@@ -1,5 +1,5 @@
 <nav class="navbar position-absolute" role="navigation">
-
+    
     <div class="container-fluid">
 
         <!-- Menu header  -->
@@ -24,72 +24,63 @@
                     <!--Files: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-files">
                         <div>
-                            <p>Visualization</p>
-                            <select class="custom-select" id="datasetsMenu"></select> <br>
-                            <select class="custom-select" id="stimuliMenu"></select> <br>
-                            <select class="custom-select" id="person-dropdown">
-                                <option value="banana" selected>All users</option>
-                            </select>
-
+                            <span>Select dataset</span>
+                            <select class="custom-select" id="datasets-menu"></select> <br>
                         </div>
                     </div>
                 </li>
-                <li>
-                    <!--Visualization #1-->
+                <li id="vis-one">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-vis1">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Vis 1</span>
                     </button>
-                    <!--Visualization #1: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
                         <div>
-                            <p>something</p>
-
-
-
+                            <span>Select stimulus and user</span>
+                            <select class="custom-select" id="stimuli-menu"></select> <br>
+                            <select class="custom-select" id="user-menu"></select>
                         </div>
-
                     </div>
                 </li>
-                <li>
-                    <!--Visualization #2-->
+                <li id="vis-two">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-vis2">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Vis 2</span>
                     </button>
-                    <!--Visualization #2: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
-                        <p>something</p>
+                        <div>
+                            <span>Something</span>
+                        </div>
                     </div>
                 </li>
-                <li>
-                    <!--Visualization #3-->
+                <li id="vis-three">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-vis3">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Vis 3</span>
                     </button>
-                    <!--Visualization #3: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
-                        <p>something</p>
+                        <div>
+                            <span>Something</span>
+                        </div>
                     </div>
                 </li>
-                <li>
-                    <!--Visualization #4-->
+                <li id="vis-four">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-vis4">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Vis 4</span>
                     </button>
-                    <!--Visualization #4: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis4">
-                        <p>something</p>
+                        <div>
+                            <span>Something</span>
+                        </div>
                     </div>
                 </li>
             </ul>

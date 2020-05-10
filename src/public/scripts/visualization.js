@@ -1,140 +1,47 @@
-// Global data variable
-var SelectedStimuli;
-var data;
-var svg = d3.selectAll("#visualization svg");
-var info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
-// var height = 1400;
-// var width = 1200;
-var scalingFactor = 1;
-// List datasets and add them to the dropdown menu once the page has loaded
-// When an entry of the menu is selected, load and process the dataset
-window.onload = () => {
-    let menu = $("#datasetsMenu");
-    menu.empty(); // Empty any previous entries
-    menu.append($("<option>Loading datasets...</option>")); // Add simple loading text
+// Import the visualization modules
+import * as visOne from "/modules/visOne.js";
+import * as visTwo from "/modules/visTwo.js";
+import * as visThree from "/modules/visThree.js";
+import * as visFour from "/modules/visFour.js";
+
+(() => {
+    // List datasets and add them to the dropdown menu
+    let menu = $("#datasets-menu");
     $.get("/datasets", (list) => {
-        // Fetch list of datasets
-        menu.empty(); // Empty loading text
-        menu.append($("<option disabled selected value> -- select a dataset -- </option>")); // Default entry
+        menu.empty();
+        menu.append($("<option disabled selected value> -- select a dataset -- </option>"));
         list.forEach((element) => {
-            // Add datasets to menu
             menu.append($(`<option value = '${element}'></option>`).text(element));
         });
     });
+
+    // Listen for selection of dataset and load it once that happens
     menu.on("change", () => {
-        // Load dataset when one has been selected
-        let selected = $("#datasetsMenu")[0].value;
-        console.log(selected);
+        let selected = menu[0].value;
+        Papa.parse("/datasets/" + selected, {
+            download: true,
+            header: true,
+            complete: (result) => {
+                // Write data to window, so modules can access it at window.data
+                window.data = result.data;
 
-        datasetListener(selected);
-    });
-};
+                // Once the user opens the menu, initialize a visualization, only on the first click
+                $("#vis-one button").one("click", () => {
+                    visOne.initialize();
+                })
 
-// Fetch dataset and put it into the global data variable
-// Also put all the stimuli in the dropdown menu
-function datasetListener(dataset) {
-    var menu = $("#stimuliMenu");
-    menu.empty(); // Empty any previous entries
-    menu.append($("<option>Loading stimuli...</option>")); // Add simple loading text
-    Papa.parse("/datasets/" + dataset, {
-        // Download and parse the dataset
-        download: true,
-        header: true,
-        complete: (result) => {
-            data = result.data; // Write result to the global data variable
-            setPersonChangeListener(data); //set listener for user
-            var uniqueStimuli = [...new Set(data.map((item) => item.StimuliName))]; // List all unique stimuli
-            menu.empty(); // Empty loading text
-            menu.append($("<option disabled selected value> -- select a stimulus -- </option>")); // Default entry
-            uniqueStimuli.forEach((element) => {
-                // Add them to the stimuli menu
-                $("#stimuliMenu").append(`<option  value="${element}">${element}</option>`);
-            });
-        },
-    });
+                $("#vis-two button").one("click", () => {
+                    visTwo.initialize();
+                })
 
-    menu.on("change", () => {
-        // Visualize when stimulus has been selected
-        var selected = $("#stimuliMenu")[0].value;
-        SelectedStimuli = selected;
+                $("#vis-three button").one("click", () => {
+                    visThree.initialize();
+                })
 
-        $("#person-dropdown").empty();
-        let filteredData = data.filter((value) => value.StimuliName == SelectedStimuli);
-        let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
-
-        $("#person-dropdown").append(`<option  value="banana"> All users</option>`);
-        uniqueUsers.forEach((user) => {
-            $("#person-dropdown").append(`<option  value="${user}"> ${user}</option>`);
+                $("#vis-four button").one("click", () => {
+                    visFour.initialize();
+                })
+            }
         });
-        drawStuff(filteredData);
-    });
-}
-
-function drawStuff(filteredData) {
-    //ADDS INVISIBLE DIV WHICH WILL BE USED TO OUTPUT EXTRA INFO FOR EACH POINT
-    let img = new Image();
-    let imgHeight = 800;
-    let imgWidth = 600;
-    img.onload = function () {
-        imgHeight = this.height;
-        imgWidth = this.width;
-        d3.selectAll("#visualization svg")
-            .attr("width", this.width * scalingFactor)
-            .attr("height", this.height * scalingFactor)
-            .insert("image", ":first-child")
-            .attr("width", imgWidth)
-            .attr("height", imgHeight)
-            .attr("xlink:href", `/stimuli/${SelectedStimuli}`)
-            .attr("class", "img");
-    };
-    img.src = `/stimuli/${SelectedStimuli}`;
-
-    let zoomObject = d3.zoom().on("zoom", function () {
-        view.attr("transform", d3.event.transform);
-        console.log("I ZOOMED");
-        svg.selectAll("image").attr("transform", d3.event.transform);
-    });
-
-    svg.selectAll("g").remove();
-    svg.selectAll(".img").remove();
-    svg.call(zoomObject);
-
-    var view = svg.append("g").attr("class", "view");
-    view.selectAll("dot")
-        .data(filteredData)
-        .enter()
-        .append("circle")
-        .attr("cx", (row) => row.MappedFixationPointX)
-        .attr("cy", (row) => row.MappedFixationPointY)
-        .attr("r", 10)
-        .style("fill", "steelblue")
-        .on("mouseover", function (filteredData) {
-            info.transition().duration(200).style("opacity", "1");
-            info.html(
-                "x: " +
-                    filteredData.MappedFixationPointX +
-                    "<br>" +
-                    "y:" +
-                    filteredData.MappedFixationPointY +
-                    "<br>" +
-                    "User: " +
-                    filteredData.user
-            );
-            info.style("left", d3.event.pageX + 8 + "px");
-            info.style("top", d3.event.pageY - 80 + "px");
-        })
-        .on("mouseout", function (filteredData) {
-            info.transition().duration(200).style("opacity", 0);
-        });
-}
-function setPersonChangeListener(data) {
-    $("#person-dropdown").on("change", function () {
-        console.log("I change stuff");
-        let filteredData = data.filter((value) => {
-            if ($(this)[0].value != "banana")
-                return value.user == $(this)[0].value && value.StimuliName == SelectedStimuli;
-            else return value.StimuliName == SelectedStimuli;
-        });
-        drawStuff(filteredData);
-    });
-}
+    })
+})()
