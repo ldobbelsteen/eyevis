@@ -14,6 +14,10 @@ function updateStimuli() {
     });
 }
 
+function compare(a, b) {
+    return a.Timestamp - b.Timestamp;
+}
+
 function updateUsers() {
     userMenu.empty();
     userMenu.append($("<option selected>All users</option>"));
@@ -26,8 +30,9 @@ function updateUsers() {
 function updateData() {
     var filter = {
         StimuliName: selectedStimulus,
-        user: selectedUser
-    }
+        user: selectedUser,
+    };
+
     filteredData = window.data.filter((item) => {
         for (let key in filter) {
             if (filter[key] === undefined) {
@@ -39,6 +44,7 @@ function updateData() {
         }
         return true;
     });
+    //console.log(filteredData);
 }
 
 export function initialize() {
@@ -75,8 +81,7 @@ function visualize() {
     img.onload = function () {
         imgHeight = this.height;
         imgWidth = this.width;
-        svg
-            .attr("width", this.width)
+        svg.attr("width", this.width)
             .attr("height", this.height)
             .insert("image", ":first-child")
             .attr("width", imgWidth)
@@ -89,6 +94,7 @@ function visualize() {
     let zoomObject = d3.zoom().on("zoom", function () {
         view.attr("transform", d3.event.transform);
         svg.selectAll("image").attr("transform", d3.event.transform);
+        svg.selectAll("path").attr("transform", d3.event.transform);
     });
 
     svg.selectAll("g").remove();
@@ -96,6 +102,25 @@ function visualize() {
     svg.call(zoomObject);
 
     var view = svg.append("g").attr("class", "view");
+
+    let sortedData = filteredData.sort(compare);
+    console.log(sortedData);
+    var line = d3
+        .line()
+        .x(function (d) {
+            return d.MappedFixationPointX;
+        })
+        .y(function (d) {
+            return d.MappedFixationPointY;
+        });
+
+    svg.append("path")
+        .attr("class", "line") // attributes given one at a time
+        .attr("d", line(sortedData)) // use the value of myline(xy) as the data, 'd'
+        .style("fill", "none")
+        .style("stroke", "red")
+        .style("stroke-width", 2);
+
     view.selectAll("dot")
         .data(filteredData)
         .enter()
