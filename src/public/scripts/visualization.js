@@ -3,6 +3,7 @@ import * as visOne from "/modules/visOne.js";
 import * as visTwo from "/modules/visTwo.js";
 import * as visThree from "/modules/visThree.js";
 import * as visFour from "/modules/visFour.js";
+import * as visFive from "/modules/visFive.js";
 
 (() => {
     // List datasets and add them to the dropdown menu
@@ -40,6 +41,10 @@ import * as visFour from "/modules/visFour.js";
 
                 $("#vis-four button").one("click", () => {
                     visFour.initialize();
+                })
+
+                $("#vis-five button").one("click", () => {
+                    visFive.initialize();
                 })
             }
         });
