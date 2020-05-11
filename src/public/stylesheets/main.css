@@ -127,3 +127,12 @@ button:focus {
 .view {
     z-index: 100;
 }
+
+.heatmap-canvas {
+    z-index: 100;
+}
+
+#visualization {
+    width: 100%;
+    height: 100%;
+}
