@@ -85,8 +85,19 @@ function createOverlay() {
 
 function visualizeUser() {
     document.getElementById('visualization').innerHTML = "";
-    let img = new Image();
+    var img = new Image();
+    function getWidthAndHeight() {
+        var ratio = $("#main").width() / this.width;
+        img.height = this.height * ratio;
+        img.width = $("#main").width();
+    }
+    function loadFailure() {
+        alert( "failed to load.");
+        return true;
+    }
+    img.onload = getWidthAndHeight;
+    img.onerror = loadFailure;
     img.src = `/stimuli/${selectedStimulus}`;
     document.getElementById('visualization').appendChild(img);
-    setTimeout(createOverlay, 50);
+    setTimeout(createOverlay, 100);
 }
