@@ -1,4 +1,5 @@
 var filteredData;
+var scaledData;
 var stimuliMenu = $("#vis-four #stimuli-menu");
 var selectedStimulus;
 var userMenu = $("#vis-four #user-menu");
@@ -13,9 +14,9 @@ var config = {
 
 //  **this does NOT work properly yet**
 
-//problems with adding data to the visualization bc of "value" property and big amount of data to process
-//no selected user = too much data, takes too long to process -> empty function for now
-//still needs scaling
+//it works properly for individual users
+//data too heavy for all users, need to find a way to deal with it faster
+
 
 function updateStimuli() {
     stimuliMenu.empty();
@@ -54,6 +55,14 @@ function updateData() {
     });
 }
 
+function scaleData(data, ratio) {
+    scaledData = JSON.parse(JSON.stringify(data));
+    scaledData.forEach( function (item) {
+        item["MappedFixationPointX"] = Math.round(item["MappedFixationPointX"] * ratio);
+        item["MappedFixationPointY"] = Math.round(item["MappedFixationPointY"] * ratio);
+    });
+}
+
 export function initialize() {
     selectedStimulus = undefined;
     selectedUser = undefined;
@@ -76,11 +85,28 @@ export function initialize() {
     });
 }
 
-function visualize() {}
+function visualize() {
+    document.getElementById('visualization').innerHTML = "";
+    var img = new Image();
+    function getWidthAndHeight() {
+        var ratio = $("#main").width() / this.width;
+        img.height = this.height * ratio;
+        img.width = $("#main").width();
+        alert("heapmaps do not work for all users together yet. try to select a single user")
+    }
+    function loadFailure() {
+        alert( "Failed to load.");
+        return true;
+    }
+    img.onload = getWidthAndHeight;
+    img.onerror = loadFailure;
+    img.src = `/stimuli/${selectedStimulus}`;
+    document.getElementById('visualization').appendChild(img);
+}
 
 function createOverlay() {
     heatmap = h337.create(config);
-    heatmap.addData(filteredData);
+    heatmap.addData(scaledData);
 }
 
 function visualizeUser() {
@@ -90,14 +116,15 @@ function visualizeUser() {
         var ratio = $("#main").width() / this.width;
         img.height = this.height * ratio;
         img.width = $("#main").width();
+        scaleData(filteredData, ratio);
     }
     function loadFailure() {
-        alert( "failed to load.");
+        alert( "Failed to load.");
         return true;
     }
     img.onload = getWidthAndHeight;
     img.onerror = loadFailure;
     img.src = `/stimuli/${selectedStimulus}`;
     document.getElementById('visualization').appendChild(img);
-    setTimeout(createOverlay, 100);
+    setTimeout(createOverlay, 50);
 }
