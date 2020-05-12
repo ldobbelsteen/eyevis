@@ -91,15 +91,21 @@ function visualize() {
     };
     img.src = `/stimuli/${selectedStimulus}`;
 
-    let zoomObject = d3.zoom().on("zoom", function () {
-        view.attr("transform", d3.event.transform);
-        svg.selectAll("image").attr("transform", d3.event.transform);
-        svg.selectAll("path").attr("transform", d3.event.transform);
-    });
+    // let zoomObject = d3.zoom().on("zoom", function () {
+    //     view.attr("transform", d3.event.transform);
+    //     svg.selectAll("image").attr("transform", d3.event.transform);
+    //     svg.selectAll("path").attr("transform", d3.event.transform);
+    // });
 
     svg.selectAll("g").remove();
     svg.selectAll(".img").remove();
-    svg.call(zoomObject);
+    svg.call(
+        d3.zoom().on("zoom", function () {
+            view.attr("transform", d3.event.transform);
+            svg.selectAll("image").attr("transform", d3.event.transform);
+            svg.selectAll("path").attr("transform", d3.event.transform);
+        })
+    );
 
     var view = svg.append("g").attr("class", "view");
 
@@ -127,8 +133,9 @@ function visualize() {
         .append("circle")
         .attr("cx", (row) => row.MappedFixationPointX)
         .attr("cy", (row) => row.MappedFixationPointY)
-        .attr("r", 10)
+        .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
         .style("fill", "steelblue")
+        .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
             info.transition().duration(200).style("opacity", "1");
             info.html(
