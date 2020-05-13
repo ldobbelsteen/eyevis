@@ -1,6 +1,4 @@
 var filteredData;
-var stimuliMenu = $("#vis-one #stimuli-menu");
-var selectedStimulus;
 var userMenu = $("#vis-one #user-menu");
 var selectedUser;
 var container = d3.select("#visualization");
@@ -8,15 +6,6 @@ var colorDot = $("#color-dot");
 var colorLine = $("#color-line");
 var dotColor = "steelblue";
 var lineColor = "red";
-
-function updateStimuli() {
-    stimuliMenu.empty();
-    stimuliMenu.append($("<option disabled selected value> -- select a stimulus -- </option>"));
-    let uniqueStimuli = [...new Set(filteredData.map((item) => item.StimuliName))];
-    uniqueStimuli.sort().forEach((stimulus) => {
-        stimuliMenu.append($("<option></option>").text(stimulus));
-    });
-}
 
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -33,7 +22,7 @@ function updateUsers() {
 
 function updateData() {
     var filter = {
-        StimuliName: selectedStimulus,
+        StimuliName: window.stimulus,
         user: selectedUser,
     };
 
@@ -52,19 +41,11 @@ function updateData() {
 }
 
 export function initialize() {
-    selectedStimulus = undefined;
     selectedUser = undefined;
     updateData();
-    updateStimuli();
-    stimuliMenu.on("change", () => {
-        selectedStimulus = stimuliMenu[0].value;
-        selectedUser = undefined;
-        updateData();
-        updateUsers();
-        visualize();
-    });
+    updateUsers();
     userMenu.on("change", () => {
-        selectedUser = userMenu[0].value;
+        selectedUser = userMenu.val();
         if (selectedUser === "All users") {
             selectedUser = undefined;
         }
@@ -72,18 +53,16 @@ export function initialize() {
         visualize();
     });
     colorDot.on("change", function () {
-        // console.log($(this)[0].value);
-        dotColor = $(this)[0].value;
+        dotColor = $(this).val();
         visualize();
     });
     colorLine.on("change", function () {
-        //  console.log($(this)[0].value);
-        lineColor = $(this)[0].value;
+        lineColor = $(this).val();
         visualize();
     });
 }
 
-function visualize() {
+export function visualize() {
     container.html("");
     container.append("svg");
     var svg = container.select("svg");
@@ -100,10 +79,10 @@ function visualize() {
             .insert("image", ":first-child")
             .attr("width", imgWidth)
             .attr("height", imgHeight)
-            .attr("xlink:href", `/stimuli/${selectedStimulus}`)
+            .attr("xlink:href", `/stimuli/${window.stimulus}`)
             .attr("class", "img");
     };
-    img.src = `/stimuli/${selectedStimulus}`;
+    img.src = `/stimuli/${window.stimulus}`;
 
     // let zoomObject = d3.zoom().on("zoom", function () {
     //     view.attr("transform", d3.event.transform);

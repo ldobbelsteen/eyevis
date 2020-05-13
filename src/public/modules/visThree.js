@@ -2,6 +2,6 @@ export function initialize() {
     console.log("Placeholder")
 }
 
-function visualize() {
+export function visualize() {
     console.log("Placeholder")
 }

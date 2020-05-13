@@ -85,7 +85,7 @@ export function initialize() {
     });
 }
 
-function visualize() {
+export function visualize() {
     document.getElementById('visualization').innerHTML = "";
     var img = new Image();
     function getWidthAndHeight() {
