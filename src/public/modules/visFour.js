@@ -18,15 +18,6 @@ var config = {
 //data too heavy for all users, need to find a way to deal with it faster
 
 
-function updateStimuli() {
-    stimuliMenu.empty();
-    stimuliMenu.append($("<option disabled selected value> -- select a stimulus -- </option>"));
-    let uniqueStimuli = [...new Set(filteredData.map((item) => item.StimuliName))];
-    uniqueStimuli.sort().forEach((stimulus) => {
-        stimuliMenu.append($("<option></option>").text(stimulus));
-    });
-}
-
 function updateUsers() {
     userMenu.empty();
     userMenu.append($("<option selected>All users</option>"));
@@ -38,7 +29,7 @@ function updateUsers() {
 
 function updateData() {
     var filter = {
-        StimuliName: selectedStimulus,
+        StimuliName: window.stimulus,
         user: selectedUser,
     }
     filteredData = window.data.filter((item) => {
@@ -64,19 +55,11 @@ function scaleData(data, ratio) {
 }
 
 export function initialize() {
-    selectedStimulus = undefined;
     selectedUser = undefined;
     updateData();
-    updateStimuli();
-    stimuliMenu.on("change", () => {
-        selectedStimulus = stimuliMenu[0].value;
-        selectedUser = undefined;
-        updateData();
-        updateUsers();
-        visualize();
-    });
+    updateUsers();
     userMenu.on("change", () => {
-        selectedUser = userMenu[0].value;
+        selectedUser = userMenu.val();
         if (selectedUser === "All users") {
             selectedUser = undefined;
         }
@@ -100,7 +83,7 @@ export function visualize() {
     }
     img.onload = getWidthAndHeight;
     img.onerror = loadFailure;
-    img.src = `/stimuli/${selectedStimulus}`;
+    img.src = `/stimuli/${window.stimulus}`;
     document.getElementById('visualization').appendChild(img);
 }
 
@@ -124,7 +107,7 @@ function visualizeUser() {
     }
     img.onload = getWidthAndHeight;
     img.onerror = loadFailure;
-    img.src = `/stimuli/${selectedStimulus}`;
+    img.src = `/stimuli/${window.stimulus}`;
     document.getElementById('visualization').appendChild(img);
     setTimeout(createOverlay, 50);
 }
