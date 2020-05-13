@@ -23,7 +23,15 @@ import * as visFive from "/modules/visFive.js";
             download: true,
             header: true,
             complete: (result) => {
-                // Write data to window, so modules can access it at window.data
+                // Filter and write data to window, so modules can access it at window.data
+                result.data.forEach((datapoint) => {
+                    if (datapoint.StimuliName.includes('ö')) {
+                        datapoint.StimuliName = datapoint.StimuliName.replace('ö', '�');
+                    }
+                    if (datapoint.StimuliName.includes('ü')) {
+                        datapoint.StimuliName = datapoint.StimuliName.replace('ü', '�');
+                    }
+                });
                 window.data = result.data;
 
                 // Once the user opens the menu, initialize a visualization, only on the first click
