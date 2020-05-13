@@ -51,6 +51,7 @@ datasetsMenu.on("change", () => {
     });
 });
 
+// Update the available stimuli and the menu listener
 function updateStimuli() {
     
     // Populate the stimuli menu
@@ -74,6 +75,7 @@ function updateStimuli() {
         visFour.initialize();
         visFive.initialize();
 
+        // Re-run the current visualization with the newly selected stimulus
         if (currentVis != undefined) {
             currentVis.visualize();
         }
