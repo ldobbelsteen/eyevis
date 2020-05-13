@@ -4,6 +4,10 @@ var selectedStimulus;
 var userMenu = $("#vis-one #user-menu");
 var selectedUser;
 var container = d3.select("#visualization");
+var colorDot = $("#color-dot");
+var colorLine = $("#color-line");
+var dotColor = "steelblue";
+var lineColor = "red";
 
 function updateStimuli() {
     stimuliMenu.empty();
@@ -67,6 +71,16 @@ export function initialize() {
         updateData();
         visualize();
     });
+    colorDot.on("change", function () {
+        // console.log($(this)[0].value);
+        dotColor = $(this)[0].value;
+        visualize();
+    });
+    colorLine.on("change", function () {
+        //  console.log($(this)[0].value);
+        lineColor = $(this)[0].value;
+        visualize();
+    });
 }
 
 function visualize() {
@@ -124,7 +138,7 @@ function visualize() {
         .attr("class", "line") // attributes given one at a time
         .attr("d", line(sortedData)) // use the value of myline(xy) as the data, 'd'
         .style("fill", "none")
-        .style("stroke", "red")
+        .style("stroke", `${lineColor}`)
         .style("stroke-width", 2);
 
     view.selectAll("dot")
@@ -134,7 +148,7 @@ function visualize() {
         .attr("cx", (row) => row.MappedFixationPointX)
         .attr("cy", (row) => row.MappedFixationPointY)
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
-        .style("fill", "steelblue")
+        .style("fill", `${dotColor}`)
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
             info.transition().duration(200).style("opacity", "1");

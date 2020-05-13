@@ -25,11 +25,11 @@ import * as visFive from "/modules/visFive.js";
             complete: (result) => {
                 // Filter and write data to window, so modules can access it at window.data
                 result.data.forEach((datapoint) => {
-                    if (datapoint.StimuliName.includes('ö')) {
-                        datapoint.StimuliName = datapoint.StimuliName.replace('ö', '�');
+                    if (datapoint.StimuliName.includes("ö")) {
+                        datapoint.StimuliName = datapoint.StimuliName.replace("ö", "�");
                     }
-                    if (datapoint.StimuliName.includes('ü')) {
-                        datapoint.StimuliName = datapoint.StimuliName.replace('ü', '�');
+                    if (datapoint.StimuliName.includes("ü")) {
+                        datapoint.StimuliName = datapoint.StimuliName.replace("ü", "�");
                     }
                 });
                 window.data = result.data;
@@ -37,24 +37,24 @@ import * as visFive from "/modules/visFive.js";
                 // Once the user opens the menu, initialize a visualization, only on the first click
                 $("#vis-one button").one("click", () => {
                     visOne.initialize();
-                })
+                });
 
                 $("#vis-two button").one("click", () => {
                     visTwo.initialize();
-                })
+                });
 
                 $("#vis-three button").one("click", () => {
                     visThree.initialize();
-                })
+                });
 
                 $("#vis-four button").one("click", () => {
                     visFour.initialize();
-                })
+                });
 
                 $("#vis-five button").one("click", () => {
                     visFive.initialize();
-                })
-            }
+                });
+            },
         });
-    })
-})()
+    });
+})();
