@@ -89,9 +89,9 @@ function visualize() {
     document.getElementById('visualization').innerHTML = "";
     var img = new Image();
     function getWidthAndHeight() {
-        var ratio = $("#main").width() / this.width;
+        var ratio = ($("#main").width() - 10)  / this.width;
         img.height = this.height * ratio;
-        img.width = $("#main").width();
+        img.width = $("#main").width() - 10;
         alert("heapmaps do not work for all users together yet. try to select a single user")
     }
     function loadFailure() {
@@ -113,9 +113,9 @@ function visualizeUser() {
     document.getElementById('visualization').innerHTML = "";
     var img = new Image();
     function getWidthAndHeight() {
-        var ratio = $("#main").width() / this.width;
+        var ratio = ($("#main").width() - 10 ) / this.width;
         img.height = this.height * ratio;
-        img.width = $("#main").width();
+        img.width = $("#main").width() - 10;
         scaleData(filteredData, ratio);
     }
     function loadFailure() {

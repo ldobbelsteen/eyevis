@@ -22,6 +22,7 @@ header {
 
 main {
     width: 90vw;
+    max-width: 90vw;
     margin-left: 5vw;
     margin-top: 20px;
 }
@@ -133,4 +134,20 @@ button:focus {
 }
 img {
     z-index: -1;
+}
+
+#vis-container {
+    width: inherit;
+    max-width: inherit;
+    overflow: hidden;
+    z-index: 200;
+}
+
+#visualization:empty {
+    border: none;
+}
+#visualization {
+    border: 5px solid black;
+    background-color: #d9edee;
+    border-radius: 10px;
 }
