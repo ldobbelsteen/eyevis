@@ -19,6 +19,7 @@ $(document).ready(function(){
         var smallerWidth = window.innerWidth * 0.9 - 270
         $about.animate({width: hide ? hiddenW : moveRight ? smallerWidth : standardW }, { duration: 0, queue: false})
         $about.animate({padding: hide ? hiddenPadding : standardPadding }, { duration: 0, queue: false})
+        $about.animate({marginBottom: hide ? '20px' : '0'}, { duration: 0, queue: false})
         $about.toggleClass('float-right')
     });
 
