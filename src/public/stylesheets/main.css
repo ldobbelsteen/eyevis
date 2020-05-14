@@ -65,6 +65,7 @@ button:focus {
 .blue-clr {
     color: #aadadd;
 }
+
 .blue-btn {
     background-color: #aadadd;
     color: black;
@@ -72,6 +73,7 @@ button:focus {
     text-align: left;
     margin-top: 2px;
 }
+
 .blue-brd {
     border: 1px solid #aadadd;
     color: #aadadd;
@@ -85,6 +87,7 @@ button:focus {
     margin-top: 6px;
     padding-bottom: 6px;
 }
+
 .menuText {
     margin-left: 5px;
 }
@@ -93,6 +96,7 @@ button:focus {
     text-decoration: none;
     color: black;
 }
+
 .invisibleLink:hover {
     text-decoration: none;
     color: black;
@@ -132,9 +136,6 @@ button:focus {
 .heatmap-canvas {
     z-index: 100;
 }
-img {
-    z-index: -1;
-}
 
 #vis-container {
     width: inherit;
@@ -146,6 +147,7 @@ img {
 #visualization:empty {
     border: none;
 }
+
 #visualization {
     border: 5px solid black;
     background-color: #d9edee;

@@ -19,6 +19,7 @@ var config = {
 
 
 function updateUsers() {
+    console.log('update users')
     userMenu.empty();
     userMenu.append($("<option selected>All users</option>"));
     let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
@@ -28,6 +29,7 @@ function updateUsers() {
 }
 
 function updateData() {
+    console.log('update data')
     var filter = {
         StimuliName: window.stimulus,
         user: selectedUser,
@@ -52,19 +54,25 @@ function scaleData(data, ratio) {
         item["MappedFixationPointX"] = Math.round(item["MappedFixationPointX"] * ratio);
         item["MappedFixationPointY"] = Math.round(item["MappedFixationPointY"] * ratio);
     });
+    console.log('scale data')
 }
 
 export function initialize() {
+    document.getElementById('visualization').innerHTML = "";
     selectedUser = undefined;
+    console.log('initialize')
     updateData();
     updateUsers();
     userMenu.on("change", () => {
         selectedUser = userMenu.val();
         if (selectedUser === "All users") {
             selectedUser = undefined;
+            updateData();
+            visualize();
+        } else {
+            updateData();
+            visualizeUser();
         }
-        updateData();
-        visualizeUser();
     });
 }
 
@@ -87,19 +95,24 @@ export function visualize() {
     document.getElementById('visualization').appendChild(img);
 }
 
-function createOverlay() {
+function createOverlay(img) {
     heatmap = h337.create(config);
     heatmap.addData(scaledData);
 }
 
 function visualizeUser() {
+    heatmap = undefined;
     document.getElementById('visualization').innerHTML = "";
     var img = new Image();
     function getWidthAndHeight() {
         var ratio = ($("#main").width() - 10 ) / this.width;
         img.height = this.height * ratio;
         img.width = $("#main").width() - 10;
-        scaleData(filteredData, ratio);
+        scaledData = undefined;
+        if (heatmap == undefined) {
+            scaleData(filteredData, ratio);
+            setTimeout(createOverlay(img), 100);
+        }
     }
     function loadFailure() {
         alert( "Failed to load.");
@@ -109,5 +122,4 @@ function visualizeUser() {
     img.onerror = loadFailure;
     img.src = `/stimuli/${window.stimulus}`;
     document.getElementById('visualization').appendChild(img);
-    setTimeout(createOverlay, 50);
 }
