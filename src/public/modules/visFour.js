@@ -3,17 +3,7 @@ var scaledData;
 var userMenu = $("#vis-four #user-menu");
 var selectedUser;
 var heatmap;
-var config = {
-    container: document.getElementById('visualization'),
-    xField: "MappedFixationPointX",
-    yField: "MappedFixationPointY",
-    valueField: "FixationDuration"
-};
-
-//  **this does NOT work properly yet**
-
-//it works properly for individual users
-//data too heavy for all users, need to find a way to deal with it faster
+var max = 0;
 
 
 function updateUsers() {
@@ -31,6 +21,11 @@ function updateData() {
         user: selectedUser,
     }
     filteredData = window.data.filter((item) => {
+        item.size = 60;
+        item.intensity = item["FixationDuration"];
+        item.x = item["MappedFixationPointX"];
+        item.y = item["MappedFixationPointY"];
+        if (item["intensity"] > max)  max = item["intensity"];
         for (let key in filter) {
             if (filter[key] === undefined) {
                 continue;
@@ -39,65 +34,50 @@ function updateData() {
                 return false;
             }
         }
-        if (item["FixationDuration"] < 0) return false;
-        if (item["MappedFixationPointX"] < 0) return false;
-        if (item["MappedFixationPointY"] < 0) return false;
+        if (item["intensity"] < 0) return false;
+        if (item["x"] < 0) return false;
+        if (item["y"] < 0) return false;
         return true;
-    });
-}
-
-function scaleData(data, ratio) {
-    scaledData = JSON.parse(JSON.stringify(data));
-    scaledData.forEach( function (item) {
-        item["MappedFixationPointX"] = Math.round(item["MappedFixationPointX"] * ratio);
-        item["MappedFixationPointY"] = Math.round(item["MappedFixationPointY"] * ratio);
     });
 }
 
 export function initialize() {
     document.getElementById('visualization').innerHTML = "";
     selectedUser = undefined;
-    console.log('initialize')
     updateData();
     updateUsers();
     userMenu.on("change", () => {
         selectedUser = userMenu.val();
-        if (selectedUser === "All users") {
-            selectedUser = undefined;
-            updateData();
-            visualize();
-        } else {
-            updateData();
-            visualizeUser();
-        }
+        updateData();
+        visualize();
     });
 }
 
+function scaleData(data, ratio) {
+    scaledData = JSON.parse(JSON.stringify(data));
+    scaledData.forEach( function (item) {
+        item["x"] = Math.round(item["x"] * ratio);
+        item["y"] = Math.round(item["y"] * ratio);
+        item["intensity"] = item["intensity"] / max;
+    });
+}
+
+function createOverlay(w, h) {
+    heatmap = createWebGLHeatmap({
+        width: w,
+        height: h 
+    });
+    heatmap.addPoints(scaledData)
+    heatmap.update()
+    heatmap.display()
+    document.getElementById('visualization').appendChild(heatmap.canvas);
+    document.getElementById('visualization').style.position = 'relative'
+    document.getElementsByTagName('canvas')[0].style.top = '0'
+    document.getElementsByTagName('canvas')[0].style.left = '0'
+    document.getElementsByTagName('canvas')[0].style.position = 'absolute'
+}
+
 export function visualize() {
-    document.getElementById('visualization').innerHTML = "";
-    var img = new Image();
-    function getWidthAndHeight() {
-        var ratio = ($("#main").width() - 10)  / this.width;
-        img.height = this.height * ratio;
-        img.width = $("#main").width() - 10;
-        alert("heapmaps do not work for all users together yet. try to select a single user")
-    }
-    function loadFailure() {
-        alert( "Failed to load.");
-        return true;
-    }
-    img.onload = getWidthAndHeight;
-    img.onerror = loadFailure;
-    img.src = `/stimuli/${window.stimulus}`;
-    document.getElementById('visualization').appendChild(img);
-}
-
-function createOverlay() {
-    heatmap = h337.create(config);
-    heatmap.addData(scaledData);
-}
-
-function visualizeUser() {
     heatmap = undefined;
     document.getElementById('visualization').innerHTML = "";
     var img = new Image();
@@ -108,7 +88,7 @@ function visualizeUser() {
         scaledData = undefined;
         if (heatmap == undefined) {
             scaleData(filteredData, ratio);
-            setTimeout(createOverlay(img), 100);
+            setTimeout(createOverlay(img.width, img.height), 100);
         }
     }
     function loadFailure() {
