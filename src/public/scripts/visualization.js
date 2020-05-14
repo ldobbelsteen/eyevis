@@ -106,9 +106,9 @@ function updateStimuli() {
         });
 
         $("#vis-five button").on("click", () => {
-            currentVis = visFour;
+            currentVis = visFive;
             container.empty();
-            visFour.visualize();
+            visFive.visualize();
         });
     });
 }

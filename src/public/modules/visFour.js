@@ -1,7 +1,5 @@
 var filteredData;
 var scaledData;
-var stimuliMenu = $("#vis-four #stimuli-menu");
-var selectedStimulus;
 var userMenu = $("#vis-four #user-menu");
 var selectedUser;
 var heatmap;
@@ -19,7 +17,6 @@ var config = {
 
 
 function updateUsers() {
-    console.log('update users')
     userMenu.empty();
     userMenu.append($("<option selected>All users</option>"));
     let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
@@ -29,7 +26,6 @@ function updateUsers() {
 }
 
 function updateData() {
-    console.log('update data')
     var filter = {
         StimuliName: window.stimulus,
         user: selectedUser,
@@ -44,6 +40,8 @@ function updateData() {
             }
         }
         if (item["FixationDuration"] < 0) return false;
+        if (item["MappedFixationPointX"] < 0) return false;
+        if (item["MappedFixationPointY"] < 0) return false;
         return true;
     });
 }
@@ -54,7 +52,6 @@ function scaleData(data, ratio) {
         item["MappedFixationPointX"] = Math.round(item["MappedFixationPointX"] * ratio);
         item["MappedFixationPointY"] = Math.round(item["MappedFixationPointY"] * ratio);
     });
-    console.log('scale data')
 }
 
 export function initialize() {
@@ -95,7 +92,7 @@ export function visualize() {
     document.getElementById('visualization').appendChild(img);
 }
 
-function createOverlay(img) {
+function createOverlay() {
     heatmap = h337.create(config);
     heatmap.addData(scaledData);
 }
