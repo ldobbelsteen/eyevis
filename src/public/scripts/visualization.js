@@ -59,7 +59,9 @@ function updateStimuli() {
     stimuliMenu.empty();
     stimuliMenu.append($("<option disabled selected value> -- select a stimulus -- </option>"));
     uniqueStimuli.sort().forEach((stimulus) => {
-        let stylized = stimulus; // W.I.P; make the text nicer, Ill do this later
+        let stylized = stimulus;
+        stylized = stylized.split('.').slice(0, -1).join('.'); // Remove file extension from stimulus name
+        stylized = stylized.split("_").join(" ") // Replace underscores with spaces
         stimuliMenu.append($(`<option value="${stimulus}" ></option>`).text(stylized));
     });
 
