@@ -38,12 +38,11 @@ datasetsMenu.on("change", () => {
             // Write result to data variable and make sure there are no umlauts
             window.data = result.data;
             window.data.forEach((datapoint) => {
-                let stimulusName = datapoint.StimuliName;
-                if (stimulusName.includes("ö")) {
-                    stimulusName = stimulusName.replace("ö", "�");
+                if (datapoint.StimuliName.includes("ö")) {
+                    datapoint.StimuliName = datapoint.StimuliName.replace("ö", "�");
                 }
-                if (stimulusName.includes("ü")) {
-                    stimulusName = stimulusName.replace("ü", "�");
+                if (datapoint.StimuliName.includes("ü")) {
+                    datapoint.StimuliName = datapoint.StimuliName.replace("ü", "�");
                 }
             });
             updateStimuli();
