@@ -3,7 +3,7 @@ var scaledData;
 var userMenu = $("#vis-four #user-menu");
 var selectedUser;
 var heatmap;
-var max = 0;
+var max;
 
 
 function updateUsers() {
@@ -21,7 +21,8 @@ function updateData() {
         user: selectedUser,
     }
     filteredData = window.data.filter((item) => {
-        item.size = 60;
+        max = 0;
+        item.size = 40;
         item.intensity = item["FixationDuration"];
         item.x = item["MappedFixationPointX"];
         item.y = item["MappedFixationPointY"];
@@ -65,10 +66,13 @@ function scaleData(data, ratio) {
 function createOverlay(w, h) {
     heatmap = createWebGLHeatmap({
         width: w,
-        height: h 
+        height: h
     });
     heatmap.addPoints(scaledData)
     heatmap.update()
+    heatmap.blur()
+    heatmap.blur()
+    heatmap.blur()
     heatmap.display()
     document.getElementById('visualization').appendChild(heatmap.canvas);
     document.getElementById('visualization').style.position = 'relative'
@@ -88,7 +92,7 @@ export function visualize() {
         scaledData = undefined;
         if (heatmap == undefined) {
             scaleData(filteredData, ratio);
-            setTimeout(createOverlay(img.width, img.height), 100);
+            createOverlay(img.width, img.height);
         }
     }
     function loadFailure() {
