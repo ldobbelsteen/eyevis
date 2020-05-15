@@ -153,3 +153,11 @@ button:focus {
     background-color: #d9edee;
     border-radius: 10px;
 }
+
+.init {
+    width: 100%;
+    margin-top: 7px;
+    margin-bottom: 5px;
+    background-color: white;
+    text-align: center;
+}

@@ -1,8 +1,9 @@
 {
     "dependencies": {
+        "adm-zip": "*",
         "ejs": "*",
         "express": "*",
         "express-fileupload": "*",
-        "adm-zip": "*"
+        "nodemon": "^2.0.4"
     }
 }

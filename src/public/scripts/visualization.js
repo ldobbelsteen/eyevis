@@ -69,47 +69,49 @@ function updateStimuli() {
     stimuliMenu.on("change", () => {
         window.stimulus = stimuliMenu.val();
 
-        // (Re)initialize all of the visualizations
-        visOne.initialize();
-        visTwo.initialize();
-        visThree.initialize();
-        visFour.initialize();
-        visFive.initialize();
-
-        // Re-run the current visualization with the newly selected stimulus
         if (currentVis != undefined) {
+            if (currentVis == visFour) $('#vis-four #user-menu').prop('disabled', true);
+            container.empty();
+            currentVis.initialize();
             currentVis.visualize();
         }
 
-        // Whenever the menu item of a visualization is clicked, do the visualization
-        $("#vis-one button").on("click", () => {
-            currentVis = visOne;
-            container.empty();
-            visOne.visualize();
-        });
+    });
 
-        $("#vis-two button").on("click", () => {
-            currentVis = visTwo;
-            container.empty();
-            visTwo.visualize();
-        });
+    // Whenever the menu item of a visualization is clicked, do the visualization
+    $("#init-vis1").on("click", () => {
+        currentVis = visOne;
+        container.empty();
+        visOne.initialize();
+        visOne.visualize();
+    });
 
-        $("#vis-three button").on("click", () => {
-            currentVis = visThree;
-            container.empty();
-            visThree.visualize();
-        });
+    $("#init-vis2").on("click", () => {
+        currentVis = visTwo;
+        container.empty();
+        visTwo.initialize();
+        visTwo.visualize();
+    });
 
-        $("#vis-four button").on("click", () => {
-            currentVis = visFour;
-            container.empty();
-            visFour.visualize();
-        });
+    $("#init-vis3").on("click", () => {
+        currentVis = visThree;
+        container.empty();
+        visThree.initialize();
+        visThree.visualize();
+    });
 
-        $("#vis-five button").on("click", () => {
-            currentVis = visFive;
-            container.empty();
-            visFive.visualize();
-        });
+    $("#init-vis4").on("click", () => {
+        currentVis = visFour;
+        $('#vis-four #user-menu').prop('disabled', true);
+        container.empty();
+        visFour.initialize();
+        visFour.visualize();
+    });
+
+    $("#init-vis5").on("click", () => {
+        currentVis = visFive;
+        container.empty();
+        visFive.initialize();
+        visFive.visualize();
     });
 }
