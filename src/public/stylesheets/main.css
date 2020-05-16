@@ -137,13 +137,6 @@ button:focus {
     z-index: 100;
 }
 
-#vis-container {
-    width: inherit;
-    max-width: inherit;
-    overflow: hidden;
-    z-index: 200;
-}
-
 #visualization:empty {
     border: none;
 }
@@ -152,6 +145,7 @@ button:focus {
     border: 5px solid black;
     background-color: #d9edee;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .init {
