@@ -4,7 +4,7 @@ var userMenu = $("#vis-four #user-menu");
 var selectedUser;
 var colorDomain;
 var svg;
-var margin = {top: 10, right: 30, bottom: 30, left: 40}
+var margin = {top: 30, right: 30, bottom: 10, left: 40}
 
 
 function updateUsers() {
@@ -120,15 +120,15 @@ export function visualize() {
                         .domain([0, img.naturalWidth])
                         .range([ margin.left, img.width + margin.right + 5]);
                     svg.append("g")
-                        .attr("transform", "translate(0," + img.height  + ")")
-                        .call(d3.axisBottom(x));
+                        .attr("transform", "translate(0," + 5  + ")")
+                        .call(d3.axisTop(x));
 
             // Add Y axis
             var y = d3.scaleLinear()
                         .domain([img.naturalHeight, 0])
-                        .range([ img.height , margin.top ]);
+                        .range([ 5 + margin.bottom + img.height , margin.top ]);
                     svg.append("g")
-                        .attr("transform", "translate(" + margin.left  + ", 0)")
+                        .attr("transform", "translate(" + (margin.left -6 )  + ", " + -18 + " )")
                         .call(d3.axisLeft(y));
 
             // Prepare a color palette
@@ -142,7 +142,8 @@ export function visualize() {
                                 .y(function(d) { return y(d.y); })
                                 .size([img.width, img.height])
                                 .bandwidth(20)
-                                (scaledData)
+                                (scaledData)                
+                                
             svg.insert("g", "g")
                 .selectAll("path")
                 .data(densityData)
@@ -156,6 +157,12 @@ export function visualize() {
                         "translate(" + margin.left + "," + 5  + ")")
                 .attr("xlink:href", `/stimuli/${window.stimulus}`)
                 .attr("class", "img")
+            d3.select("#visualization").call(d3.zoom().on("zoom", function () {
+                d3.event.sourceEvent.stopPropagation();
+                svg.attr("transform", d3.event.transform)
+            }))
+
+        //$('#reset4').on( 'click', visualize())
 
         setTimeout(userOn(), 10)
     }
@@ -167,4 +174,5 @@ export function visualize() {
     img.onerror = loadFailure;
     console.log('end vis')
     img.src = `/stimuli/${window.stimulus}`
+
 }

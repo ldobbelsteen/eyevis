@@ -70,7 +70,6 @@ function updateStimuli() {
         window.stimulus = stimuliMenu.val();
 
         if (currentVis != undefined) {
-            //if (currentVis == visFour) $('#vis-four #user-menu').prop('disabled', true);
             container.empty();
             currentVis.initialize();
             currentVis.visualize();
@@ -102,7 +101,6 @@ function updateStimuli() {
 
     $("#init-vis4").on("click", () => {
         currentVis = visFour;
-        //$('#vis-four #user-menu').prop('disabled', true);
         container.empty();
         visFour.initialize();
         visFour.visualize();
@@ -113,5 +111,12 @@ function updateStimuli() {
         container.empty();
         visFive.initialize();
         visFive.visualize();
+    });
+
+    $("#reset4").on("click", () => {
+        if (currentVis = visFour) {
+            container.empty();
+            visFour.visualize();
+        }
     });
 }

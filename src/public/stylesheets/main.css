@@ -161,3 +161,12 @@ button:focus {
     background-color: white;
     text-align: center;
 }
+
+.init4, .reset4 {
+    display: inline-block;
+    width: 49%;
+    margin-top: 7px;
+    margin-bottom: 5px;
+    background-color: white;
+    text-align: center;
+}
