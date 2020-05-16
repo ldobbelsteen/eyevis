@@ -70,7 +70,7 @@ function updateStimuli() {
         window.stimulus = stimuliMenu.val();
 
         if (currentVis != undefined) {
-            if (currentVis == visFour) $('#vis-four #user-menu').prop('disabled', true);
+            //if (currentVis == visFour) $('#vis-four #user-menu').prop('disabled', true);
             container.empty();
             currentVis.initialize();
             currentVis.visualize();
@@ -102,7 +102,7 @@ function updateStimuli() {
 
     $("#init-vis4").on("click", () => {
         currentVis = visFour;
-        $('#vis-four #user-menu').prop('disabled', true);
+        //$('#vis-four #user-menu').prop('disabled', true);
         container.empty();
         visFour.initialize();
         visFour.visualize();

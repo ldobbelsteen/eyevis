@@ -8,7 +8,7 @@ var margin = {top: 10, right: 30, bottom: 30, left: 40}
 
 
 function updateUsers() {
-    //userMenu.empty();
+    userMenu.empty();
     userMenu.append($("<option selected disabled>---</option>"));
     let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
     uniqueUsers.sort().forEach((user) => {
@@ -17,10 +17,28 @@ function updateUsers() {
     console.log('update users')
 }
 
+function userOn() {
+    userMenu.on("change", () => {
+        console.log('menu change')
+        d3.select("#visualization").html("");
+        selectedUser = userMenu.val();
+        console.log(selectedUser);
+        if (selectedUser === "---") {
+            selectedUser = undefined;
+        }
+        updateData();
+        visualize();
+    });
+}
+
+function userOff() {
+    userMenu.off("change")
+}
+
 function updateData() {
     var filter = {
         StimuliName: window.stimulus,
-        user: selectedUser
+        user: selectedUser,
     }
     filteredData = window.data.filter((item) => {
         item.value = item["FixationDuration"];
@@ -39,6 +57,7 @@ function updateData() {
         if (item["y"] < 0) return false;
         return true;
     });
+    console.log(filteredData)
     if (selectedUser == undefined) {
         colorDomain = [0,10]
     } else {
@@ -48,25 +67,14 @@ function updateData() {
 
 export function initialize() {
     console.log('initializing')
-    $('#vis-four #user-menu').prop('disabled', false);
+    //$('#vis-four #user-menu').prop('disabled', false);
     selectedUser = undefined;
     updateData();
-    scaleData(filteredData);
     updateUsers();
-    userMenu.on("change", () => {
-        console.log('menu change')
-        selectedUser = userMenu.val();
-        if (selectedUser === "All users") {
-            selectedUser = undefined;
-        }
-        updateData();
-
-        visualize();
-    });
+    userOn();
     $("#stimuli-menu").on("change", () => {
-        console.log('off')
-        userMenu.off("change")
-    });
+        userOff();
+    })
 }
 
 function scaleData(data) {
@@ -78,7 +86,8 @@ function scaleData(data) {
             scaledData.push(
                 {
                     x: item.x,
-                    y: item.y
+                    y: item.y,
+                    user: item.user
                 }
             )
         }
@@ -86,6 +95,8 @@ function scaleData(data) {
 }
 
 export function visualize() {
+    userOff();
+    scaleData(filteredData);
     console.log('start vis')
     d3.select("#visualization").html("");
     document.getElementById('visualization').style.position = 'relative'
@@ -146,7 +157,7 @@ export function visualize() {
                 .attr("xlink:href", `/stimuli/${window.stimulus}`)
                 .attr("class", "img")
 
-        
+        setTimeout(userOn(), 10)
     }
     function loadFailure() {
         alert( "Failed to load.");
@@ -155,7 +166,5 @@ export function visualize() {
     img.onload = loadImg;
     img.onerror = loadFailure;
     console.log('end vis')
-    if (svg == undefined) {
-        img.src = `/stimuli/${window.stimulus}`;
-    }
+    img.src = `/stimuli/${window.stimulus}`
 }
