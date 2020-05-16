@@ -2,7 +2,6 @@ var filteredData;
 var scaledData;
 var userMenu = $("#vis-four #user-menu");
 var selectedUser;
-var colorDomain;
 var svg;
 var margin = {top: 30, right: 30, bottom: 10, left: 40}
 
@@ -57,17 +56,11 @@ function updateData() {
         if (item["y"] < 0) return false;
         return true;
     });
-    console.log(filteredData)
-    if (selectedUser == undefined) {
-        colorDomain = [0,10]
-    } else {
-        colorDomain = [0,0.8]
-    }
+    console.log(filteredData) 
 }
 
 export function initialize() {
     console.log('initializing')
-    //$('#vis-four #user-menu').prop('disabled', false);
     selectedUser = undefined;
     updateData();
     updateUsers();
@@ -105,12 +98,14 @@ export function visualize() {
     function loadImg() {
         console.log('load vis')
         var ratio = ($("#main").width() - 10 ) / this.width;
+        var containerW = this.width;
+        var containerH = this.height * ratio;
         img.height = this.height * ratio - 10 - 2 *  margin.top - 2 * margin.bottom;
         img.width = $("#main").width() - 10 - 2 * margin.left - 2 * margin.right;
         svg = d3.select("#visualization")
                 .append("svg")
-                    .attr("width", img.width + margin.left + margin.right)
-                    .attr("height", img.height + margin.top + margin.bottom)
+                    .attr("width", containerW)
+                    .attr("height", containerH)
                 .append("g")
                     .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
@@ -131,19 +126,37 @@ export function visualize() {
                         .attr("transform", "translate(" + (margin.left -6 )  + ", " + -18 + " )")
                         .call(d3.axisLeft(y));
 
-            // Prepare a color palette
-            var color = d3.scaleLinear()
-                            .domain( colorDomain)     // Points per square pixel.
-                            .range(["rgba(11, 216, 219, 0.1)", "rgba(219, 11, 73, 1)"])
-
             // compute the density data
             var densityData = d3.contourDensity()
                                 .x(function(d) { return x(d.x); })
                                 .y(function(d) { return y(d.y); })
                                 .size([img.width, img.height])
                                 .bandwidth(20)
-                                (scaledData)                
-                                
+                                (scaledData)
+
+            function minMax() {
+                var max = 0
+                var min = Infinity
+                densityData.forEach(function (item) {
+                    if (item.value > max) max = item.value;
+                    if (item.value < min) min = item.value;
+                })
+                return [min,max];
+            }
+            var minMax = minMax()
+            console.log(densityData)
+            console.log(minMax)
+
+            var interval = (minMax[1] - minMax[0]) / 5;
+            var colorDomain = [minMax[0], minMax[0]+interval, minMax[0]+2*interval, minMax[0]+3*interval, minMax[1] + 1 ]
+            console.log(colorDomain)
+            
+            // Prepare a color palette
+            var color = d3.scaleLinear()
+                            .domain( colorDomain )     // Points per square pixel.
+                            .range(["rgba(59, 232, 255, 0.2)", "rgb(249, 255, 84,0.2)",  "rgba(255, 167, 66, 0.2)","rgb(232, 14, 14,0.2)","rgb(201, 14, 14, 0.2)"])
+
+            
             svg.insert("g", "g")
                 .selectAll("path")
                 .data(densityData)
@@ -162,7 +175,8 @@ export function visualize() {
                 svg.attr("transform", d3.event.transform)
             }))
 
-        //$('#reset4').on( 'click', visualize())
+            svg.attr('display', 'block')
+            svg.attr('margin-left', 'auto')
 
         setTimeout(userOn(), 10)
     }
