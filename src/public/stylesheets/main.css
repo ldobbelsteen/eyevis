@@ -15,7 +15,7 @@ header {
     height: 100px;
     align-items: center;
     justify-content: center;
-    border: 5px solid black;
+    border: 2px solid black;
     margin-top: 0;
 }
 
@@ -33,7 +33,7 @@ nav {
     color: white;
     font-size: 12px;
     position: absolute;
-    top: 65px;
+    top: 66px;
     border-radius: 4px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -105,7 +105,8 @@ button:focus {
 
 #about {
     background-color: #d9edee;
-    border: 5px solid black;
+    border: 2px solid black;
+    border-radius: 4px;
     text-align: center;
     padding: 5px 20px 10px 20px;
 }
@@ -143,10 +144,10 @@ button:focus {
 }
 
 #visualization {
-    border: 5px solid black;
+    border: 2px solid black;
     background-color: #d9edee;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 4px;
     overflow: hidden;
 }
 

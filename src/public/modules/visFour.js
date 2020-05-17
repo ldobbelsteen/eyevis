@@ -97,41 +97,38 @@ export function visualize() {
     var img = new Image();
     function loadImg() {
         console.log('load vis')
-        var ratio = ($("#main").width() - 10 ) / this.width;
-        var containerW = this.width;
+        var ratio = ($("#main").width()) / this.width;
+        var containerW = $("#main").width();
         var containerH = this.height * ratio;
-        img.height = this.height * ratio - 10 - 2 *  margin.top - 2 * margin.bottom;
-        img.width = $("#main").width() - 10 - 2 * margin.left - 2 * margin.right;
+        img.height = this.height * ratio;
+        img.width = $("#main").width();
         svg = d3.select("#visualization")
                 .append("svg")
                     .attr("width", containerW)
                     .attr("height", containerH)
                 .append("g")
-                    .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
-        
             //add X axis
             var x = d3.scaleLinear()
                         .domain([0, img.naturalWidth])
-                        .range([ margin.left, img.width + margin.right + 5]);
+                        .range([ 0, img.width ]); /*
                     svg.append("g")
-                        .attr("transform", "translate(0," + 5  + ")")
-                        .call(d3.axisTop(x));
-
+                        .attr("transform", "translate(0," + (margin.top - 10) + ")")
+                       .call(d3.axisTop(x));*/
+            
             // Add Y axis
             var y = d3.scaleLinear()
                         .domain([img.naturalHeight, 0])
-                        .range([ 5 + margin.bottom + img.height , margin.top ]);
+                        .range([ img.height , margin.top ])
+                        /*
                     svg.append("g")
-                        .attr("transform", "translate(" + (margin.left -6 )  + ", " + -18 + " )")
-                        .call(d3.axisLeft(y));
-
-            // compute the density data
+                        .attr("transform", "translate(" + ( margin.left - 10 )  + ", " + (margin.top -5)+ " )")
+                        .call(d3.axisLeft(y));*/
+ // compute the density data
             var densityData = d3.contourDensity()
                                 .x(function(d) { return x(d.x); })
                                 .y(function(d) { return y(d.y); })
                                 .size([img.width, img.height])
-                                .bandwidth(20)
+                                .bandwidth(14)
                                 (scaledData)
 
             function minMax() {
@@ -166,8 +163,6 @@ export function visualize() {
             svg.insert("image", ":first-child")
                 .attr("width", img.width)
                 .attr("height", img.height)
-                .attr("transform",
-                        "translate(" + margin.left + "," + 5  + ")")
                 .attr("xlink:href", `/stimuli/${window.stimulus}`)
                 .attr("class", "img")
             d3.select("#visualization").call(d3.zoom().on("zoom", function () {
