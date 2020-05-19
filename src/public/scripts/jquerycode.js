@@ -18,12 +18,12 @@ $(document).ready(function(){
         var moveRight = $main.hasClass('moveRight')
         var smallerWidth = (window.innerWidth - 250) * 0.9 - 10
         $about.animate({width: hide ? hiddenW : moveRight ? smallerWidth : standardW }, { duration: 0, queue: false})
-        $about.animate({padding: hide ? hiddenPadding : standardPadding }, { duration: 0, queue: false})
-        $about.animate({marginBottom: hide ? '20px' : '0'}, { duration: 0, queue: false})
+        hide ? $about.css('padding', hiddenPadding) : $about.css('padding', standardPadding)
+        hide ? $about.css('margin-bottom', '20px') : $about.css('margin-bottom', '0')
         hide ? $about.css('position', 'absolute') : $about.css('position', 'relative')
         hide ? $about.css('right', '0') : $about.css('right', 'auto')
-        hide ? $about.css('top', '95px') : $about.css('top', 'auto')
-        hide ? $about.css('border-bottom-left-radius', '5px') : $about.css('border-bottom-left-radius', '0')
+        hide ? $about.css('top', '97.5px') : $about.css('top', 'auto')
+        hide ? $about.css('border-top-right-radius', '0') : $about.css('border-top-right-radius', '4px')
     });
 
     // main body moves right or goes back to normal position depending on menu

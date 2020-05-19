@@ -114,7 +114,7 @@ function updateStimuli() {
     });
 
     $("#reset4").on("click", () => {
-        if (currentVis = visFour) {
+        if (currentVis == visFour) {
             container.empty();
             visFour.visualize();
         }
