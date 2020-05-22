@@ -12,7 +12,7 @@ header {
     width: 100%;
     background-color: #aadadd;
     text-align: center;
-    height: 100px;
+    height: 110px;
     align-items: center;
     justify-content: center;
     border: 2px solid black;
@@ -33,7 +33,7 @@ nav {
     color: white;
     font-size: 12px;
     position: absolute;
-    top: 66px;
+    top: 77px;
     border-radius: 4px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -61,6 +61,12 @@ select {
 
 button:focus {
     outline: 0;
+}
+
+
+.btn-outline-dark {
+    background-color: white;
+    font-size: 14px;
 }
 
 .blue-clr {
@@ -109,6 +115,10 @@ button:focus {
     border-radius: 4px;
     text-align: center;
     padding: 5px 20px 10px 20px;
+}
+
+#description {
+    padding: 10px;
 }
 
 /* rotates glyphicons when the menu links are expanded */

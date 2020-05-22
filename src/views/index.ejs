@@ -32,22 +32,33 @@
 
             <!--actual content of section-->
             <div class="collapse navbar-collapse show" id="main-collapse">
+                <div id='description'>
 
-                <p>This tool helps you analyze your eyetracking data by providing four different visualizations you can
+                    <p>This tool helps you analyze your eyetracking data by providing five different visualizations you can
                     choose from. <br>
                     To get started, upload a .zip file containing a .csv file for the dataset and jpg, png or jpeg files
                     for the stimuli.
-                </p>
+                    </p>
 
-                <!--uploading dataset and stimuli-->
-                <form action="/upload" enctype="multipart/form-data" method="post">
-                    <input type="file" name="upload">
-                    <input type="submit">
-                </form>
+                    <!--uploading dataset and stimuli--> 
+                    
+                    <form action="/upload" class="form-inline justify-content-center" enctype="multipart/form-data" method="post">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" accept=".zip" name= "upload" id="inputGroupFile04">
+                                <label class="custom-file-label justify-content-start" for="inputGroupFile04">Select ZIP file</label>
+                            </div>
+                            <div class="input-group-append">
+                              <input class="btn btn-outline-dark" type="submit" value="Submit"></button>
+                            </div>
+                          </div>
+                    </form>
+                
 
-                <br>
-                <p>Use the menu to choose your dataset, your stimulus, navigate between the various types of
+                    <br>
+                    <p>Use the menu to choose your dataset, your stimulus, navigate between the various types of
                     visualizations, or export a visualization.</p>
+                </div>
             </div>
         </div>
         <br>
