@@ -22,7 +22,7 @@ $(document).ready(function(){
         hide ? $about.css('margin-bottom', '20px') : $about.css('margin-bottom', '0')
         hide ? $about.css('position', 'absolute') : $about.css('position', 'relative')
         hide ? $about.css('right', '0') : $about.css('right', 'auto')
-        hide ? $about.css('top', '97.5px') : $about.css('top', 'auto')
+        hide ? $about.css('top', '107.6px') : $about.css('top', 'auto')
         hide ? $about.css('border-top-right-radius', '0') : $about.css('border-top-right-radius', '4px')
     });
 
