@@ -3,7 +3,6 @@ var scaledData;
 var svg;
 var img;
 var heatmapOver;
-var densityData;
 var margin = {top: 30, right: 30, bottom: 10, left: 40}
 var classicGradient = ["rgba(59, 232, 255, 0.2)", "rgb(249, 255, 84,0.2)",  "rgba(255, 167, 66, 0.2)","rgb(232, 14, 14,0.2)","rgb(201, 14, 14, 0.2)"]
 
@@ -53,6 +52,7 @@ function scaleData(data) {
     });
 }
 
+// finds max and min density
 function findMinMax(data) {
     var max = 0
     var min = Infinity
@@ -64,8 +64,10 @@ function findMinMax(data) {
 }
 
 export function heatmap() {
-    densityData = undefined;
+
+    // remove old heatmap overlay
     svg.select("g","g").remove()
+
     // x coordinates
     var x = d3.scaleLinear()
                 .domain([0, img.naturalWidth])
@@ -77,12 +79,12 @@ export function heatmap() {
                 .range([ img.height , margin.top ])
 
     // compute the density data
-    densityData = d3.contourDensity()
-    .x(function(d) { return x(d.x); })
-    .y(function(d) { return y(d.y); })
-    .size([img.width, img.height])
-    .bandwidth(14)
-    (scaledData)
+    var densityData = d3.contourDensity()
+                        .x(function(d) { return x(d.x); })
+                        .y(function(d) { return y(d.y); })
+                        .size([img.width, img.height])
+                        .bandwidth(14)
+                        (scaledData)
     // you need to set your own thresholds to get the fixation point legend
 
 
@@ -102,11 +104,9 @@ export function heatmap() {
         .enter().append("path")
         .attr("d", d3.geoPath())
         .attr("fill", function(d) { return color(d.value); })
-        .attr("id", "heat")
 }
 
 export function visualize() {
-    // gets data ready
 
     // gets container ready
     d3.select("#visualization").html("");
@@ -127,10 +127,11 @@ export function visualize() {
                     .attr("width", containerW)
                     .attr("height", containerH)
                 .append("g")
-                            
-            heatmap()
+        
+        // add heatmap overlay
+        heatmap();
 
-            // inserts heatmap and image + zoom
+            // adds image and zoom
             svg.insert("image", ":first-child")
                 .attr("width", img.width)
                 .attr("height", img.height)
@@ -143,10 +144,12 @@ export function visualize() {
             svg.attr('display', 'block')
             svg.attr('margin-left', 'auto')
     }
+
     function loadFailure() {
         alert( "Failed to load.");
         return true;
     }
+
     img.onload = loadImg;
     img.onerror = loadFailure;
     img.src = `/stimuli/${window.stimulus}`

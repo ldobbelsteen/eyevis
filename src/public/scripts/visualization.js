@@ -170,8 +170,8 @@ function updateUsers() {
         if (window.selectedUser === "All users") {
             window.selectedUser = undefined;
         }
+        currentVis.initialize();
         if (currentVis == visFour) {
-            currentVis.initialize();
             currentVis.heatmap();
         } else if (currentVis != undefined) {
             currentVis.visualize();
