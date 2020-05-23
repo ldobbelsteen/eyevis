@@ -100,6 +100,7 @@ function updateStimuli() {
             container.empty();
             currentVis.initialize();
             currentVis.visualize();
+            
         }
 
         filterData();
@@ -169,9 +170,10 @@ function updateUsers() {
         if (window.selectedUser === "All users") {
             window.selectedUser = undefined;
         }
-        if (currentVis != undefined) {
-            container.empty();
+        if (currentVis == visFour) {
             currentVis.initialize();
+            currentVis.heatmap();
+        } else if (currentVis != undefined) {
             currentVis.visualize();
         }
     });

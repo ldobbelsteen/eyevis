@@ -1,6 +1,9 @@
 var filteredData;
 var scaledData;
 var svg;
+var img;
+var heatmapOver;
+var densityData;
 var margin = {top: 30, right: 30, bottom: 10, left: 40}
 var classicGradient = ["rgba(59, 232, 255, 0.2)", "rgb(249, 255, 84,0.2)",  "rgba(255, 167, 66, 0.2)","rgb(232, 14, 14,0.2)","rgb(201, 14, 14, 0.2)"]
 
@@ -24,7 +27,7 @@ function updateData() {
         }
         return true;
     });
-    console.log(filteredData) 
+    scaleData(filteredData);
 }
 
 export function initialize() {
@@ -42,16 +45,68 @@ function scaleData(data) {
                 {
                     x: item.x,
                     y: item.y,
-                    user: item.user
+                    user: item.user,
+                    FixationDuration: item.FixationDuration
                 }
             )
         }
     });
 }
 
+function findMinMax(data) {
+    var max = 0
+    var min = Infinity
+    data.forEach(function (item) {
+        if (item.value > max) max = item.value;
+        if (item.value < min) min = item.value;
+    })
+    return [min,max];
+}
+
+export function heatmap() {
+    densityData = undefined;
+    svg.select("g","g").remove()
+    // x coordinates
+    var x = d3.scaleLinear()
+                .domain([0, img.naturalWidth])
+                .range([ 0, img.width ]); 
+
+    // y coordinates
+    var y = d3.scaleLinear()
+                .domain([img.naturalHeight, 0])
+                .range([ img.height , margin.top ])
+
+    // compute the density data
+    densityData = d3.contourDensity()
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); })
+    .size([img.width, img.height])
+    .bandwidth(14)
+    (scaledData)
+    // you need to set your own thresholds to get the fixation point legend
+
+
+    var minMax = findMinMax(densityData)
+
+    var interval = (minMax[1] - minMax[0]) / 5;
+    var colorDomain = [minMax[0], minMax[0]+interval, minMax[0]+2*interval, minMax[0]+3*interval, minMax[1] + 1 ]
+
+    // color palette
+    var color = d3.scaleLinear()
+                    .domain(colorDomain)   
+                    .range(classicGradient)
+
+    heatmapOver = svg.insert("g", "g")
+        .selectAll("path")
+        .data(densityData)
+        .enter().append("path")
+        .attr("d", d3.geoPath())
+        .attr("fill", function(d) { return color(d.value); })
+        .attr("id", "heat")
+}
+
 export function visualize() {
     // gets data ready
-    scaleData(filteredData);
 
     // gets container ready
     d3.select("#visualization").html("");
@@ -59,7 +114,7 @@ export function visualize() {
     svg = undefined;
 
     // prepares image, used as a means to scale vis thanks to onload function
-    var img = new Image();
+    img = new Image();
     function loadImg() {
         console.log('load vis')
         var ratio = ($("#main").width()) / this.width;
@@ -72,52 +127,10 @@ export function visualize() {
                     .attr("width", containerW)
                     .attr("height", containerH)
                 .append("g")
-            
-            // x coordinates
-            var x = d3.scaleLinear()
-                        .domain([0, img.naturalWidth])
-                        .range([ 0, img.width ]); 
-
-            // y coordinates
-            var y = d3.scaleLinear()
-                        .domain([img.naturalHeight, 0])
-                        .range([ img.height , margin.top ])
-                        
-            // compute the density data
-            var densityData = d3.contourDensity()
-                                .x(function(d) { return x(d.x); })
-                                .y(function(d) { return y(d.y); })
-                                .size([img.width, img.height])
-                                .bandwidth(14)
-                                (scaledData)
-                                // you need to set your own thresholds to get the fixation point legend
-
-            function minMax() {
-                var max = 0
-                var min = Infinity
-                densityData.forEach(function (item) {
-                    if (item.value > max) max = item.value;
-                    if (item.value < min) min = item.value;
-                })
-                return [min,max];
-            }
-            var minMax = minMax()
-
-            var interval = (minMax[1] - minMax[0]) / 5;
-            var colorDomain = [minMax[0], minMax[0]+interval, minMax[0]+2*interval, minMax[0]+3*interval, minMax[1] + 1 ]
-
-            // color palette
-            var color = d3.scaleLinear()
-                            .domain(colorDomain)   
-                            .range(classicGradient)
+                            
+            heatmap()
 
             // inserts heatmap and image + zoom
-            svg.insert("g", "g")
-                .selectAll("path")
-                .data(densityData)
-                .enter().append("path")
-                .attr("d", d3.geoPath())
-                .attr("fill", function(d) { return color(d.value); })
             svg.insert("image", ":first-child")
                 .attr("width", img.width)
                 .attr("height", img.height)
