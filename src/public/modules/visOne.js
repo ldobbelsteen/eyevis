@@ -34,11 +34,11 @@ export function initialize() {
     updateData();
     colorDot.on("change", function () {
         dotColor = $(this).val();
-        visualize();
+        if (window.currentVis == "one") visualize();
     });
     colorLine.on("change", function () {
         lineColor = $(this).val();
-        visualize();
+        if (window.currentVis == "one") visualize();
     });
 }
 

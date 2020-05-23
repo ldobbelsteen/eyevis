@@ -108,6 +108,7 @@ function updateStimuli() {
 
     // Whenever the menu item of a visualization is clicked, do the visualization
     $("#init-vis1").on("click", () => {
+        window.currentVis = "one";
         currentVis = visOne;
         container.empty();
         visOne.initialize();
@@ -115,6 +116,7 @@ function updateStimuli() {
     });
 
     $("#init-vis2").on("click", () => {
+        window.currentVis = "two";
         currentVis = visTwo;
         container.empty();
         visTwo.initialize();
@@ -122,6 +124,7 @@ function updateStimuli() {
     });
 
     $("#init-vis3").on("click", () => {
+        window.currentVis = "three";
         currentVis = visThree;
         container.empty();
         visThree.initialize();
@@ -129,6 +132,7 @@ function updateStimuli() {
     });
 
     $("#init-vis4").on("click", () => {
+        window.currentVis = "four";
         currentVis = visFour;
         container.empty();
         visFour.initialize();
@@ -136,6 +140,7 @@ function updateStimuli() {
     });
 
     $("#init-vis5").on("click", () => {
+        window.currentVis = "five";
         currentVis = visFive;
         container.empty();
         visFive.initialize();
