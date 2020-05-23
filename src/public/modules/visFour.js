@@ -1,44 +1,14 @@
 var filteredData;
 var scaledData;
-var userMenu = $("#vis-four #user-menu");
-var selectedUser;
 var svg;
 var margin = {top: 30, right: 30, bottom: 10, left: 40}
 var classicGradient = ["rgba(59, 232, 255, 0.2)", "rgb(249, 255, 84,0.2)",  "rgba(255, 167, 66, 0.2)","rgb(232, 14, 14,0.2)","rgb(201, 14, 14, 0.2)"]
 
 
-function updateUsers() {
-    userMenu.empty();
-    userMenu.append($("<option selected disabled>---</option>"));
-    let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
-    uniqueUsers.sort().forEach((user) => {
-        userMenu.append($("<option></option>").text(user));
-    });
-    console.log('update users')
-}
-
-function userOn() {
-    userMenu.on("change", () => {
-        console.log('menu change')
-        d3.select("#visualization").html("");
-        selectedUser = userMenu.val();
-        console.log(selectedUser);
-        if (selectedUser === "---") {
-            selectedUser = undefined;
-        }
-        updateData();
-        visualize();
-    });
-}
-
-function userOff() {
-    userMenu.off("change")
-}
-
 function updateData() {
     var filter = {
         StimuliName: window.stimulus,
-        user: selectedUser,
+        user: window.selectedUser,
     }
     filteredData = window.data.filter((item) => {
         item.value = item["FixationDuration"];
@@ -52,9 +22,6 @@ function updateData() {
                 return false;
             }
         }
-        if (item["value"] < 0) return false;
-        if (item["x"] < 0) return false;
-        if (item["y"] < 0) return false;
         return true;
     });
     console.log(filteredData) 
@@ -62,13 +29,7 @@ function updateData() {
 
 export function initialize() {
     console.log('initializing')
-    selectedUser = undefined;
     updateData();
-    updateUsers();
-    userOn();
-    $("#stimuli-menu").on("change", () => {
-        userOff();
-    })
 }
 
 function scaleData(data) {
@@ -89,9 +50,6 @@ function scaleData(data) {
 }
 
 export function visualize() {
-    // turns off user menu
-    userOff();
-
     // gets data ready
     scaleData(filteredData);
 
@@ -171,9 +129,6 @@ export function visualize() {
 
             svg.attr('display', 'block')
             svg.attr('margin-left', 'auto')
-        
-        // re-activates user menu
-        setTimeout(userOn(), 10)
     }
     function loadFailure() {
         alert( "Failed to load.");

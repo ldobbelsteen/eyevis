@@ -7,12 +7,15 @@ import * as visFive from "/modules/visFive.js";
 
 const datasetsMenu = $("#datasets-menu");
 const stimuliMenu = $("#stimuli-menu");
+const userMenu = $("#user-menu")
 const container = $("#visualization");
+var filteredData
 var currentVis;
 
 // Disable menus as they are not yet populated
 datasetsMenu.prop("disabled", true);
 stimuliMenu.prop('disabled', true);
+userMenu.prop("disabled", true)
 
 // List datasets and add them to the dropdown menu
 datasetsMenu.empty();
@@ -29,6 +32,8 @@ $.get("/datasets", (list) => {
 
 // Listen for selection of a dataset
 datasetsMenu.on("change", () => {
+    stimuliMenu.off("change");
+    window.stimulus = undefined;
     stimuliMenu.empty();
     stimuliMenu.append($("<option disabled selected value> Loading dataset... </option>"));
     Papa.parse("/datasets/" + datasetsMenu.val(), {
@@ -50,6 +55,25 @@ datasetsMenu.on("change", () => {
     });
 });
 
+function filterData() {
+    var filter = {
+        StimuliName: window.stimulus
+    };
+    console.log(window.selectedUser)
+
+    filteredData = window.data.filter((item) => {
+        for (let key in filter) {
+            if (filter[key] === undefined) {
+                continue;
+            }
+            if (item[key] != filter[key]) {
+                return false;
+            }
+        }
+        return true;
+    });
+}
+
 // Update the available stimuli and the menu listener
 function updateStimuli() {
     
@@ -65,9 +89,12 @@ function updateStimuli() {
         stimuliMenu.append($(`<option value="${stimulus}" ></option>`).text(stylized));
     });
 
+
     // Listen for selection of a stimulus
     stimuliMenu.on("change", () => {
+        window.selectedUser = undefined;
         window.stimulus = stimuliMenu.val();
+        userMenu.off("change")
 
         if (currentVis != undefined) {
             container.empty();
@@ -75,6 +102,8 @@ function updateStimuli() {
             currentVis.visualize();
         }
 
+        filterData();
+        updateUsers();
     });
 
     // Whenever the menu item of a visualization is clicked, do the visualization
@@ -117,6 +146,28 @@ function updateStimuli() {
         if (currentVis == visFour) {
             container.empty();
             visFour.visualize();
+        }
+    });
+}
+
+function updateUsers() {
+    userMenu.empty();
+    userMenu.prop("disabled", false);
+    userMenu.append($("<option selected>All users</option>"));
+    let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
+    uniqueUsers.sort().forEach((user) => {
+        userMenu.append($("<option></option>").text(user));
+    });
+
+    userMenu.on("change", () => {
+        window.selectedUser = userMenu.val();
+        if (window.selectedUser === "All users") {
+            window.selectedUser = undefined;
+        }
+        if (currentVis != undefined) {
+            container.empty();
+            currentVis.initialize();
+            currentVis.visualize();
         }
     });
 }

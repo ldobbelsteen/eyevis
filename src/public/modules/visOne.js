@@ -1,6 +1,4 @@
 var filteredData;
-var userMenu = $("#vis-one #user-menu");
-var selectedUser;
 var container = d3.select("#visualization");
 var colorDot = $("#color-dot");
 var colorLine = $("#color-line");
@@ -11,20 +9,12 @@ function compare(a, b) {
     return a.Timestamp - b.Timestamp;
 }
 
-function updateUsers() {
-    userMenu.empty();
-    userMenu.append($("<option selected>All users</option>"));
-    let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
-    uniqueUsers.sort().forEach((user) => {
-        userMenu.append($("<option></option>").text(user));
-    });
-}
-
 function updateData() {
     var filter = {
         StimuliName: window.stimulus,
-        user: selectedUser,
+        user: window.selectedUser,
     };
+    console.log(window.selectedUser)
 
     filteredData = window.data.filter((item) => {
         for (let key in filter) {
@@ -37,21 +27,11 @@ function updateData() {
         }
         return true;
     });
-    //console.log(filteredData);
+    console.log(filteredData);
 }
 
 export function initialize() {
-    selectedUser = undefined;
     updateData();
-    updateUsers();
-    userMenu.on("change", () => {
-        selectedUser = userMenu.val();
-        if (selectedUser === "All users") {
-            selectedUser = undefined;
-        }
-        updateData();
-        visualize();
-    });
     colorDot.on("change", function () {
         dotColor = $(this).val();
         visualize();
