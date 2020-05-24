@@ -59,7 +59,6 @@ function filterData() {
     var filter = {
         StimuliName: window.stimulus
     };
-    console.log(window.selectedUser)
 
     filteredData = window.data.filter((item) => {
         for (let key in filter) {

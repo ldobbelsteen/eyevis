@@ -54,8 +54,9 @@ $(document).ready(function(){
         $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
     }
 
+    // when user selects zip file to upload, its name appears on the input field
     document.querySelector('.custom-file-input').addEventListener('change',function(e){
-        var fileName = document.getElementById("inputGroupFile04").files[0].name;
+        var fileName = document.getElementById("fileUpload").files[0].name;
         var nextSibling = e.target.nextElementSibling
         nextSibling.innerText = fileName
     })
