@@ -3,7 +3,6 @@
         "adm-zip": "*",
         "ejs": "*",
         "express": "*",
-        "express-fileupload": "*",
-        "nodemon": "^2.0.4"
+        "express-fileupload": "*"
     }
 }
