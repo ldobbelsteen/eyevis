@@ -1,7 +1,6 @@
 var filteredData, scaledData;
 var svg, img;
 var containerH, containerW;
-var margin = {top: 30, right: 30, bottom: 10, left: 40}
 var classicGradient = ["rgba(59, 232, 255, 0.2)", "rgb(249, 255, 84,0.2)",  "rgba(255, 167, 66, 0.2)","rgb(232, 14, 14,0.2)","rgb(201, 14, 14, 0.2)"]
 
 
@@ -28,7 +27,7 @@ function updateData() {
 }
 
 export function initialize() {
-    console.log('initializing')
+    //console.log('initializing')
     updateData();
 }
 
@@ -76,14 +75,14 @@ export function heatmap() {
 
     // y coordinates
     var y = d3.scaleLinear()
-                .domain([img.naturalHeight, 0])
-                .range([ containerH , margin.top ])
+                .domain([ img.naturalHeight, 0 ])
+                .range([ containerH , 0 ])
 
     // compute the density data
     var densityData = d3.contourDensity()
                         .x(function(d) { return x(d.x); })
                         .y(function(d) { return y(d.y); })
-                        .size([img.width, img.height])
+                        .size([containerW, containerH])
                         .bandwidth(14)
                         (scaledData)
     // you need to set your own thresholds to get the fixation point legend
@@ -124,8 +123,8 @@ export function visualize() {
         containerH = this.height * ratio;
         svg = d3.select("#visualization")
                 .append("svg")
-                    .attr("width", containerW)
-                    .attr("height", containerH)
+                .attr("width", containerW)
+                .attr("height", containerH)
                 .append("g")
         
         // add heatmap overlay
@@ -136,7 +135,7 @@ export function visualize() {
             .attr("width", containerW)
             .attr("height", containerH)
             .attr("xlink:href", `/stimuli/${window.stimulus}`)
-            .attr("class", "img")
+
         // add zoom properties
         d3.select("#visualization").call(d3.zoom().on("zoom", function () {
             svg.attr("transform", d3.event.transform)
