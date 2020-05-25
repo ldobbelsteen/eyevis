@@ -1,4 +1,4 @@
-var filteredData, scaledData;
+var filteredData;
 var svg, img;
 var containerH, containerW;
 var classicGradient = ["rgba(59, 232, 255, 0.2)", "rgb(249, 255, 84,0.2)",  "rgba(255, 167, 66, 0.2)","rgb(232, 14, 14,0.2)","rgb(201, 14, 14, 0.2)"]
@@ -13,6 +13,7 @@ function updateData() {
     filteredData = window.data.filter((item) => {
         item.x = item["MappedFixationPointX"];
         item.y = item["MappedFixationPointY"];
+        item.weight = item["FixationDuration"];
         for (let key in filter) {
             if (filter[key] === undefined) {
                 continue;
@@ -23,32 +24,11 @@ function updateData() {
         }
         return true;
     });
-    scaleData(filteredData);
 }
 
 export function initialize() {
     //console.log('initializing')
     updateData();
-}
-
-// duplicate data based on fixation duration
-// so that it's a gaze duration heatmap, not a fixation count one
-function scaleData(data) {
-    console.log('scale data')
-    scaledData = JSON.parse(JSON.stringify(data));
-    scaledData.forEach( function (item) {
-        var number = item.FixationDuration
-        for ( var n = 0; n < number; n++) {
-            scaledData.push(
-                {
-                    x: item.x,
-                    y: item.y,
-                    user: item.user,
-                    FixationDuration: item.FixationDuration
-                }
-            )
-        }
-    });
 }
 
 // find max and min density (using density data)
@@ -70,7 +50,7 @@ export function heatmap() {
 
     // x coordinates
     var x = d3.scaleLinear()
-                .domain([0, img.naturalWidth])
+                .domain([ 0, img.naturalWidth ])
                 .range([ 0, containerW ]); 
 
     // y coordinates
@@ -82,9 +62,12 @@ export function heatmap() {
     var densityData = d3.contourDensity()
                         .x(function(d) { return x(d.x); })
                         .y(function(d) { return y(d.y); })
-                        .size([containerW, containerH])
+                        .weight(function(d) { return d.weight; })
+                        .size([ containerW, containerH ])
                         .bandwidth(14)
-                        (scaledData)
+                        (filteredData)
+
+    console.log(densityData)
     // you need to set your own thresholds to get the fixation point legend
 
     // compute array with min and max density among single points
