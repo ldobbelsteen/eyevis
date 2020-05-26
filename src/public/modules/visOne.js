@@ -1,9 +1,12 @@
+//Eric Abraham 1408828 scanpath visualization
+
 var filteredData;
 var container = d3.select("#visualization");
 var colorDot = $("#color-dot");
 var colorLine = $("#color-line");
 var dotColor = "steelblue";
 var lineColor = "red";
+var img, xOffset, yOffset, svg, info;
 
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -14,7 +17,7 @@ function updateData() {
         StimuliName: window.stimulus,
         user: window.selectedUser,
     };
-    console.log(window.selectedUser)
+    console.log(window.selectedUser);
 
     filteredData = window.data.filter((item) => {
         for (let key in filter) {
@@ -42,70 +45,48 @@ export function initialize() {
     });
 }
 
-export function visualize() {
-    container.html("");
-    container.append("svg");
-    var svg = container.select("svg");
-    var info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
-    var imgHeight;
-    var imgWidth;
-
-    let img = new Image();
-    img.onload = function () {
-        imgHeight = this.height;
-        imgWidth = this.width;
-        svg.attr("width", this.width)
-            .attr("height", this.height)
-            .insert("image", ":first-child")
-            .attr("width", imgWidth)
-            .attr("height", imgHeight)
-            .attr("xlink:href", `/stimuli/${window.stimulus}`)
-            .attr("class", "img");
-    };
-    img.src = `/stimuli/${window.stimulus}`;
-
-    // let zoomObject = d3.zoom().on("zoom", function () {
-    //     view.attr("transform", d3.event.transform);
-    //     svg.selectAll("image").attr("transform", d3.event.transform);
-    //     svg.selectAll("path").attr("transform", d3.event.transform);
-    // });
-
-    svg.selectAll("g").remove();
-    svg.selectAll(".img").remove();
-    svg.call(
-        d3.zoom().on("zoom", function () {
-            view.attr("transform", d3.event.transform);
-            svg.selectAll("image").attr("transform", d3.event.transform);
-            svg.selectAll("path").attr("transform", d3.event.transform);
-        })
-    );
-
-    var view = svg.append("g").attr("class", "view");
-
+function drawScanpath() {
+    //sorts data chronologically, needed for lines
     let sortedData = filteredData.sort(compare);
-    console.log(sortedData);
+
+    let points = svg.insert("g", "g"); //inside this d3 object the points will be drawn
+
+    let lines = svg.insert("g", "g"); //inside this d3 object the lines will be drawn
+
     var line = d3
         .line()
         .x(function (d) {
-            return d.MappedFixationPointX;
+            return xOffset(d.MappedFixationPointX);
         })
         .y(function (d) {
-            return d.MappedFixationPointY;
+            return yOffset(d.MappedFixationPointY);
         });
 
-    svg.append("path")
-        .attr("class", "line") // attributes given one at a time
-        .attr("d", line(sortedData)) // use the value of myline(xy) as the data, 'd'
+    //function that draws the lines
+    lines
+        .append("path")
+        .attr("class", "line")
+        .attr("d", line(sortedData))
         .style("fill", "none")
         .style("stroke", `${lineColor}`)
         .style("stroke-width", 2);
 
-    view.selectAll("dot")
+    //zoom and pan functions
+    svg.call(
+        d3.zoom().on("zoom", function () {
+            svg.selectAll("g", "g").attr("transform", d3.event.transform);
+            svg.selectAll("image").attr("transform", d3.event.transform);
+        })
+    );
+
+    //this creates circles with offset points, adds the hover pop-up interaction
+    points
+        .selectAll("dot")
         .data(filteredData)
         .enter()
         .append("circle")
-        .attr("cx", (row) => row.MappedFixationPointX)
-        .attr("cy", (row) => row.MappedFixationPointY)
+        .attr("cx", (row) => xOffset(row.MappedFixationPointX))
+        .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
         .style("fill", `${dotColor}`)
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
@@ -127,4 +108,40 @@ export function visualize() {
         .on("mouseout", function (filteredData) {
             info.transition().duration(200).style("opacity", 0);
         });
+}
+
+export function visualize() {
+    container.html("");
+    img = new Image();
+    info = d3.select("body").append("div").attr("class", "output").style("opacity", 0); //the pop-up on hover thingy
+    img.onload = function () {
+        //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
+        //image size variables
+        var ratio = $("#main").width() / this.width;
+        let containerW = $("#main").width();
+        let containerH = this.height * ratio;
+
+        svg = d3
+            .select("#visualization")
+            .append("svg")
+            .attr("width", containerW)
+            .attr("height", containerH)
+            .append("g");
+
+        // x coordinates that will be offset when image is sacled to fit screen
+        xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, containerW]);
+
+        // y coordinates that will be offset when image is scaled to fit screen
+        yOffset = d3.scaleLinear().domain([img.naturalHeight, 0]).range([containerH, 0]);
+
+        drawScanpath();
+
+        //first image is removed and then redrawn, so prevent overlapping images
+        svg.selectAll(".img").remove();
+        svg.insert("image", ":first-child")
+            .attr("width", containerW)
+            .attr("xlink:href", `/stimuli/${window.stimulus}`)
+            .attr("class", "img");
+    };
+    img.src = `/stimuli/${window.stimulus}`;
 }
