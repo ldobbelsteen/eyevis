@@ -153,6 +153,10 @@ button:focus {
     overflow: hidden;
 }
 
+#vis-container {
+    margin-bottom: 30px;
+}
+
 .init {
     width: 100%;
     margin-top: 7px;

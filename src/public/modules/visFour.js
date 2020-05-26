@@ -1,7 +1,8 @@
-var filteredData;
-var svg, img;
+var filteredData, densityData;
+var svg, img, color, overlay;
 var containerH, containerW;
-var classicGradient = ["rgba(59, 232, 255, 0.2)", "rgb(249, 255, 84,0.2)",  "rgba(255, 167, 66, 0.2)","rgb(232, 14, 14,0.2)","rgb(201, 14, 14, 0.2)"]
+var margRight = 100;
+var classicGradient = ["rgba(59, 238, 223, 0.2)", "rgba(145, 238, 146, 0.2)",  "rgba(253, 254, 87, 0.2)","rgba(254, 138, 21, 0.2)","rgba(253, 26, 12, 0.2)", "rgba(172, 0, 1, 0.2)"]
 
 
 // update data based on options selected on menu
@@ -27,8 +28,12 @@ function updateData() {
 }
 
 export function initialize() {
-    //console.log('initializing')
     updateData();
+}
+
+export function newUser() {
+    heatmap();
+    showOverlay();
 }
 
 // find max and min density (using density data)
@@ -42,16 +47,62 @@ function findMinMax(data) {
     return [min,max];
 }
 
-// add heatmap overlay on image
-export function heatmap() {
+function showOverlay() {
+    overlay.selectAll("path").remove()
+    overlay.selectAll("path")
+                .data(densityData)
+                .enter().append("path")
+                .attr("d", d3.geoPath())
+                .attr("fill", function(d) { return color(d.value); })
+}
 
-    // remove old heatmap overlay
-    svg.select("g","g").remove()
+// add heatmap overlay on image
+function heatmap() {
+
+    var defs = svg.append("defs");
+
+    var gradient = defs.append("linearGradient")
+                        .attr("id", "svgGradient")
+                        .attr("x1", "0%")
+                        .attr("x2", "100%")
+                        .attr("y1", "0%")
+                        .attr("y2", "100%");
+
+    gradient.append("stop")
+            .attr('class', 'start')
+            .attr("offset", "0%")
+            .attr("stop-color", "rgba(59, 238, 223)") //light blue
+            .attr("stop-opacity", 1);
+    gradient.append("stop")
+            .attr('class', 'end')
+            .attr("offset", "20%")
+            .attr("stop-color", "rgb(145, 238, 146)") //light green
+            .attr("stop-opacity", 1);
+    gradient.append("stop")
+            .attr('class', 'end')
+            .attr("offset", "40%")
+            .attr("stop-color", "rgb(253, 254, 87)") //yellow
+            .attr("stop-opacity", 1);
+    gradient.append("stop")
+            .attr('class', 'end')
+            .attr("offset", "60%")
+            .attr("stop-color", "rgb(254, 138, 21)") //orange
+            .attr("stop-opacity", 1);
+    gradient.append("stop")
+            .attr('class', 'end')
+            .attr("offset", "80%")
+            .attr("stop-color", "rgb(253, 26, 12)") //red
+            .attr("stop-opacity", 1);
+    gradient.append("stop")
+            .attr('class', 'end')
+            .attr("offset", "100%")
+            .attr("stop-color", "rgb(172, 0, 1)") //dark red
+            .attr("stop-opacity", 1);
 
     // x coordinates
     var x = d3.scaleLinear()
                 .domain([ 0, img.naturalWidth ])
-                .range([ 0, containerW ]); 
+                .range([ 0, (containerW - margRight) ]); 
 
     // y coordinates
     var y = d3.scaleLinear()
@@ -59,36 +110,28 @@ export function heatmap() {
                 .range([ containerH , 0 ])
 
     // compute the density data
-    var densityData = d3.contourDensity()
+    densityData = d3.contourDensity()
                         .x(function(d) { return x(d.x); })
                         .y(function(d) { return y(d.y); })
                         .weight(function(d) { return d.weight; })
-                        .size([ containerW, containerH ])
-                        .bandwidth(14)
+                        .size([ (containerW-margRight), (containerH) ])
+                        .bandwidth(20)
                         (filteredData)
 
     console.log(densityData)
-    // you need to set your own thresholds to get the fixation point legend
 
     // compute array with min and max density among single points
     var minMax = findMinMax(densityData)
 
     // compute 5 equally sized intervals and relative color coding
     var interval = (minMax[1] - minMax[0]) / 5;
-    var colorDomain = [minMax[0], minMax[0]+interval, minMax[0]+2*interval, minMax[0]+3*interval, minMax[1] + 1 ]
+    var colorDomain = [ minMax[0], (minMax[0]+interval), (minMax[0]+2*interval), (minMax[0]+3*interval), (minMax[0]+4*interval), minMax[1] ]
 
     // implement color palette
-    var color = d3.scaleLinear()
+    color = d3.scaleLinear()
                     .domain(colorDomain)   
                     .range(classicGradient)
-
-    // insert overlay on svg
-    svg.insert("g", "g")
-        .selectAll("path")
-        .data(densityData)
-        .enter().append("path")
-        .attr("d", d3.geoPath())
-        .attr("fill", function(d) { return color(d.value); })
+    
 }
 
 export function visualize() {
@@ -101,7 +144,7 @@ export function visualize() {
     img = new Image();
     function loadImg() {
         //console.log('load vis')
-        var ratio = ($("#main").width()) / this.width;
+        var ratio = ($("#main").width()-margRight) / this.width;
         containerW = $("#main").width();
         containerH = this.height * ratio;
         svg = d3.select("#visualization")
@@ -109,25 +152,26 @@ export function visualize() {
                 .attr("width", containerW)
                 .attr("height", containerH)
                 .append("g")
-        
+
         // add heatmap overlay
         heatmap();
 
+         // insert overlay on svg
+        overlay = svg.insert("g", "g")
+        showOverlay();
+
         // add image
         svg.insert("image", ":first-child")
-            .attr("width", containerW)
-            .attr("height", containerH)
+            .attr("width", containerW-margRight)
             .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
         // add zoom properties
-        d3.select("#visualization").call(d3.zoom().on("zoom", function () {
-            svg.attr("transform", d3.event.transform)
+        svg.call(d3.zoom().on("zoom", function () {
+            svg.selectAll("image").attr("transform", d3.event.transform);
+            svg.selectAll("g", "g").attr("transform", d3.event.transform);
         }))
 
-        svg.attr('display', 'block')
-        svg.attr('margin-left', 'auto')
     }
-
     function loadFailure() {
         alert( "Failed to load.");
         return true;

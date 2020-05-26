@@ -171,7 +171,7 @@ function updateUsers() {
         }
         currentVis.initialize();
         if (currentVis == visFour) {
-            currentVis.heatmap();
+            currentVis.newUser();
         } else if (currentVis != undefined) {
             currentVis.visualize();
         }
