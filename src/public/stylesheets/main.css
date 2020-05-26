@@ -180,3 +180,7 @@ button:focus {
     color: white;
     border-color: #f0e9ed;
 }
+
+.val {
+    width: 10px !important;
+}

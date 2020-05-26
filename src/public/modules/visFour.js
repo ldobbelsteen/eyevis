@@ -1,7 +1,10 @@
 var filteredData, densityData;
-var svg, img, color, overlay;
-var containerH, containerW;
-var margRight = 100;
+var svg, img, color, overlay, points;
+var containerH, containerW, x, y;
+let $valueRad = $('#sliderRadius');
+let $valueBand =  $('#sliderBand');
+const $reinit = $('#init-vis4');
+//var margRight = 100;
 var classicGradient = ["rgba(59, 238, 223, 0.2)", "rgba(145, 238, 146, 0.2)",  "rgba(253, 254, 87, 0.2)","rgba(254, 138, 21, 0.2)","rgba(253, 26, 12, 0.2)", "rgba(172, 0, 1, 0.2)"]
 
 
@@ -29,6 +32,12 @@ function updateData() {
 
 export function initialize() {
     updateData();
+    $valueRad.on('input change', () => {
+        if (window.currentVis == "four") showOverlay();
+    });
+    $valueBand.on('input change', () => {
+        if (window.currentVis == "four") newUser();
+    });
 }
 
 export function newUser() {
@@ -49,11 +58,19 @@ function findMinMax(data) {
 
 function showOverlay() {
     overlay.selectAll("path").remove()
+    points.selectAll("circle").remove()
     overlay.selectAll("path")
                 .data(densityData)
                 .enter().append("path")
                 .attr("d", d3.geoPath())
                 .attr("fill", function(d) { return color(d.value); })
+    points.selectAll("cirlce")
+            .attr("stroke", "white")
+              .data(filteredData)
+              .enter().append("circle")
+                .attr("cx", d => x(d.MappedFixationPointX))
+                .attr("cy", d => y(d.MappedFixationPointY))
+                .attr("r", $valueRad.val());
 }
 
 // add heatmap overlay on image
@@ -100,12 +117,13 @@ function heatmap() {
             .attr("stop-opacity", 1);
 
     // x coordinates
-    var x = d3.scaleLinear()
+    x = d3.scaleLinear()
                 .domain([ 0, img.naturalWidth ])
-                .range([ 0, (containerW - margRight) ]); 
+                //.range([ 0, (containerW - margRight) ]); 
+                .range([ 0, (containerW) ]); 
 
     // y coordinates
-    var y = d3.scaleLinear()
+    y = d3.scaleLinear()
                 .domain([ img.naturalHeight, 0 ])
                 .range([ containerH , 0 ])
 
@@ -114,8 +132,9 @@ function heatmap() {
                         .x(function(d) { return x(d.x); })
                         .y(function(d) { return y(d.y); })
                         .weight(function(d) { return d.weight; })
-                        .size([ (containerW-margRight), (containerH) ])
-                        .bandwidth(20)
+                        //.size([ (containerW-margRight), (containerH) ])
+                        .size([ (containerW), (containerH) ])
+                        .bandwidth($valueBand.val())
                         (filteredData)
 
     console.log(densityData)
@@ -144,33 +163,50 @@ export function visualize() {
     img = new Image();
     function loadImg() {
         //console.log('load vis')
-        var ratio = ($("#main").width()-margRight) / this.width;
+        //var ratio = ($("#main").width()-margRight) / this.width;
+        var ratio = ($("#main").width()) / this.width;
         containerW = $("#main").width();
         containerH = this.height * ratio;
         svg = d3.select("#visualization")
                 .append("svg")
                 .attr("width", containerW)
                 .attr("height", containerH)
+                .attr("id", "svg")
                 .append("g")
 
         // add heatmap overlay
         heatmap();
 
          // insert overlay on svg
-        overlay = svg.insert("g", "g")
+        overlay = svg.insert("g", "g");
+        points = svg.append("g", "g");
         showOverlay();
 
         // add image
         svg.insert("image", ":first-child")
-            .attr("width", containerW-margRight)
+            //.attr("width", containerW-margRight)
+            .attr("width", containerW)
             .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
+
         // add zoom properties
-        svg.call(d3.zoom().on("zoom", function () {
+        const zoom = d3.zoom()
+                        .on("zoom", zoomed);
+
+        function zoomed() {
             svg.selectAll("image").attr("transform", d3.event.transform);
             svg.selectAll("g", "g").attr("transform", d3.event.transform);
-        }))
+        }
 
+        svg.call(zoom)
+    
+        $("#reset4").on("click", () => {
+            if (window.currentVis == "four") {
+                svg.transition()
+                    .duration(400)
+                    .call(zoom.transform, d3.zoomIdentity);
+            }
+        });
     }
     function loadFailure() {
         alert( "Failed to load.");

@@ -61,4 +61,20 @@ $(document).ready(function(){
         nextSibling.innerText = fileName
     })
 
+    //slider vis4 circle radius
+    const $valueRad = $('.valueRad');
+    const $sliderR = $('#sliderRadius');
+    $valueRad.html($sliderR.val());
+    $sliderR.on('input change', () => {
+        $valueRad.html($sliderR.val());
+    });
+
+    //slider vis4 bandwidth
+    const $valueBand = $('.valueBand');
+    const $sliderB = $('#sliderBand');
+    $valueBand.html($sliderB.val());
+    $sliderB.on('input change', () => {
+        $valueBand.html($sliderB.val());
+    });
+
 });

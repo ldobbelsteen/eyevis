@@ -147,12 +147,6 @@ function updateStimuli() {
         visFive.visualize();
     });
 
-    $("#reset4").on("click", () => {
-        if (currentVis == visFour) {
-            container.empty();
-            visFour.visualize();
-        }
-    });
 }
 
 function updateUsers() {
