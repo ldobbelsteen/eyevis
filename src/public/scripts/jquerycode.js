@@ -77,4 +77,12 @@ $(document).ready(function(){
         $valueBand.html($sliderB.val());
     });
 
+    //slider vis4 alpha
+    const $valueAlpha = $('.valueAlpha');
+    const $sliderA = $('#sliderAlpha');
+    $valueAlpha.html($sliderA.val());
+    $sliderA.on('input change', () => {
+        $valueAlpha.html($sliderA.val());
+    });
+
 });

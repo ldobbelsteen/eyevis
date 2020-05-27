@@ -1,11 +1,13 @@
+//Chiara Liotta 1414755 - heatmap
+
 var filteredData, densityData;
 var svg, img, color, overlay, points;
 var containerH, containerW, x, y, info;
 let $valueRad = $('#sliderRadius');
 let $valueBand =  $('#sliderBand');
+let $valueAlpha = $('#sliderAlpha');
 const $reinit = $('#init-vis4');
 //var margRight = 100;
-var classicGradient = ["rgba(59, 238, 223, 0.2)", "rgba(145, 238, 146, 0.2)",  "rgba(253, 254, 87, 0.2)","rgba(254, 138, 21, 0.2)","rgba(253, 26, 12, 0.2)", "rgba(172, 0, 1, 0.2)"]
 
 
 // update data based on options selected on menu
@@ -38,6 +40,9 @@ export function initialize() {
     $valueBand.on('input change', () => {
         if (window.currentVis == "four") newUser();
     });
+    $valueAlpha.on('input change', () => {
+        if (window.currentVis == "four") showOverlay();
+    });
 }
 
 export function newUser() {
@@ -57,6 +62,15 @@ function findMinMax(data) {
 }
 
 function showOverlay() {
+    
+    var classicGradient = ["rgba(59, 238, 223,"+ $valueAlpha.val() + ")",
+                        "rgba(145, 238, 146, "+ $valueAlpha.val() + ")",
+                        "rgba(253, 254, 87, "+ $valueAlpha.val() + ")",
+                        "rgba(254, 138, 21, "+ $valueAlpha.val() + ")",
+                        "rgba(253, 26, 12, "+ $valueAlpha.val() + ")", 
+                        "rgba(172, 0, 1, "+ $valueAlpha.val() + ")"]
+
+    color.range(classicGradient)
     overlay.selectAll("path").remove()
     points.selectAll("circle").remove()
     overlay.selectAll("path")
@@ -166,8 +180,7 @@ function heatmap() {
 
     // implement color palette
     color = d3.scaleLinear()
-                    .domain(colorDomain)   
-                    .range(classicGradient)
+                    .domain(colorDomain) 
     
 }
 
