@@ -1,6 +1,6 @@
 var filteredData, densityData;
 var svg, img, color, overlay, points;
-var containerH, containerW, x, y;
+var containerH, containerW, x, y, info;
 let $valueRad = $('#sliderRadius');
 let $valueBand =  $('#sliderBand');
 const $reinit = $('#init-vis4');
@@ -70,7 +70,25 @@ function showOverlay() {
               .enter().append("circle")
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
-                .attr("r", $valueRad.val());
+                .attr("r", $valueRad.val())
+                .on("mouseover", function (filteredData) {
+                    info.transition().duration(100).style("opacity", "1");
+                    info.html(
+                        "x: " +
+                            filteredData.MappedFixationPointX +
+                            "<br>" +
+                            "y: " +
+                            filteredData.MappedFixationPointY +
+                            "<br>" +
+                            "Fixation Duration: " +
+                            filteredData.FixationDuration
+                    );
+                    info.style("left", d3.event.pageX + 8 + "px");
+                    info.style("top", d3.event.pageY - 80 + "px");
+                })
+                .on("mouseout", function () {
+                    info.transition().duration(200).style("opacity", 0);
+                });
 }
 
 // add heatmap overlay on image
@@ -158,6 +176,7 @@ export function visualize() {
     // get container ready
     d3.select("#visualization").html("");
     document.getElementById('visualization').style.position = 'relative'
+    info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
     // prepare image and scale vis
     img = new Image();
