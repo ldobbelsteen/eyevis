@@ -1,14 +1,3 @@
-function filterData(data, filter) {
-    return data.filter((item) => {
-        for (let key in filter) {
-            if (item[key] != filter[key]) {
-                return false;
-            }
-        }
-        return true;
-    });
-}
-
 export function initialize() {}
 
 export function visualize() {
@@ -16,26 +5,9 @@ export function visualize() {
     // Find input fields and visualization container
     const gridSizeInputX = $("#vis-three input:eq(0)");
     const gridSizeInputY = $("#vis-three input:eq(1)");
-    const container = d3.select("#visualization");
 
-    // Filter dataset data by the current stimulus
-    let data = filterData(window.data, {
-        StimuliName: window.stimulus
-    });
 
-    // Create svg for the ThemeRiver
-    container.html("");
-    container.append("svg");
-
-    // Get the container width and height
-    let containerWidth = parseInt(container.style("width"));
-    let containerHeight = parseInt(container.style("height"));
-
-    let svg = container.select("svg");
-    svg.style("margin", "20px")
-
-    // Add the stimulus
-    // This is where Lukas had both the stimuli image and his visualization, I only need the visualization for now 
+    // Load stimulus (won't be displayed, or will it?? Who knows)
     let stimulusWidth;
     let stimulusHeight;
     let stimulusLink = "/stimuli/" + window.stimulus;
@@ -43,8 +15,7 @@ export function visualize() {
     image.onload = () => {
         stimulusWidth = image.naturalWidth;
         stimulusHeight = image.naturalHeight;
-        svg.attr("width", stimulusWidth)
-            .attr("height", stimulusHeight);
+
         gridSizeInputX.on("change", themeRiver);
         gridSizeInputY.on("change", themeRiver);
         themeRiver();
@@ -53,136 +24,150 @@ export function visualize() {
 
     function themeRiver() {
 
-        // 8x8 Possible colors for AOIs
-        let colorRange = [
-            "#63b598", "#ce7d78", "#ea9e70", "#a48a9e", "#c6e1e8", "#648177", "#0d5ac1",
-            "#f205e6", "#1c0365", "#14a9ad", "#4ca2f9", "#a4e43f", "#d298e2", "#6119d0",
-            "#d2737d", "#c0a43c", "#f2510e", "#651be6", "#79806e", "#61da5e", "#cd2f00",
-            "#9348af", "#01ac53", "#c5a4fb", "#996635", "#b11573", "#4bb473", "#75d89e",
-            "#2f3f94", "#2f7b99", "#da967d", "#34891f", "#b0d87b", "#ca4751", "#7e50a8",
-            "#c4d647", "#e0eeb8", "#11dec1", "#289812", "#566ca0", "#ffdbe1", "#2f1179",
-            "#935b6d", "#916988", "#513d98", "#aead3a", "#9e6d71", "#4b5bdc", "#0cd36d",
-            "#250662", "#cb5bea", "#228916", "#ac3e1b", "#df514a", "#539397", "#880977",
-            "#f697c1", "#ba96ce", "#679c9d", "#c6c42c", "#5d2c52", "#48b41b", "#e1cf3b",
-            "#5be4f0", "#57c4d8", "#a4d17a", "#225b80", "#be608b", "#96b00c", "#088baf"
-        ];
+        // Create the svg
+        let svg = d3.select("#visualization").html("")
+            .append("svg")
+            .attr("width", stimulusWidth)
+            .attr("height", stimulusHeight)
+            .append("g");
+
 
         // Get input values for the amount of horizontal and vertical AOIs
         let gridSizeX = gridSizeInputX.val();
         let gridSizeY = gridSizeInputY.val();
 
-        // Array of AOI objects
-        let aois = [];
 
-        // Calculate width and height of AOIs
+        // Get AOI sizes
         let AOIsizeX = stimulusWidth / gridSizeX;
         let AOIsizeY = stimulusHeight / gridSizeY;
 
-        // Add the AOIs to the array
+
+        // Color pattern
+        let colors = d3.scaleOrdinal(d3.interpolatePlasma);
+
+
+        // Creating array with AOIs
+        let aois = [];
         for (let x = 0; x < gridSizeX; x++) {
             for (let y = 0; y < gridSizeY; y++) {
                 aois.push({
-                    color: colorRange.pop(),
+                    color: colors(Math.random()),
                     x1: AOIsizeX * x,
                     x2: AOIsizeX * (x + 1),
                     y1: AOIsizeY * y,
                     y2: AOIsizeY * (y + 1),
                     gridX: x,
-                    gridY: y,
-                    name: "aoi_" + String(x) + "_" + String(y)
-                })
+                    gridY: y
+                });
             }
         }
         console.log(aois);
 
+
         // Making array with the data
-        // I am still not sure what the best way to structure the data would be
-        // I keep changing it in the hope that something will eventually work
         let aoiInfo = [];
-        for (let stamp = 0; stamp < 10000; stamp += 1000) {
-                let timestampInfo = {};
-                timestampInfo.time = stamp;
-                timestampInfo.aois = [];
-            aois.forEach(aoi => {
-                let aoiInfo = {};
-                aoiInfo.name = aoi.name;
-                aoiInfo.timestamp = stamp;
-
-                // Need to figure out how to count the fixations in each aoi later
-                // For now it's just a random count between 0 and 10
-                aoiInfo.fixCount = Math.floor(Math.random() * 10); 
-                aoiInfo.color = aoi.color;
-
-                timestampInfo.aois.push(aoiInfo);
+        for (let stamp = 0; stamp <= 10000; stamp += 1000) {
+            let timestampInfo = {};
+            timestampInfo.x = stamp;
+            aois.forEach((aoi) => {
+                let name = "aoi_" + aoi.gridX + "_" + aoi.gridY;
+                timestampInfo[name] = Math.floor(Math.random() * 10);
             });
             aoiInfo.push(timestampInfo);
         }
         console.log(aoiInfo);
 
-    
-        // Scaling x
-        var x = d3.scaleLinear()
-            .domain(d3.extent(aoiInfo, function(d) { return d.timestamp; }))
-            .range([ 0, containerWidth ]);
-        
-        // Scaling y
-        var y = d3.scaleLinear()
-            .domain([0, d3.max(aoiInfo, function(d) { return +d.fixCount; })])
-            .range([ containerHeight, 0 ]);
 
+        //Getting all the names of the aois to use as keys
+        var keys = Object.keys(aoiInfo[0]);
+        keys.shift();
+        console.log(keys);
 
-        //One example added this but i'm not sure if I need it... the console doesn't like the ordinal thing
-        // var z = d3.scale.ordinal()
-        //    .range(colorRange);
-
-        // Set dimensions of the svg and set rendering
-        //svg.html("");
-        //svg.attr("viewBox", [0, 0, containerWidth, containerHeight]);
-        //svg.attr("shape-rendering", "crispEdges");
 
         //Creating stack
-        var stack = d3.layout.stack()
-            .offset("silhouette")
-            .keys(function(d) {return d.name;})
-            .values(function(d) { return d.aois; })
-            .x(function(d) { return d.timestamp; })
-            .y(function(d) { return d.fixCount; });
+        var stack = d3.stack()
+            .offset(d3.stackOffsetSilhouette)
+            .order(d3.stackOrderNone)
+            .keys(keys);
 
-        //Creates nested format, but I believe I already have this
-        //var nest = d3.nest()
-        //    .key(function(d) { return d.name; });
 
-        // Making it a filled in area instead of just lines
-        // I think this is where (one of the) errors occur, 
-        // the example magically had a y and y0 after reading a csv file that contained neither
-        // So where the hell do they come from...
-        var area = d3.svg.area()
-            .interpolate("cardinal")
-            .x(function(d) { return x(d.timestamp); })
-            .y0(function(d) { return y(d.y0); })
-            .y1(function(d) { return y(d.y0 + d.y); });
-    
         //Creating the layers
         var layers = stack(aoiInfo);
-        
-        //Making the graph
-        svg.selectAll(".layer")
+        console.log(layers);
+
+
+        // Calculating minumums and maximums for scaling
+        var minX = d3.min(aoiInfo, function(d){
+            return d.x; 
+         });
+     
+         var maxX = d3.max(aoiInfo, function(d){
+             return d.x;
+         });
+     
+         var minY = d3.min(layers, function(l) {
+             return d3.min(l, function(d) {
+                 return d[0];
+             })
+         });
+     
+         var maxY = d3.max(layers, function(l) {
+             return d3.max(l, function(d) {
+                 return d[1];
+             })
+         });
+     
+         // Scaling
+         var xScale = d3.scaleLinear()
+             .domain([minX, maxX])
+             .range([40, stimulusWidth-40]);
+     
+         var yScale = d3.scaleLinear()
+             .domain([minY, maxY])
+             .range([stimulusHeight-40, 40]);
+         
+         var yAxisScale = d3.scaleLinear()
+             .domain([0, 2*maxY])
+             .range([stimulusHeight-40, 40]);
+
+        // Making it a filled in area instead of just lines
+        var area = d3.area()
+            .curve(d3.curveCardinal)
+            .x(function(d) { return xScale(d.data.x); })
+            .y0(function(d) { return yScale(d[0]); })
+            .y1(function(d) { return yScale(d[1]); });
+
+
+        // Making the graph
+        // Color is just weird for now
+        svg.selectAll("g")
             .data(layers)
-            .enter().append("path")
-            .attr("class", "layer")
-            .attr("d", function(d) { return area(d.fixCount); })
-            .style("fill", function(d) { return d.color });
+            .enter()
+            .append("g")
+            .attr("fill", function(d) {
+                return colors(d.key);
+            });
+
+        svg.selectAll("path") 
+            .data(layers)
+            .enter()
+            .append("path")
+            .attr("d", area)
+            .attr("fill", function(d) {
+                return colors(d.key);
+            });
+        
 
         // Adding x-axis
         svg.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + stimulusHeight + ")")
-            .call(d3.axisBottom(x));
+            .attr("transform", "translate(0," + (stimulusHeight-40) + ")")
+            .call(d3.axisBottom(xScale));
       
         // Adding y-axis
         svg.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(" + stimulusWidth + ", 0)")
-            .call(d3.axisLeft(y));
+            .attr("transform", "translate(40, 0)")
+            .call(d3.axisLeft(yAxisScale));
     }
 }
