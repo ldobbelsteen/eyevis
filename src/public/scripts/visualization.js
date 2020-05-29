@@ -42,6 +42,14 @@ function updateDatasets() {
 function updateStimuli() {
     stimuliMenu.empty().append($("<option disabled selected value> Loading selected dataset... </option>"));
     d3.tsv("/datasets/" + datasetsMenu.val()).then(result => {
+        result.forEach(row => {
+            if (row.StimuliName.includes("ö")) {
+                row.StimuliName = row.StimuliName.replace("ö", "�");
+            }
+            if (row.StimuliName.includes("ü")) {
+                row.StimuliName = row.StimuliName.replace("ü", "�");
+            }
+        });
         data = result;
         console.log(data)
         stimuliMenu.prop('disabled', false);
