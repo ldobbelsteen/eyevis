@@ -9,12 +9,6 @@ function filterData(data, filter) {
     });
 }
 
-function randomColor() {
-    return "#" + Math.floor(Math.random()*16777215).toString(16);
-}
-
-export function initialize() {}
-
 export function visualize() {
 
     // Find input fields and visualization container
