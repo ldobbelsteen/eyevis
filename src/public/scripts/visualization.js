@@ -12,7 +12,6 @@ var data;
 
 // Filter the full dataset according to selected values
 function filterData() {
-    console.log(window.user)
     window.data = data.filter(row => {
         return (
             row.StimuliName === window.stimulus &&
@@ -51,7 +50,6 @@ function updateStimuli() {
             }
         });
         data = result;
-        console.log(data)
         stimuliMenu.prop('disabled', false);
         stimuliMenu.empty().append($("<option disabled selected value> -- select a stimulus -- </option>"));
         let uniqueStimuli = [...new Set(data.map(item => item.StimuliName))];
