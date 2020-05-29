@@ -1,4 +1,3 @@
-// Import the visualization modules
 import * as visOne from "/modules/visOne.js";
 import * as visTwo from "/modules/visTwo.js";
 import * as visThree from "/modules/visThree.js";
@@ -7,168 +6,145 @@ import * as visFive from "/modules/visFive.js";
 
 const datasetsMenu = $("#datasets-menu");
 const stimuliMenu = $("#stimuli-menu");
-const userMenu = $("#user-menu")
+const usersMenu = $("#users-menu");
 const container = $("#visualization");
-var filteredData
-var currentVis;
+var data;
+
+// Filter the full dataset according to selected values
+function filterData() {
+    console.log(window.user)
+    window.data = data.filter(row => {
+        return (
+            row.StimuliName === window.stimulus &&
+            (
+                row.user === window.user || 
+                window.user === "All users" || 
+                window.user === undefined
+            )
+        );
+    });
+}
+
+// List datasets and update the menu
+function updateDatasets() {
+    datasetsMenu.empty().append($("<option disabled selected value> Loading list of available datasets... </option>"));
+    $.get("/datasets", list => {
+        datasetsMenu.prop("disabled", false);
+        datasetsMenu.empty().append($("<option disabled selected value> -- select a dataset -- </option>"));
+        list.forEach(element => {
+            let capitalized = element[0].toUpperCase() + element.slice(1);
+            datasetsMenu.append($(`<option value="${element}"></option>`).text(capitalized));
+        });
+    });
+}
+
+// List all of the unique stimuli and update the menu
+function updateStimuli() {
+    stimuliMenu.empty().append($("<option disabled selected value> Loading selected dataset... </option>"));
+    d3.tsv("/datasets/" + datasetsMenu.val()).then(result => {
+        data = result;
+        console.log(data)
+        stimuliMenu.prop('disabled', false);
+        stimuliMenu.empty().append($("<option disabled selected value> -- select a stimulus -- </option>"));
+        let uniqueStimuli = [...new Set(data.map(item => item.StimuliName))];
+        uniqueStimuli.sort().forEach(stimulus => {
+            let stylized = stimulus;
+            stylized = stylized.split('.').slice(0, -1).join('.'); // Remove file extension from stimulus name
+            stylized = stylized.split("_").join(" "); // Replace underscores with spaces
+            stimuliMenu.append($(`<option value="${stimulus}" ></option>`).text(stylized));
+        });
+    });
+}
+
+// List all of the unique users and update the menu
+function updateUsers() {
+    usersMenu.prop("disabled", false);
+    usersMenu.empty().append($("<option selected> All users </option>"));
+    let uniqueUsers = [...new Set(window.data.map(item => item.user))];
+    uniqueUsers.sort().forEach(user => {
+        usersMenu.append($("<option></option>").text(user));
+    });
+}
 
 // Disable menus as they are not yet populated
 datasetsMenu.prop("disabled", true);
 stimuliMenu.prop('disabled', true);
-userMenu.prop("disabled", true)
+usersMenu.prop("disabled", true);
 
-// List datasets and add them to the dropdown menu
-datasetsMenu.empty();
-datasetsMenu.append($("<option disabled selected value> Loading datasets... </option>"));
-$.get("/datasets", (list) => {
-    datasetsMenu.prop("disabled", false);
-    datasetsMenu.empty();
-    datasetsMenu.append($("<option disabled selected value> -- select a dataset -- </option>"));
-    list.forEach((element) => {
-        let capitalized = element[0].toUpperCase() + element.slice(1);
-        datasetsMenu.append($(`<option value="${element}"></option>`).text(capitalized));
-    });
-});
-
-// Listen for selection of a dataset
-datasetsMenu.on("change", () => {
-    stimuliMenu.off("change");
-    window.stimulus = undefined;
-    stimuliMenu.empty();
-    stimuliMenu.append($("<option disabled selected value> Loading dataset... </option>"));
-    Papa.parse("/datasets/" + datasetsMenu.val(), {
-        download: true,
-        header: true,
-        complete: (result) => {
-            // Write result to data variable and make sure there are no umlauts
-            window.data = result.data;
-            window.data.forEach((datapoint) => {
-                if (datapoint.StimuliName.includes("ö")) {
-                    datapoint.StimuliName = datapoint.StimuliName.replace("ö", "�");
-                }
-                if (datapoint.StimuliName.includes("ü")) {
-                    datapoint.StimuliName = datapoint.StimuliName.replace("ü", "�");
-                }
-            });
-            updateStimuli();
-        }
-    });
-});
-
-function filterData() {
-    var filter = {
-        StimuliName: window.stimulus
-    };
-
-    filteredData = window.data.filter((item) => {
-        for (let key in filter) {
-            if (filter[key] === undefined) {
-                continue;
-            }
-            if (item[key] != filter[key]) {
-                return false;
-            }
-        }
-        return true;
-    });
+window.onload = () => {
+    updateDatasets();
 }
 
-// Update the available stimuli and the menu listener
-function updateStimuli() {
-    
-    // Populate the stimuli menu
-    let uniqueStimuli = [...new Set(window.data.map((item) => item.StimuliName))];
-    stimuliMenu.prop('disabled', false);
-    stimuliMenu.empty();
-    stimuliMenu.append($("<option disabled selected value> -- select a stimulus -- </option>"));
-    uniqueStimuli.sort().forEach((stimulus) => {
-        let stylized = stimulus;
-        stylized = stylized.split('.').slice(0, -1).join('.'); // Remove file extension from stimulus name
-        stylized = stylized.split("_").join(" ") // Replace underscores with spaces
-        stimuliMenu.append($(`<option value="${stimulus}" ></option>`).text(stylized));
-    });
+datasetsMenu.on("change", () => {
+    updateStimuli();
+});
 
+stimuliMenu.on("change", () => {
+    window.stimulus = stimuliMenu.val();
+    window.user = undefined;
+    filterData();
+    updateUsers();
+    redraw("stimulus");
+});
 
-    // Listen for selection of a stimulus
-    stimuliMenu.on("change", () => {
-        window.selectedUser = undefined;
-        window.stimulus = stimuliMenu.val();
-        userMenu.off("change")
+usersMenu.on("change", () => {
+    window.user = usersMenu.val();
+    filterData();
+    redraw("user");
+});
 
-        if (currentVis != undefined) {
-            container.empty();
-            currentVis.initialize();
-            currentVis.visualize();
-            
-        }
-
-        filterData();
-        updateUsers();
-    });
-
-    // Whenever the menu item of a visualization is clicked, do the visualization
-    $("#init-vis1").on("click", () => {
-        window.currentVis = "one";
-        currentVis = visOne;
-        container.empty();
+function redraw(change) {
+    if (window.visualization === "one") {
         visOne.initialize();
         visOne.visualize();
-    });
-
-    $("#init-vis2").on("click", () => {
-        window.currentVis = "two";
-        currentVis = visTwo;
-        container.empty();
+    } else if (window.visualization === "two") {
         visTwo.initialize();
         visTwo.visualize();
-    });
-
-    $("#init-vis3").on("click", () => {
-        window.currentVis = "three";
-        currentVis = visThree;
-        container.empty();
+    } else if (window.visualization === "three") {
         visThree.initialize();
         visThree.visualize();
-    });
-
-    $("#init-vis4").on("click", () => {
-        window.currentVis = "four";
-        currentVis = visFour;
-        container.empty();
-        visFour.initialize();
-        visFour.visualize();
-    });
-
-    $("#init-vis5").on("click", () => {
-        window.currentVis = "five";
-        currentVis = visFive;
-        container.empty();
-        visFive.initialize();
+    } else if (window.visualization === "four") {
+        if (change === "user") {
+            visFour.initialize();
+            visFour.newUser();
+        } else {
+            visFour.initialize();
+            visFour.visualize();
+        }
+    } else if (window.visualization === "five") {
         visFive.visualize();
-    });
-
+    }
 }
 
-function updateUsers() {
-    userMenu.empty();
-    userMenu.prop("disabled", false);
-    userMenu.append($("<option selected>All users</option>"));
-    let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
-    uniqueUsers.sort().forEach((user) => {
-        userMenu.append($("<option></option>").text(user));
-    });
+$("#init-vis1").on("click", () => {
+    window.visualization = "one";
+    container.empty();
+    visOne.initialize();
+    visOne.visualize();
+});
 
-    userMenu.on("change", () => {
-        window.selectedUser = userMenu.val();
-        if (window.selectedUser === "All users") {
-            window.selectedUser = undefined;
-        }
-        if (currentVis == visFour) {
-            currentVis.initialize();
-            currentVis.newUser();
-        } else if (currentVis != undefined) {
-            currentVis.initialize();
-            currentVis.visualize();
-        }
-    });
-}
+$("#init-vis2").on("click", () => {
+    window.visualization = "two";
+    container.empty();
+    visTwo.initialize();
+    visTwo.visualize();
+});
+
+$("#init-vis3").on("click", () => {
+    window.visualization = "three";
+    container.empty();
+    visThree.initialize();
+    visThree.visualize();
+});
+
+$("#init-vis4").on("click", () => {
+    window.visualization = "four";
+    container.empty();
+    visFour.initialize();
+    visFour.visualize();
+});
+
+$("#init-vis5").on("click", () => {
+    window.visualization = "five";
+    visFive.visualize();
+});
