@@ -60,30 +60,29 @@ $(document).ready(function(){
         var nextSibling = e.target.nextElementSibling
         nextSibling.innerText = fileName
     })
+
+    //function to update a slider
+    function updateSlider(slider, value) {
+        value.html(slider.val());
+        slider.on('input change', () => {
+            value.html(slider.val());
+        });
+    }
     
     //slider vis4 circle radius
     const $valueRad = $('.valueRad');
     const $sliderR = $('#sliderRadius');
-    $valueRad.html($sliderR.val());
-    $sliderR.on('input change', () => {
-        $valueRad.html($sliderR.val());
-    });
+    updateSlider($sliderR, $valueRad);
 
     //slider vis4 bandwidth
     const $valueBand = $('.valueBand');
     const $sliderB = $('#sliderBand');
-    $valueBand.html($sliderB.val());
-    $sliderB.on('input change', () => {
-        $valueBand.html($sliderB.val());
-    });
+    updateSlider($sliderB, $valueBand);
 
     //slider vis4 alpha
     const $valueAlpha = $('.valueAlpha');
     const $sliderA = $('#sliderAlpha');
-    $valueAlpha.html($sliderA.val());
-    $sliderA.on('input change', () => {
-        $valueAlpha.html($sliderA.val());
-    });
+    updateSlider($sliderA, $valueAlpha);
 
     //function to reset a slider to a value
     function resetSlider(slider, value) {
