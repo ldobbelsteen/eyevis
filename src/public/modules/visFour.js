@@ -3,9 +3,9 @@
 var filteredData, densityData;
 var svg, img, color, overlay, points;
 var containerH, containerW, x, y, info;
-let $valueRad = $('#sliderRadius');
-let $valueBand =  $('#sliderBand');
-let $valueAlpha = $('#sliderAlpha');
+const $valueRad = $('#sliderRadius');
+const $valueBand =  $('#sliderBand');
+const $valueAlpha = $('#sliderAlpha');
 const $reinit = $('#init-vis4');
 //var margRight = 100;
 
@@ -35,13 +35,13 @@ function updateData() {
 export function initialize() {
     updateData();
     $valueRad.on('input change', () => {
-        if (window.currentVis == "four") showOverlay();
+        if (window.visualization == "four") showOverlay();
     });
     $valueBand.on('input change', () => {
-        if (window.currentVis == "four") newUser();
+        if (window.visualization == "four") newUser();
     });
     $valueAlpha.on('input change', () => {
-        if (window.currentVis == "four") showOverlay();
+        if (window.visualization == "four") showOverlay();
     });
 }
 
