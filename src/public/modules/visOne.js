@@ -37,11 +37,11 @@ export function initialize() {
     updateData();
     colorDot.on("change", function () {
         dotColor = $(this).val();
-        if (window.currentVis == "one") visualize();
+        if (window.visualization == "one") visualize();
     });
     colorLine.on("change", function () {
         lineColor = $(this).val();
-        if (window.currentVis == "one") visualize();
+        if (window.visualization == "one") visualize();
     });
 }
 

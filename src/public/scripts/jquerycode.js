@@ -31,7 +31,7 @@ $(document).ready(function(){
         $main.toggleClass('moveRight')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = 250 + (window.innerWidth - 250) * 0.05
-        var smallerWidth = (window.innerWidth - 250) * 0.9 - 10
+        var smallerWidth = (window.innerWidth - 250) * 0.9
         var hide = $about.hasClass('hide')
         $main.animate({width: moveRight ? smallerWidth : standardW }, { duration: 250, queue: false})
         $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
@@ -45,7 +45,7 @@ $(document).ready(function(){
         var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = 250 + (window.innerWidth - 250) * 0.05
-        var smallerWidth = (window.innerWidth - 250) * 0.9 - 10
+        var smallerWidth = (window.innerWidth - 250) * 0.9
         if (!hide) {
             $about.animate({width: moveRight ? smallerWidth : standardW}, { duration: 250, queue: false})
         }
@@ -61,28 +61,42 @@ $(document).ready(function(){
         nextSibling.innerText = fileName
     })
 
+    //function to update a slider
+    function updateSlider(slider, value) {
+        value.html(slider.val());
+        slider.on('input change', () => {
+            value.html(slider.val());
+        });
+    }
+    
     //slider vis4 circle radius
     const $valueRad = $('.valueRad');
     const $sliderR = $('#sliderRadius');
-    $valueRad.html($sliderR.val());
-    $sliderR.on('input change', () => {
-        $valueRad.html($sliderR.val());
-    });
+    updateSlider($sliderR, $valueRad);
 
     //slider vis4 bandwidth
     const $valueBand = $('.valueBand');
     const $sliderB = $('#sliderBand');
-    $valueBand.html($sliderB.val());
-    $sliderB.on('input change', () => {
-        $valueBand.html($sliderB.val());
-    });
+    updateSlider($sliderB, $valueBand);
 
     //slider vis4 alpha
     const $valueAlpha = $('.valueAlpha');
     const $sliderA = $('#sliderAlpha');
-    $valueAlpha.html($sliderA.val());
-    $sliderA.on('input change', () => {
-        $valueAlpha.html($sliderA.val());
+    updateSlider($sliderA, $valueAlpha);
+
+    //function to reset a slider to a value
+    function resetSlider(slider, value) {
+        slider.val(value);
+        slider.change();
+    }
+
+    //reset sliders vis4
+    const $resetS4 = $('#reset-sliders4');
+    $resetS4.on('click', () => {
+        resetSlider($sliderA, 0.3);
+        resetSlider($sliderB, 20);
+        resetSlider($sliderR, 1);
     });
+    
 
 });

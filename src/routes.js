@@ -1,6 +1,6 @@
-var data = require("./data");
-var upload = require("express-fileupload");
-var routes = require("express").Router();
+const data = require("./data");
+const upload = require("express-fileupload");
+const routes = require("express").Router();
 
 // Serve main page
 routes.get("/", (req, res) => {
@@ -9,14 +9,14 @@ routes.get("/", (req, res) => {
 
 // Serve list of datasets
 routes.get("/datasets", (req, res) => {
-    data.listDatasets((list) => {
+    data.listDatasets(list => {
         res.send(list);
     });
 });
 
 // Serve list of stimuli
 routes.get("/stimuli", (req, res) => {
-    data.listStimuli((list) => {
+    data.listStimuli(list => {
         res.send(list);
     });
 });
@@ -30,8 +30,8 @@ routes.use(upload({
 
 // Handle file uploads
 routes.post("/upload", (req, res) => {
-    var name = req.files.upload.name;
-    var buffer = req.files.upload.data;
+    let name = req.files.upload.name;
+    let buffer = req.files.upload.data;
     data.addDataset(name, buffer);
     res.render("upload");
 });
