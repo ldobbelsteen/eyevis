@@ -83,7 +83,13 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
                         <div>
                             <button type="button" class="btn btn-default init" id="init-vis3">(Re)Initialize</button> <br>
-                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input type="number" min="2" max="8" value="3">
+                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input type="number" min="2" max="8" value="3"><br>
+                            <br>
+                            <span>Offset (standard or normalized)</span> <br> 
+                            <select class="custom-select" id="offset-option">
+                                <option selected value="d3.stackOffsetSilhouette">Standard</option>
+                                <option value="d3.stackOffsetExpand">Normalized</option>
+                            </select>
                         </div>
                     </div>
                 </li>
