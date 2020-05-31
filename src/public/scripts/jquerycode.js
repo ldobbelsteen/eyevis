@@ -94,11 +94,9 @@ $(document).ready(function(){
     //reset sliders vis4
     const $resetS4 = $('#reset-sliders4');
     $resetS4.on('click', () => {
-        if (window.visualization == "four") {
-            resetSlider($sliderA, 0.3);
-            resetSlider($sliderB, 20);
-            resetSlider($sliderR, 1);
-        }
+        resetSlider($sliderA, 0.3);
+        resetSlider($sliderB, 20);
+        resetSlider($sliderR, 1);
     });
     
 
