@@ -100,7 +100,10 @@ function drawScanpath() {
                     filteredData.MappedFixationPointY +
                     "<br>" +
                     "User: " +
-                    filteredData.user
+                    filteredData.user +
+                    "<br>" +
+                    "FixationIndex: " +
+                    filteredData.FixationIndex
             );
             info.style("left", d3.event.pageX + 8 + "px");
             info.style("top", d3.event.pageY - 80 + "px");
