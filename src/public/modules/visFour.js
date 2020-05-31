@@ -169,8 +169,6 @@ function heatmap() {
                         .bandwidth($valueBand.val())
                         (filteredData)
 
-    console.log(densityData)
-
     // compute array with min and max density among single points
     var minMax = findMinMax(densityData)
 
@@ -188,7 +186,8 @@ export function visualize() {
 
     // get container ready
     d3.select("#visualization").html("");
-    document.getElementById('visualization').style.position = 'relative'
+    document.getElementById('visualization').style.position = 'relative';
+
     info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
     // prepare image and scale vis
@@ -196,14 +195,20 @@ export function visualize() {
     function loadImg() {
         //console.log('load vis')
         //var ratio = ($("#main").width()-margRight) / this.width;
-        var ratio = ($("#main").width()) / this.width;
+        var ratio = ($("#main").width()) / img.width;
         containerW = $("#main").width();
         containerH = this.height * ratio;
+        document.getElementById('visualization').style.paddingBottom = "" + (containerH - 3) + "px";
         svg = d3.select("#visualization")
+                .style("padding-bottom", containerH)
+                .classed("svg-container", true)
                 .append("svg")
-                .attr("width", containerW)
-                .attr("height", containerH)
+                .classed("svg-content", true)
+                //.attr("width", containerW)
+                //.attr("height", containerH)
                 .attr("id", "svg")
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 " + containerW + " "+ containerH)
                 .append("g")
 
         // add heatmap overlay
