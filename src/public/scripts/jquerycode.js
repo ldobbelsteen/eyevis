@@ -60,7 +60,7 @@ $(document).ready(function(){
         var nextSibling = e.target.nextElementSibling
         nextSibling.innerText = fileName
     })
-
+    
     //slider vis4 circle radius
     const $valueRad = $('.valueRad');
     const $sliderR = $('#sliderRadius');
@@ -84,5 +84,22 @@ $(document).ready(function(){
     $sliderA.on('input change', () => {
         $valueAlpha.html($sliderA.val());
     });
+
+    //function to reset a slider to a value
+    function resetSlider(slider, value) {
+        slider.val(value);
+        slider.change();
+    }
+
+    //reset sliders vis4
+    const $resetS4 = $('#reset-sliders4');
+    $resetS4.on('click', () => {
+        if (window.visualization == "four") {
+            resetSlider($sliderA, 0.3);
+            resetSlider($sliderB, 20);
+            resetSlider($sliderR, 1);
+        }
+    });
+    
 
 });

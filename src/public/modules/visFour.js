@@ -233,7 +233,7 @@ export function visualize() {
         svg.call(zoom)
     
         $("#reset4").on("click", () => {
-            if (window.currentVis == "four") {
+            if (window.visualization == "four") {
                 svg.transition()
                     .duration(400)
                     .call(zoom.transform, d3.zoomIdentity);
