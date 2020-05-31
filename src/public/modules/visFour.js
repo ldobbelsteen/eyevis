@@ -6,7 +6,6 @@ var containerH, containerW, x, y, info;
 const $valueRad = $('#sliderRadius');
 const $valueBand =  $('#sliderBand');
 const $valueAlpha = $('#sliderAlpha');
-const $reinit = $('#init-vis4');
 //var margRight = 100;
 
 
@@ -193,19 +192,17 @@ export function visualize() {
     // prepare image and scale vis
     img = new Image();
     function loadImg() {
-        //console.log('load vis')
-        //var ratio = ($("#main").width()-margRight) / this.width;
         var ratio = ($("#main").width()) / img.width;
+        const originalW = img.width;
+        const originalH = img.height;
         containerW = $("#main").width();
-        containerH = this.height * ratio;
+        containerH = originalH * ratio;
         document.getElementById('visualization').style.paddingBottom = "" + (containerH - 3) + "px";
         svg = d3.select("#visualization")
                 .style("padding-bottom", containerH)
                 .classed("svg-container", true)
                 .append("svg")
                 .classed("svg-content", true)
-                //.attr("width", containerW)
-                //.attr("height", containerH)
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + containerW + " "+ containerH)
@@ -244,6 +241,14 @@ export function visualize() {
                     .call(zoom.transform, d3.zoomIdentity);
             }
         });
+        window.addEventListener("resize", () => {
+            var moveRight = $('#main').hasClass('moveRight');
+            if (moveRight) var newRatio = (window.innerWidth - 250 )* 0.9 / originalW;
+            else var newRatio = (window.innerWidth)* 0.9 / originalW;
+            var newH = originalH * newRatio;
+            document.getElementById('visualization').style.paddingBottom = "" + (newH-3) + "px";
+        })
+
     }
     function loadFailure() {
         alert( "Failed to load.");

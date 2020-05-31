@@ -31,7 +31,7 @@ $(document).ready(function(){
         $main.toggleClass('moveRight')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = 250 + (window.innerWidth - 250) * 0.05
-        var smallerWidth = (window.innerWidth - 250) * 0.9 - 10
+        var smallerWidth = (window.innerWidth - 250) * 0.9
         var hide = $about.hasClass('hide')
         $main.animate({width: moveRight ? smallerWidth : standardW }, { duration: 250, queue: false})
         $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
@@ -45,7 +45,7 @@ $(document).ready(function(){
         var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = 250 + (window.innerWidth - 250) * 0.05
-        var smallerWidth = (window.innerWidth - 250) * 0.9 - 10
+        var smallerWidth = (window.innerWidth - 250) * 0.9
         if (!hide) {
             $about.animate({width: moveRight ? smallerWidth : standardW}, { duration: 250, queue: false})
         }
