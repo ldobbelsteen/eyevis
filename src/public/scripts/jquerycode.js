@@ -100,13 +100,15 @@ $(document).ready(function(){
     //reset sliders vis4
     const $resetS4 = $('#reset-sliders4');
     $resetS4.on('click', () => {
-        showLoading();
         function reset() {
             resetSlider($sliderA, 0.3);
             resetSlider($sliderB, 20);
             resetSlider($sliderR, 1);
         }
-        setTimeout(reset, 100);
+        if (window.visualization == "four") {
+            showLoading();
+            setTimeout(reset, 50);
+        }
     });
     
 

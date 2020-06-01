@@ -35,7 +35,7 @@ function updateData() {
 function showLoading() {
     container.LoadingOverlay("show", {
         background  : "rgba(255,255,255,0.80)",
-        fade: [10,400]
+        fade: [10,300]
     });
 }
 
@@ -51,30 +51,33 @@ export function initialize() {
         if (window.visualization == "four") {
             showLoading();
             setTimeout(showOverlay, 10);
-            setTimeout(hideLoading, 10);
+            setTimeout(hideLoading, 5);
         }
     });
     $valueBand.on("change", () => {
         if (window.visualization == "four") {
             showLoading();
             setTimeout(newUser, 10);
-            setTimeout(hideLoading, 10);
+            setTimeout(hideLoading, 5);
         }
     });
     $valueAlpha.on("change", () => {
         if (window.visualization == "four") {
             showLoading();
             setTimeout(showOverlay, 10);
-            setTimeout(hideLoading, 10);
+            setTimeout(hideLoading, 5);
         }
     });
 }
 
 export function newUser() {
     showLoading();
-    heatmap();
-    showOverlay();
-    setTimeout(hideLoading, 10);
+    function overlay() {
+        heatmap();
+        showOverlay();
+    }
+    setTimeout(overlay, 10);
+    setTimeout(hideLoading, 5);
 }
 
 // find max and min density (using density data)
