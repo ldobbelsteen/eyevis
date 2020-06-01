@@ -61,6 +61,13 @@ $(document).ready(function(){
         nextSibling.innerText = fileName
     })
 
+    function showLoading() {
+        $("#visualization").LoadingOverlay("show", {
+            background  : "rgba(255,255,255,0.80)",
+            fade: [10,400]
+        });
+    }
+
     //function to update a slider
     function updateSlider(slider, value) {
         value.html(slider.val());
@@ -93,9 +100,13 @@ $(document).ready(function(){
     //reset sliders vis4
     const $resetS4 = $('#reset-sliders4');
     $resetS4.on('click', () => {
-        resetSlider($sliderA, 0.3);
-        resetSlider($sliderB, 20);
-        resetSlider($sliderR, 1);
+        showLoading();
+        function reset() {
+            resetSlider($sliderA, 0.3);
+            resetSlider($sliderB, 20);
+            resetSlider($sliderR, 1);
+        }
+        setTimeout(reset, 100);
     });
     
 

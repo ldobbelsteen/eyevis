@@ -50,22 +50,22 @@ export function initialize() {
     $valueRad.on("change", () => {
         if (window.visualization == "four") {
             showLoading();
-            showOverlay();
-            hideLoading();
+            setTimeout(showOverlay, 10);
+            setTimeout(hideLoading, 10);
         }
     });
     $valueBand.on("change", () => {
         if (window.visualization == "four") {
             showLoading();
-            newUser();
-            hideLoading();
+            setTimeout(newUser, 10);
+            setTimeout(hideLoading, 10);
         }
     });
     $valueAlpha.on("change", () => {
         if (window.visualization == "four") {
             showLoading();
-            showOverlay();
-            hideLoading();
+            setTimeout(showOverlay, 10);
+            setTimeout(hideLoading, 10);
         }
     });
 }
@@ -74,7 +74,7 @@ export function newUser() {
     showLoading();
     heatmap();
     showOverlay();
-    hideLoading();
+    setTimeout(hideLoading, 10);
 }
 
 // find max and min density (using density data)
