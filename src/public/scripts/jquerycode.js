@@ -1,3 +1,5 @@
+import * as visFour from "/modules/visFour.js";
+
 $(document).ready(function(){
 
     var $main = $('#main')
@@ -64,15 +66,15 @@ $(document).ready(function(){
     function showLoading() {
         $("#visualization").LoadingOverlay("show", {
             background  : "rgba(255,255,255,0.80)",
-            fade: [10,400]
+            fade: [10,300]
         });
     }
 
     //function to update a slider
-    function updateSlider(slider, value) {
-        value.html(slider.val());
+    function updateSlider(slider, text) {
+        text.html(slider.val());
         slider.on('input change', () => {
-            value.html(slider.val());
+            text.html(slider.val());
         });
     }
     
@@ -91,23 +93,24 @@ $(document).ready(function(){
     const $sliderA = $('#sliderAlpha');
     updateSlider($sliderA, $valueAlpha);
 
-    //function to reset a slider to a value
-    function resetSlider(slider, value) {
+    //function to reset a slider to a value, doesn't trigger change
+    function resetSlider(slider, text, value) {
         slider.val(value);
-        slider.change();
+        text.html(value);
     }
 
-    //reset sliders vis4
+    //reset button for vis4
     const $resetS4 = $('#reset-sliders4');
     $resetS4.on('click', () => {
         function reset() {
-            resetSlider($sliderA, 0.3);
-            resetSlider($sliderB, 20);
-            resetSlider($sliderR, 1);
+            resetSlider($sliderA, $valueAlpha, 0.3);
+            resetSlider($sliderB, $valueBand, 20);
+            resetSlider($sliderR, $valueRad, 1);
         }
         if (window.visualization == "four") {
             showLoading();
-            setTimeout(reset, 50);
+            reset();
+            setTimeout(visFour.newUser(), 10);
         }
     });
     
