@@ -35,13 +35,13 @@ export function initialize() {
     updateData();
 
     // sliders
-    $valueRad.on("input change", () => {
+    $valueRad.on("change", () => {
         if (window.visualization == "four") showOverlay();
     });
-    $valueBand.on("input change", () => {
+    $valueBand.on("change", () => {
         if (window.visualization == "four") newUser();
     });
-    $valueAlpha.on("input change", () => {
+    $valueAlpha.on("change", () => {
         if (window.visualization == "four") showOverlay();
     });
 }
@@ -63,14 +63,16 @@ function findMinMax(data) {
 }
 
 function showOverlay() {
+
+    var alpha = $valueAlpha.val()
     
     // set color gradient
-    var classicGradient = ["rgba(59, 238, 223,"+ $valueAlpha.val() + ")",
-                        "rgba(145, 238, 146, "+ $valueAlpha.val() + ")",
-                        "rgba(253, 254, 87, "+ $valueAlpha.val() + ")",
-                        "rgba(254, 138, 21, "+ $valueAlpha.val() + ")",
-                        "rgba(253, 26, 12, "+ $valueAlpha.val() + ")", 
-                        "rgba(172, 0, 1, "+ $valueAlpha.val() + ")"]
+    var classicGradient = ["rgba(59, 238, 223,"+ alpha + ")",
+                        "rgba(145, 238, 146, "+ alpha + ")",
+                        "rgba(253, 254, 87, "+ alpha + ")",
+                        "rgba(254, 138, 21, "+ alpha + ")",
+                        "rgba(253, 26, 12, "+ alpha + ")", 
+                        "rgba(172, 0, 1, "+ alpha + ")"]
 
     color.range(classicGradient)
 
