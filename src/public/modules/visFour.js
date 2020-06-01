@@ -3,6 +3,7 @@
 var filteredData, densityData;
 var svg, img, color, overlay, points;
 var containerH, containerW, x, y, info;
+const container = $("#visualization");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
 const $valueAlpha = $("#sliderAlpha");
@@ -31,24 +32,49 @@ function updateData() {
     });
 }
 
+function showLoading() {
+    container.LoadingOverlay("show", {
+        background  : "rgba(255,255,255,0.80)",
+        fade: [10,400]
+    });
+}
+
+function hideLoading() {
+    container.LoadingOverlay("hide", true);
+}
+
 export function initialize() {
     updateData();
 
     // sliders
     $valueRad.on("change", () => {
-        if (window.visualization == "four") showOverlay();
+        if (window.visualization == "four") {
+            showLoading();
+            showOverlay();
+            hideLoading();
+        }
     });
     $valueBand.on("change", () => {
-        if (window.visualization == "four") newUser();
+        if (window.visualization == "four") {
+            showLoading();
+            newUser();
+            hideLoading();
+        }
     });
     $valueAlpha.on("change", () => {
-        if (window.visualization == "four") showOverlay();
+        if (window.visualization == "four") {
+            showLoading();
+            showOverlay();
+            hideLoading();
+        }
     });
 }
 
 export function newUser() {
+    showLoading();
     heatmap();
     showOverlay();
+    hideLoading();
 }
 
 // find max and min density (using density data)
