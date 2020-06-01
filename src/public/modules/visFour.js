@@ -206,11 +206,8 @@ export function visualize() {
         var ratio = $("#main").width() / originalW;
         containerW = $("#main").width();
         containerH = originalH * ratio;
-        document.getElementById("visualization").style.paddingBottom = "" + (containerH - 3) + "px";
         svg = d3.select("#visualization")
-                .classed("svg-container", true)
                 .append("svg")
-                .classed("svg-content", true)
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + containerW + " "+ containerH)
@@ -250,16 +247,6 @@ export function visualize() {
                     .call(zoom.transform, d3.zoomIdentity);
             }
         });
-
-        // scale vis when window gets resized
-        window.addEventListener("resize", () => {
-            var moveRight = $("#main").hasClass("moveRight");
-            if (moveRight) var newRatio = (window.innerWidth - 250 )* 0.9 / originalW;
-            else var newRatio = (window.innerWidth)* 0.9 / originalW;
-            var newH = originalH * newRatio;
-            document.getElementById("visualization").style.paddingBottom = "" + (newH-3) + "px";
-        })
-
     }
 
     // alert if the image fails to load

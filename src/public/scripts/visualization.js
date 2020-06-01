@@ -122,14 +122,8 @@ function redraw(change) {
     }
 }
 
-function removeVis4Prop() {
-    document.getElementById("visualization").style.paddingBottom = "0";
-    document.getElementById("visualization").classList.remove("svg-container");
-}
-
 $("#init-vis1").on("click", () => {
     window.visualization = "one";
-    removeVis4Prop();
     container.empty();
     visOne.initialize();
     visOne.visualize();
@@ -137,7 +131,6 @@ $("#init-vis1").on("click", () => {
 
 $("#init-vis2").on("click", () => {
     window.visualization = "two";
-    removeVis4Prop();
     container.empty();
     visTwo.initialize();
     visTwo.visualize();
@@ -145,7 +138,6 @@ $("#init-vis2").on("click", () => {
 
 $("#init-vis3").on("click", () => {
     window.visualization = "three";
-    removeVis4Prop();
     container.empty();
     visThree.initialize();
     visThree.visualize();
@@ -160,6 +152,5 @@ $("#init-vis4").on("click", () => {
 
 $("#init-vis5").on("click", () => {
     window.visualization = "five";
-    removeVis4Prop();
     visFive.visualize();
 });
