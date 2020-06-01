@@ -54,9 +54,7 @@ export function visualize() {
         
 
         // this is either d3.stackOffsetSilhouette or d3.stackOffsetExpand
-        
         let offset = $(offsetOption).val();
-        console.log(offset);
 
 
         // Get AOI sizes
@@ -117,7 +115,6 @@ export function visualize() {
 
         //Creating the layers
         var layers = stack(aoiInfo);
-        console.log(layers)
 
 
         // Calculating minumums and maximums for scaling
@@ -226,8 +223,14 @@ export function visualize() {
       
         // Adding left y-axis
         svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(40, 0)")
+        .call(d3.axisLeft(yAxisScale));
+
+        // Adding right y-axis
+        svg.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(40, 0)")
-            .call(d3.axisLeft(yAxisScale));
+            .attr("transform", "translate(" + (width-40)+ ", 0)")
+            .call(d3.axisRight(yAxisScale));
     }
 }
