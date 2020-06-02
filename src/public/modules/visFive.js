@@ -129,6 +129,9 @@ export function visualize() {
         timelines.attr("viewBox", [-yAxisWidth, 0, containerWidth + yAxisWidth, timelineHeight * users.length + xAxisHeight])
         timelines.attr("shape-rendering", "crispEdges")
 
+        // Pop-up box
+        let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
+
         // Add gazes to the svg
         timelines.selectAll("rect")
             .data(gazes)
@@ -146,6 +149,22 @@ export function visualize() {
                     return xScale(gaze.duration);
                 })
                 .attr("height", timelineHeight)
+                .on("mouseover", gaze => {
+                    info.transition().duration(200).style("opacity", 1)
+                    info.html(
+                        "Timestamp: " + gaze.time + "<br>" +
+                        "Duration: " + gaze.duration
+                    )
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mousemove", () => {
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mouseout", () => {
+                    info.transition().duration(200).style("opacity", 0)
+                })
 
         // Add y-axis for users
         timelines.append("g")
