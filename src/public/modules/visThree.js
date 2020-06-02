@@ -1,3 +1,5 @@
+// Milou Henzen (1409107) - ThemeRiver
+
 export function initialize() {}
 
 export function visualize() {
@@ -37,8 +39,7 @@ export function visualize() {
         // Create the svg
         let svg = d3.select("#visualization").html("")
             .append("svg")
-            .attr("width", width)
-            .attr("height", height)
+            .attr("viewBox", "0 0 " + width + " "+ height)
             .append("g");
 
         var tooltip = d3.select("#visualization")
@@ -53,8 +54,7 @@ export function visualize() {
         
 
         // this is either d3.stackOffsetSilhouette or d3.stackOffsetExpand
-        let offset = offsetOption.val();
-        console.log(offset);
+        let offset = $(offsetOption).val();
 
 
         // Get AOI sizes
@@ -100,14 +100,18 @@ export function visualize() {
         // Color pattern
         let colors = d3.interpolatePlasma;
 
-
         //Creating stack
-        var stack = d3.stack()
-            //.offset(offset)
-            .offset(d3.stackOffsetSilhouette)
-            .order(d3.stackOrderNone)
-            .keys(keys);
-
+        if (offset == "d3.stackOffsetSilhouette") {
+            var stack = d3.stack()
+                .offset(d3.stackOffsetSilhouette)
+                .order(d3.stackOrderNone)
+                .keys(keys);
+        } else {
+            var stack = d3.stack()
+                .offset(d3.stackOffsetExpand)
+                .order(d3.stackOrderNone)
+                .keys(keys);            
+        }
 
         //Creating the layers
         var layers = stack(aoiInfo);
@@ -188,10 +192,10 @@ export function visualize() {
          
         tooltip.html("AOI: " +keys[i]+
                 "<br>timestamp: " +parseInt(invertedX)+
-                "<br>fixCount: " + parseInt(invertedY))
+                "<br>fixCount: " + "(DISCLAIMER Not based on our data yet)")
 
                 .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY - 28) + "px")
+                .style("top", (d3.event.pageY - 15) + "px")
                 .style("opacity", .9);         
 
         // Change opacity of aois that are not hovered over
@@ -217,11 +221,16 @@ export function visualize() {
             .attr("transform", "translate(0," + (height-40) + ")")
             .call(d3.axisBottom(xScale));
       
-        // Adding y-axis
+        // Adding left y-axis
+        svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(40, 0)")
+        .call(d3.axisLeft(yAxisScale));
+
+        // Adding right y-axis
         svg.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(40, 0)")
-            .call(d3.axisLeft(yAxisScale));
-
+            .attr("transform", "translate(" + (width-40)+ ", 0)")
+            .call(d3.axisRight(yAxisScale));
     }
 }

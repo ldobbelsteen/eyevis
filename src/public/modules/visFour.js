@@ -3,9 +3,10 @@
 var filteredData, densityData;
 var svg, img, color, overlay, points;
 var containerH, containerW, x, y, info;
-const $valueRad = $('#sliderRadius');
-const $valueBand =  $('#sliderBand');
-const $valueAlpha = $('#sliderAlpha');
+const container = $("#visualization");
+const $valueRad = $("#sliderRadius");
+const $valueBand =  $("#sliderBand");
+const $valueAlpha = $("#sliderAlpha");
 //var margRight = 100;
 
 
@@ -31,22 +32,52 @@ function updateData() {
     });
 }
 
+function showLoading() {
+    container.LoadingOverlay("show", {
+        background  : "rgba(255,255,255,0.80)",
+        fade: [10,300]
+    });
+}
+
+function hideLoading() {
+    container.LoadingOverlay("hide", true);
+}
+
 export function initialize() {
     updateData();
-    $valueRad.on('input change', () => {
-        if (window.visualization == "four") showOverlay();
+
+    // sliders
+    $valueRad.on("change", () => {
+        if (window.visualization == "four") {
+            showLoading();
+            setTimeout(showOverlay, 10);
+            setTimeout(hideLoading, 5);
+        }
     });
-    $valueBand.on('input change', () => {
-        if (window.visualization == "four") newUser();
+    $valueBand.on("change", () => {
+        if (window.visualization == "four") {
+            showLoading();
+            setTimeout(newUser, 10);
+            setTimeout(hideLoading, 5);
+        }
     });
-    $valueAlpha.on('input change', () => {
-        if (window.visualization == "four") showOverlay();
+    $valueAlpha.on("change", () => {
+        if (window.visualization == "four") {
+            showLoading();
+            setTimeout(showOverlay, 10);
+            setTimeout(hideLoading, 5);
+        }
     });
 }
 
 export function newUser() {
-    heatmap();
-    showOverlay();
+    showLoading();
+    function overlay() {
+        heatmap();
+        showOverlay();
+    }
+    setTimeout(overlay, 10);
+    setTimeout(hideLoading, 5);
 }
 
 // find max and min density (using density data)
@@ -61,17 +92,24 @@ function findMinMax(data) {
 }
 
 function showOverlay() {
+
+    var alpha = $valueAlpha.val()
     
-    var classicGradient = ["rgba(59, 238, 223,"+ $valueAlpha.val() + ")",
-                        "rgba(145, 238, 146, "+ $valueAlpha.val() + ")",
-                        "rgba(253, 254, 87, "+ $valueAlpha.val() + ")",
-                        "rgba(254, 138, 21, "+ $valueAlpha.val() + ")",
-                        "rgba(253, 26, 12, "+ $valueAlpha.val() + ")", 
-                        "rgba(172, 0, 1, "+ $valueAlpha.val() + ")"]
+    // set color gradient
+    var classicGradient = ["rgba(59, 238, 223,"+ alpha + ")",
+                        "rgba(145, 238, 146, "+ alpha + ")",
+                        "rgba(253, 254, 87, "+ alpha + ")",
+                        "rgba(254, 138, 21, "+ alpha + ")",
+                        "rgba(253, 26, 12, "+ alpha + ")", 
+                        "rgba(172, 0, 1, "+ alpha + ")"]
 
     color.range(classicGradient)
+
+    // remove all previous overlays
     overlay.selectAll("path").remove()
     points.selectAll("circle").remove()
+
+    // add new overlay and points 
     overlay.selectAll("path")
                 .data(densityData)
                 .enter().append("path")
@@ -84,6 +122,7 @@ function showOverlay() {
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
                 .attr("r", $valueRad.val())
+                // on mouseover pop-up with x and y coordinates and fixation duration
                 .on("mouseover", function (filteredData) {
                     info.transition().duration(100).style("opacity", "1");
                     info.html(
@@ -107,6 +146,7 @@ function showOverlay() {
 // add heatmap overlay on image
 function heatmap() {
 
+    // gradient: still not in use
     var defs = svg.append("defs");
 
     var gradient = defs.append("linearGradient")
@@ -185,24 +225,20 @@ export function visualize() {
 
     // get container ready
     d3.select("#visualization").html("");
-    document.getElementById('visualization').style.position = 'relative';
 
+    // pop-up with x, y, fixation duration
     info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
     // prepare image and scale vis
     img = new Image();
     function loadImg() {
-        var ratio = ($("#main").width()) / img.width;
-        const originalW = img.width;
-        const originalH = img.height;
+        var originalW = img.width;
+        var originalH = img.height;
+        var ratio = $("#main").width() / originalW;
         containerW = $("#main").width();
         containerH = originalH * ratio;
-        document.getElementById('visualization').style.paddingBottom = "" + (containerH - 3) + "px";
         svg = d3.select("#visualization")
-                .style("padding-bottom", containerH)
-                .classed("svg-container", true)
                 .append("svg")
-                .classed("svg-content", true)
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + containerW + " "+ containerH)
@@ -233,7 +269,8 @@ export function visualize() {
         }
 
         svg.call(zoom)
-    
+        
+        // button to reset zoom
         $("#reset4").on("click", () => {
             if (window.visualization == "four") {
                 svg.transition()
@@ -241,17 +278,11 @@ export function visualize() {
                     .call(zoom.transform, d3.zoomIdentity);
             }
         });
-        window.addEventListener("resize", () => {
-            var moveRight = $('#main').hasClass('moveRight');
-            if (moveRight) var newRatio = (window.innerWidth - 250 )* 0.9 / originalW;
-            else var newRatio = (window.innerWidth)* 0.9 / originalW;
-            var newH = originalH * newRatio;
-            document.getElementById('visualization').style.paddingBottom = "" + (newH-3) + "px";
-        })
-
     }
+
+    // alert if the image fails to load
     function loadFailure() {
-        alert( "Failed to load.");
+        alert("Failed to load.");
         return true;
     }
 
