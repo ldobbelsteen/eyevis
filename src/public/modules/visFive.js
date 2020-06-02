@@ -120,9 +120,13 @@ export function visualize() {
                     .domain(users)
                     .range([0, (users.length - 1) * timelineHeight])
 
+        // TEMPORARY
+        let yAxisWidth = 32
+        let xAxisHeight = 16
+
         // Set dimensions of the timelines svg and set rendering
         timelines.html("");
-        timelines.attr("viewBox", [0, 0, containerWidth, timelineHeight * users.length])
+        timelines.attr("viewBox", [-yAxisWidth, 0, containerWidth + yAxisWidth, timelineHeight * users.length + xAxisHeight])
         timelines.attr("shape-rendering", "crispEdges")
 
         // Add gazes to the svg
@@ -142,5 +146,15 @@ export function visualize() {
                     return xScale(gaze.duration);
                 })
                 .attr("height", timelineHeight)
+
+        // Add y-axis for users
+        timelines.append("g")
+            .attr("transform", `translate(0, ${0.5 * timelineHeight})`)
+            .call(d3.axisLeft(yScale))
+
+        // Add x-axis for time
+        timelines.append("g")
+            .attr("transform", `translate(0, ${timelineHeight * users.length})`)
+            .call(d3.axisBottom(xScale))
     }
 }
