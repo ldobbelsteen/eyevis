@@ -1,37 +1,24 @@
+// Select input and visualization container
+const container = d3.select("#visualization");
+const gridSizeInputX = $("#vis-two input:eq(0)");
+const gridSizeInputY = $("#vis-two input:eq(1)");
+
 var filteredData;
-var filteredDataUser;
-var stimuliMenu = $("#vis-two #stimuli-menu");
-var selectedStimulus;
-var userMenu = $("#vis-two #user-menu");
-var selectedUser;
-var container = d3.select("#visualization");
+var gridSizeX;
+var gridSizeY;
+var imgHeight;
+var imgWidth;
+var img, svg;
 
-function updateStimuli() {
-    stimuliMenu.empty();
-    stimuliMenu.append($("<option disabled selected value> -- select a stimulus -- </option>"));
-    let uniqueStimuli = [...new Set(filteredData.map((item) => item.StimuliName))];
-    uniqueStimuli.sort().forEach((stimulus) => {
-        stimuliMenu.append($("<option></option>").text(stimulus));
-    });
-}
+var AOIs;
+var gazeToAOI;
 
-function updateUsers() {
-    userMenu.empty();
-    userMenu.append($("<option selected>All users</option>"));
-    let uniqueUsers = [...new Set(filteredData.map((item) => item.user))];
-    uniqueUsers.sort().forEach((user) => {
-        userMenu.append($("<option></option>").text(user));
-    });
-}
-
+// Update data to appriopate stimuli
 function updateData() {
     var filter = {
-        StimuliName: selectedStimulus
-    }
-    var filterUser = {
-        StimuliName: selectedStimulus,
-        user: selectedUser
-    }
+        StimuliName: window.stimulus,
+        user: window.selectedUser,
+    };
 
     filteredData = window.data.filter((item) => {
         for (let key in filter) {
@@ -44,101 +31,141 @@ function updateData() {
         }
         return true;
     });
+}
 
-    filteredDataUser = window.data.filter((item) => {
-        for (let key in filterUser) {
-            if (filterUser[key] === undefined) {
-                continue;
-            }
-            if (item[key] != filterUser[key]) {
-                return false;
-            }
+function compare(a, b) {
+    return a.Timestamp - b.Timestamp;
+}
+
+// define the areas of interest
+function createAOIs(sizeX, sizeY, stimulusWidth, stimulusHeight) {
+    let arrayAOI = [];
+
+    let AOIsizeX = stimulusWidth / sizeX;
+    let AOIsizeY = stimulusHeight / sizeY;
+
+    for (let x = 0; x < sizeX; x++) {
+        for (let y = 0; y < sizeY; y++) {
+            arrayAOI.push({
+                x: AOIsizeX * x,
+                x1: AOIsizeX * (x + 1),
+                y: AOIsizeY * y,
+                y1: AOIsizeY * (x + 1),
+                width: AOIsizeX,
+                height: AOIsizeY,
+            })
         }
-        return true;
+    }
+
+    return arrayAOI;
+}
+
+// determine in which AOI the gazes are.
+// function returns array of timestamp,user,aoi
+function gazeAOI(data, arrayAOI) {
+    let arrayGazeAOI = []
+
+    data.forEach(gaze => {
+        let x = gaze.MappedFixationPointX;
+        let y = gaze.MappedFixationPointY;
+
+        arrayAOI.forEach(aoi => {
+            if (x >= aoi.x && x <= aoi.x1 && y >= aoi.y && y <= aoi.y1) {
+                arrayGazeAOI.push({
+                    timestamp: gaze.Timestamp,
+                    user: gaze.user,
+                    aoi: aoi
+                });
+            }
+        });
     });
+
+    return arrayGazeAOI;
+}
+
+// determine
+function transitionsAOI(filteredGaze) {
+    let result = [];
+
+    let users = [...new Set(data.map((item) => item.user))];
+    users.forEach(user => {
+        let userData = filterData(filteredGaze, {
+            user: user
+        });
+
+        let sortedData = userData.sort(compare);
+
+        for (let i = 0; i < sortedData.length; i++) {
+            result.push({
+                user: user,
+                start: sortedData[i].aoi,
+                end: sortedData[i+1].aoi
+            });
+        }
+    });
+
+    return result;
+
+}
+
+
+
+// function visualizeGrid() {
+//     let gridX = svg.selectAll(".gridX")
+//         .data(AOIs)
+//         .enter().append("g")
+//         .attr("class", "gridX");
+//
+//     let gridY = svg.selectAll(".gridY")
+//         .data(function(d) {return d;})
+//         .enter().append("rect")
+//         .attr("class", "gridY")
+//         .attr("x", function(d) {return d.x;})
+//         .attr("y", function(d) {return d.y;})
+//         .attr("width", function(d) {return d.width;})
+//         .attr("height", function(d) {return d.height;})
+//         .style("stroke",  "#222")
+// }
+
+function visuaizeSankey() {
+    return true;
 }
 
 export function initialize() {
-    selectedStimulus = undefined;
-    selectedUser = undefined;
     updateData();
-    updateStimuli();
-    stimuliMenu.on("change", () => {
-        selectedStimulus = stimuliMenu[0].value;
-        selectedUser = undefined;
-        updateData();
-        updateUsers();
-        visualize();
-    });
-    userMenu.on("change", () => {
-        selectedUser = userMenu[0].value;
-        if (selectedUser === "All users") {
-            selectedUser = undefined;
-        }
-        updateData();
-        visualize();
-    });
+
+    AOIs = createAOIs(gridSizeX, gridSizeY, imgWidth, imgHeight);
+
+    gazeToAOI = gazeAOI(filteredData, AOIs);
+
+    transistions = transitionsAOI(gazeToAOI);
+
 }
 
-function visualize() {
+export function visualize() {
+    // Empty container
     container.html("");
-    container.append("svg");
-    var svg = container.select("svg");
-    var info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
-    var imgHeight;
-    var imgWidth;
 
+    svg = container.append("svg");
+    gridSizeX = gridSizeInputX.val();
+    gridSizeY = gridSizeInputY.val();
+
+    // Select stimulus in loadImg
     let img = new Image();
     img.onload = function () {
         imgHeight = this.height;
         imgWidth = this.width;
-        svg
-            .attr("width", this.width)
+        svg.attr("width", this.width)
             .attr("height", this.height)
             .insert("image", ":first-child")
             .attr("width", imgWidth)
             .attr("height", imgHeight)
-            .attr("xlink:href", `/stimuli/${selectedStimulus}`)
+            .attr("xlink:href", `/stimuli/${window.stimulus}`)
             .attr("class", "img");
+        // visualizeGrid();
+        // visualizeSankey();
     };
-    img.src = `/stimuli/${selectedStimulus}`;
+    img.src = `/stimuli/${window.stimulus}`;
 
-    let zoomObject = d3.zoom().on("zoom", function () {
-        view.attr("transform", d3.event.transform);
-        svg.selectAll("image").attr("transform", d3.event.transform);
-    });
 
-    svg.selectAll("g").remove();
-    svg.selectAll(".img").remove();
-    svg.call(zoomObject);
-
-    var view = svg.append("g").attr("class", "view");
-    view.selectAll("dot")
-        .data(filteredData)
-        .enter()
-        .append("circle")
-        .attr("cx", (row) => row.MappedFixationPointX)
-        .attr("cy", (row) => row.MappedFixationPointY)
-        .attr("r", (row) => row.FixationDuration/10)
-        .style("stroke", "black")
-        .style("fill", "red")
-        .style("opacity", "0.4")
-        .on("mouseover", function (filteredData) {
-            info.transition().duration(200).style("opacity", "1");
-            info.html(
-                "x: " +
-                    filteredData.MappedFixationPointX +
-                    "<br>" +
-                    "y:" +
-                    filteredData.MappedFixationPointY +
-                    "<br>" +
-                    "duration: " +
-                    filteredData.FixationDuration + "ms"
-            );
-            info.style("left", d3.event.pageX + 8 + "px");
-            info.style("top", d3.event.pageY - 80 + "px");
-        })
-        .on("mouseout", function (filteredData) {
-            info.transition().duration(200).style("opacity", 0);
-        });
 }
