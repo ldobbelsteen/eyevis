@@ -1,12 +1,26 @@
 //Eric Abraham 1408828 scanpath visualization
 
 var filteredData;
-var container = d3.select("#visualization");
+var container = $("#visualization");
 var colorDot = $("#color-dot");
 var colorLine = $("#color-line");
 var dotColor = "steelblue";
 var lineColor = "red";
 var img, xOffset, yOffset, svg, info;
+
+//loading animation functions
+function showLoading() {
+    container.LoadingOverlay("show", {
+        background: "rgba(255,255,255,0.80)",
+        fade: [10, 300],
+    });
+}
+
+function hideLoading() {
+    container.LoadingOverlay("hide", true);
+}
+
+//compare function to sort chronologically
 
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -33,15 +47,29 @@ function updateData() {
     console.log(filteredData);
 }
 
+export function userChange() {
+    showLoading();
+    setTimeout(visualize, 10);
+    setTimeout(hideLoading, 5);
+}
+
 export function initialize() {
     updateData();
     colorDot.on("change", function () {
         dotColor = $(this).val();
-        if (window.visualization == "one") visualize();
+        if (window.visualization == "one") {
+            showLoading();
+            setTimeout(visualize, 10);
+            setTimeout(hideLoading, 5);
+        }
     });
     colorLine.on("change", function () {
         lineColor = $(this).val();
-        if (window.visualization == "one") visualize();
+        if (window.visualization == "one") {
+            showLoading();
+            setTimeout(visualize, 10);
+            setTimeout(hideLoading, 5);
+        }
     });
 }
 
