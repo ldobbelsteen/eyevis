@@ -84,7 +84,7 @@ export function visualize() {
         let gazes = [];
         let highestDuration = 0;
         let users = [...new Set(data.map((item) => item.user))];
-        users.forEach(user => {
+        users.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach(user => {
             let userData = filterData(data, {
                 user: user
             });

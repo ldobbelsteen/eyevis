@@ -73,7 +73,7 @@ function updateUsers() {
     usersMenu.prop("disabled", false);
     usersMenu.empty().append($("<option selected> All users </option>"));
     let uniqueUsers = [...new Set(window.data.map((item) => item.user))];
-    uniqueUsers.sort().forEach((user) => {
+    uniqueUsers.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach((user) => {
         usersMenu.append($("<option></option>").text(user));
     });
 }
