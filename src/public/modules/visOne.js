@@ -7,6 +7,7 @@ var colorLine = $("#color-line");
 var dotColor = "steelblue";
 var lineColor = "red";
 var img, xOffset, yOffset, svg, info;
+var points, lines;
 
 //loading animation functions
 function showLoading() {
@@ -49,7 +50,7 @@ function updateData() {
 
 export function userChange() {
     showLoading();
-    setTimeout(visualize, 10);
+    setTimeout(drawScanpath, 10);
     setTimeout(hideLoading, 5);
 }
 
@@ -59,7 +60,7 @@ export function initialize() {
         dotColor = $(this).val();
         if (window.visualization == "one") {
             showLoading();
-            setTimeout(visualize, 10);
+            setTimeout(drawScanpath, 10);
             setTimeout(hideLoading, 5);
         }
     });
@@ -67,7 +68,7 @@ export function initialize() {
         lineColor = $(this).val();
         if (window.visualization == "one") {
             showLoading();
-            setTimeout(visualize, 10);
+            setTimeout(drawScanpath, 10);
             setTimeout(hideLoading, 5);
         }
     });
@@ -77,10 +78,6 @@ function drawScanpath() {
     //sorts data chronologically, needed for lines
     let sortedData = filteredData.sort(compare);
 
-    let points = svg.insert("g", "g"); //inside this d3 object the points will be drawn
-
-    let lines = svg.insert("g", "g"); //inside this d3 object the lines will be drawn
-
     var line = d3
         .line()
         .x(function (d) {
@@ -89,6 +86,10 @@ function drawScanpath() {
         .y(function (d) {
             return yOffset(d.MappedFixationPointY);
         });
+
+    //delete previous lines and points
+    lines.selectAll("path").remove();
+    points.selectAll("circle").remove();
 
     //function that draws the lines
     lines
@@ -142,6 +143,7 @@ function drawScanpath() {
 }
 
 export function visualize() {
+    console.log("I AM CALLED ONCE!");
     container.html("");
     img = new Image();
     info = d3.select("body").append("div").attr("class", "output").style("opacity", 0); //the pop-up on hover thingy
@@ -164,6 +166,10 @@ export function visualize() {
 
         // y coordinates that will be offset when image is scaled to fit screen
         yOffset = d3.scaleLinear().domain([img.naturalHeight, 0]).range([containerH, 0]);
+
+        points = svg.insert("g", "g"); //inside this d3 object the points will be drawn
+
+        lines = svg.insert("g", "g"); //inside this d3 object the lines will be drawn
 
         drawScanpath();
 

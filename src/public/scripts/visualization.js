@@ -109,6 +109,7 @@ function redraw(change) {
     if (window.visualization === "one") {
         if (change == "user") {
             visOne.initialize();
+            visOne.visualize();
             visOne.userChange();
         } else {
             visOne.initialize();
