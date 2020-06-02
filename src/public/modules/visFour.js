@@ -17,9 +17,6 @@ function updateData() {
         user: window.selectedUser,
     }
     filteredData = window.data.filter((item) => {
-        item.x = item["MappedFixationPointX"];
-        item.y = item["MappedFixationPointY"];
-        item.weight = item["FixationDuration"];
         for (let key in filter) {
             if (filter[key] === undefined) {
                 continue;
@@ -32,6 +29,7 @@ function updateData() {
     });
 }
 
+// show the loading overlay
 function showLoading() {
     container.LoadingOverlay("show", {
         background  : "rgba(255,255,255,0.80)",
@@ -39,6 +37,7 @@ function showLoading() {
     });
 }
 
+// hide the loading overlay
 function hideLoading() {
     container.LoadingOverlay("hide", true);
 }
@@ -70,6 +69,8 @@ export function initialize() {
     });
 }
 
+// called when updating user, bandwidth, or resetting slider
+// because density data needs to be recomputed in all 3 scenarios
 export function newUser() {
     showLoading();
     function overlay() {
@@ -91,6 +92,7 @@ function findMinMax(data) {
     return [min,max];
 }
 
+// update heatmap overlay
 function showOverlay() {
 
     var alpha = $valueAlpha.val()
@@ -115,10 +117,10 @@ function showOverlay() {
                 .enter().append("path")
                 .attr("d", d3.geoPath())
                 .attr("fill", function(d) { return color(d.value); })
-    points.selectAll("cirlce")
-            .attr("stroke", "white")
-              .data(filteredData)
-              .enter().append("circle")
+
+    points.selectAll("circle")
+                .data(filteredData)
+                .enter().append("circle")
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
                 .attr("r", $valueRad.val())
@@ -187,22 +189,11 @@ function heatmap() {
             .attr("stop-color", "rgb(172, 0, 1)") //dark red
             .attr("stop-opacity", 1);
 
-    // x coordinates
-    x = d3.scaleLinear()
-                .domain([ 0, img.naturalWidth ])
-                //.range([ 0, (containerW - margRight) ]); 
-                .range([ 0, (containerW) ]); 
-
-    // y coordinates
-    y = d3.scaleLinear()
-                .domain([ img.naturalHeight, 0 ])
-                .range([ containerH , 0 ])
-
     // compute the density data
     densityData = d3.contourDensity()
-                        .x(function(d) { return x(d.x); })
-                        .y(function(d) { return y(d.y); })
-                        .weight(function(d) { return d.weight; })
+                        .x(function(d) { return x(d.MappedFixationPointX); })
+                        .y(function(d) { return y(d.MappedFixationPointY); })
+                        .weight(function(d) { return d.FixationDuration; })
                         //.size([ (containerW-margRight), (containerH) ])
                         .size([ (containerW), (containerH) ])
                         .bandwidth($valueBand.val())
@@ -243,6 +234,17 @@ export function visualize() {
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + containerW + " "+ containerH)
                 .append("g")
+
+        // x coordinates
+        x = d3.scaleLinear()
+                .domain([ 0, img.naturalWidth ])
+                //.range([ 0, (containerW - margRight) ]); 
+                .range([ 0, (containerW) ]); 
+
+        // y coordinates
+        y = d3.scaleLinear()
+                .domain([ img.naturalHeight, 0 ])
+                .range([ containerH , 0 ])
 
         // add heatmap overlay
         heatmap();
