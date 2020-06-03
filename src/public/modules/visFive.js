@@ -53,9 +53,6 @@ export function visualize() {
 
     function updateTimelines() {
 
-        // Make a scale of colors
-        let colors = d3.interpolateCool;
-
         // Get input values for the amount of horizontal and vertical AOIs
         let gridSizeX = gridSizeInputX.val();
         let gridSizeY = gridSizeInputY.val();
@@ -71,7 +68,6 @@ export function visualize() {
         for (let x = 0; x < gridSizeX; x++) {
             for (let y = 0; y < gridSizeY; y++) {
                 AOIs.push({
-                    color: colors(Math.random()),
                     x1: AOIsizeX * x,
                     x2: AOIsizeX * (x + 1),
                     y1: AOIsizeY * y,
@@ -80,6 +76,12 @@ export function visualize() {
             }
         }
 
+        // Assign colors to each AOI
+        let colors = d3.interpolateTurbo;
+        let interval = 1 / (AOIs.length - 1);
+        AOIs.forEach((aoi, index) => {
+            aoi.color = colors(interval * index);
+        });
         // Create array of gazes by cleaning up the data for each user and adding it
         let gazes = [];
         let highestDuration = 0;
