@@ -154,6 +154,7 @@ export function visualize() {
                     info.html(
                         "Start time: " + gaze.time + "ms" + "<br>" +
                         "Duration: " + gaze.duration + "ms" + "<br>" +
+                        "User: " + gaze.user + "<br>" +
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
