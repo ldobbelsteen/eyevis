@@ -9,26 +9,6 @@ const $valueBand =  $("#sliderBand");
 const $valueAlpha = $("#sliderAlpha");
 //var margRight = 100;
 
-
-// update data based on options selected on menu
-function updateData() {
-    var filter = {
-        StimuliName: window.stimulus,
-        user: window.selectedUser,
-    }
-    filteredData = window.data.filter((item) => {
-        for (let key in filter) {
-            if (filter[key] === undefined) {
-                continue;
-            }
-            if (item[key] != filter[key]) {
-                return false;
-            }
-        }
-        return true;
-    });
-}
-
 // show the loading overlay
 function showLoading() {
     container.LoadingOverlay("show", {
@@ -74,91 +54,34 @@ export function initialize() {
 export function newUser() {
     showLoading();
     function overlay() {
-        heatmap();
+        overlayData();
         showOverlay();
     }
     setTimeout(overlay, 10);
     setTimeout(hideLoading, 5);
 }
 
-// find max and min density (using density data)
-function findMinMax(data) {
-    var max = 0
-    var min = Infinity
-    data.forEach(function (item) {
-        if (item.value > max) max = item.value;
-        if (item.value < min) min = item.value;
-    })
-    return [min,max];
+// update data based on options selected on menu
+function updateData() {
+    var filter = {
+        StimuliName: window.stimulus,
+        user: window.selectedUser,
+    }
+    filteredData = window.data.filter((item) => {
+        for (let key in filter) {
+            if (filter[key] === undefined) {
+                continue;
+            }
+            if (item[key] != filter[key]) {
+                return false;
+            }
+        }
+        return true;
+    });
 }
 
-// update heatmap overlay
-function showOverlay() {
+function initializeGradient() {
 
-     // remove all previous overlays
-     overlay.selectAll("path").remove()
-     points.selectAll("circle").remove()
-     topInfo.selectAll("rect").remove()
-
-    var alpha = $valueAlpha.val()
-    
-    // set color gradient
-    var classicGradient = ["rgba(59, 238, 223,"+ alpha + ")",
-                        "rgba(145, 238, 146, "+ alpha + ")",
-                        "rgba(253, 254, 87, "+ alpha + ")",
-                        "rgba(254, 138, 21, "+ alpha + ")",
-                        "rgba(253, 26, 12, "+ alpha + ")", 
-                        "rgba(172, 0, 1, "+ alpha + ")"]
-
-    color.range(classicGradient)
-
-    topInfo.append('rect')
-                .attr('fill', "url(#svgGradient)")
-                .attr('x', (containerW * 0.15))
-                .attr('y', 15)
-                .attr('width', (containerW * 0.7))
-                .attr('height', 40);
-
-    // add new overlay and points 
-    overlay.selectAll("path")
-                .data(densityData)
-                .enter().append("path")
-                .attr("d", d3.geoPath())
-                .attr("fill", function(d) { return color(d.value); })
-
-    points.selectAll("circle")
-                .data(filteredData)
-                .enter().append("circle")
-                .attr("cx", d => x(d.MappedFixationPointX))
-                .attr("cy", d => y(d.MappedFixationPointY))
-                .attr("r", $valueRad.val())
-                // on mouseover pop-up with x and y coordinates and fixation duration
-                .on("mouseover", function (filteredData) {
-                    info.transition().duration(100).style("opacity", "1");
-                    info.html(
-                        "x: " +
-                            filteredData.MappedFixationPointX +
-                            "<br>" +
-                            "y: " +
-                            filteredData.MappedFixationPointY +
-                            "<br>" +
-                            "Fixation Duration: " +
-                            filteredData.FixationDuration
-                    );
-                    info.style("left", d3.event.pageX + 8 + "px");
-                    info.style("top", d3.event.pageY - 80 + "px");
-                })
-                .on("mouseout", function () {
-                    info.transition().duration(200).style("opacity", 0);
-                });
-}
-
-// add heatmap overlay on image
-function heatmap() {
-
-    topInfo.select("g").remove()
-
-    // gradient: still not in use
     var defs = topInfo.append("defs");
 
     var gradient = defs.append("linearGradient")
@@ -169,35 +92,37 @@ function heatmap() {
                         .attr("y2", "0%");
 
     gradient.append("stop")
-            .attr('class', 'start')
+            .attr("class", "start")
             .attr("offset", "0%")
             .attr("stop-color", "rgba(59, 238, 223)") //light blue
             .attr("stop-opacity", 1);
     gradient.append("stop")
-            .attr('class', 'end')
             .attr("offset", "20%")
             .attr("stop-color", "rgb(145, 238, 146)") //light green
             .attr("stop-opacity", 1);
     gradient.append("stop")
-            .attr('class', 'end')
             .attr("offset", "40%")
             .attr("stop-color", "rgb(253, 254, 87)") //yellow
             .attr("stop-opacity", 1);
     gradient.append("stop")
-            .attr('class', 'end')
             .attr("offset", "60%")
             .attr("stop-color", "rgb(254, 138, 21)") //orange
             .attr("stop-opacity", 1);
     gradient.append("stop")
-            .attr('class', 'end')
             .attr("offset", "80%")
             .attr("stop-color", "rgb(253, 26, 12)") //red
             .attr("stop-opacity", 1);
     gradient.append("stop")
-            .attr('class', 'end')
+            .attr("class", "end")
             .attr("offset", "100%")
             .attr("stop-color", "rgb(172, 0, 1)") //dark red
             .attr("stop-opacity", 1);
+}
+
+// deal with overlay data
+function overlayData() {
+
+    topInfo.select("g").remove()
 
     // compute the density data
     densityData = d3.contourDensity()
@@ -231,6 +156,91 @@ function heatmap() {
 
 }
 
+// find max and min density (using density data)
+function findMinMax(data) {
+    var max = 0
+    var min = Infinity
+    data.forEach(function (item) {
+        if (item.value > max) max = item.value;
+        if (item.value < min) min = item.value;
+    })
+    return [min,max];
+}
+
+// update heatmap overlay
+function showOverlay() {
+
+    // remove all previous overlays
+    overlay.selectAll("path").remove()
+    points.selectAll("circle").remove()
+    topInfo.selectAll("rect").remove()
+
+   var alpha = $valueAlpha.val()
+   
+   // set color gradient
+   var classicGradient = ["rgb(59, 238, 223)",
+                       "rgb(145, 238, 146)",
+                       "rgb(253, 254, 87)",
+                       "rgb(254, 138, 21)",
+                       "rgb(253, 26, 12)", 
+                       "rgb(172, 0, 1)"]
+
+   color.range(classicGradient)
+
+   topInfo.append('rect')
+               .attr('fill', "url(#svgGradient)")
+               .attr('x', (containerW * 0.15))
+               .attr('y', 15)
+               .attr('width', (containerW * 0.7))
+               .attr('height', 40);
+
+   // add new overlay and points 
+   overlay.selectAll("path")
+                .data(densityData)
+                .enter().append("path")
+                .attr("d", d3.geoPath())
+                .attr("fill", function(d) { return color(d.value); })
+                .attr("opacity", alpha)
+                .on("mouseover", function (densityData) {
+                    info.transition().duration(100).style("opacity", "1");
+                    info.html(
+                        "density: " +
+                            densityData.value 
+                    );
+                    info.style("left", d3.event.pageX + 8 + "px");
+                    info.style("top", d3.event.pageY - 80 + "px");
+                })
+                .on("mouseout", function () {
+                    info.transition().duration(200).style("opacity", 0);
+                });
+
+   points.selectAll("circle")
+                .data(filteredData)
+                .enter().append("circle")
+                .attr("cx", d => x(d.MappedFixationPointX))
+                .attr("cy", d => y(d.MappedFixationPointY))
+                .attr("r", $valueRad.val())
+                // on mouseover pop-up with x and y coordinates and fixation duration
+                .on("mouseover", function (filteredData) {
+                    info.transition().duration(100).style("opacity", "1");
+                    info.html(
+                       "x: " +
+                           filteredData.MappedFixationPointX +
+                           "<br>" +
+                           "y: " +
+                           filteredData.MappedFixationPointY +
+                           "<br>" +
+                           "Fixation Duration: " +
+                           filteredData.FixationDuration
+                    );
+                    info.style("left", d3.event.pageX + 8 + "px");
+                    info.style("top", d3.event.pageY - 80 + "px");
+                })
+                .on("mouseout", function () {
+                   info.transition().duration(200).style("opacity", 0);
+                });
+}
+
 export function visualize() {
 
     // get container ready
@@ -252,6 +262,8 @@ export function visualize() {
                     .append("svg")
                     .attr("viewBox", "0 0 " + containerW + " "+ 80)
 
+        initializeGradient();
+
         svg = d3.select("#visualization")
                 .append("svg")
                 .attr("id", "svg")
@@ -270,8 +282,8 @@ export function visualize() {
                 .domain([ img.naturalHeight, 0 ])
                 .range([ containerH , 0 ])
 
-        // add heatmap overlay
-        heatmap();
+        // deal with data needed for overlay
+        overlayData();
 
          // insert overlay on svg
         overlay = svg.insert("g", "g");
