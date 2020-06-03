@@ -82,6 +82,22 @@ export function visualize() {
         AOIs.forEach((aoi, index) => {
             aoi.color = colors(interval * index);
         });
+
+        // Overlay the AOIs over the stimulus
+        stimulus.selectAll("rect").remove()
+        let viewBox = stimulus.attr("viewBox").split(",");
+        let aoiScaleX = viewBox[2] / stimulusWidth;
+        let aoiScaleY = viewBox[3] / stimulusHeight;
+        AOIs.forEach(aoi => {
+            stimulus.append("rect")
+                .attr("x", aoi.x1 * aoiScaleX)
+                .attr("y", aoi.y1 * aoiScaleY)
+                .attr("width", (aoi.x2 - aoi.x1) * aoiScaleX)
+                .attr("height", (aoi.y2 - aoi.y1) * aoiScaleY)
+                .attr("fill", aoi.color)
+                .attr("opacity", 0.7)
+        });
+
         // Create array of gazes by cleaning up the data for each user and adding it
         let gazes = [];
         let highestDuration = 0;
