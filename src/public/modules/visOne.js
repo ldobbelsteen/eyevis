@@ -118,6 +118,7 @@ function drawScanpath() {
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
         .style("fill", `${dotColor}`)
+        //.style("fill", function (d, i) {})
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
             info.transition().duration(200).style("opacity", "1");
@@ -146,6 +147,7 @@ export function visualize() {
     console.log("I AM CALLED ONCE!");
     container.html("");
     img = new Image();
+    d3.selectAll(".output").remove();
     info = d3.select("body").append("div").attr("class", "output").style("opacity", 0); //the pop-up on hover thingy
     img.onload = function () {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
