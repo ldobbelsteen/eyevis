@@ -7,7 +7,6 @@ const container = $("#visualization");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
 const $valueAlpha = $("#sliderAlpha");
-//var margRight = 100;
 
 // show the loading overlay
 function showLoading() {
@@ -122,14 +121,13 @@ function initializeGradient() {
 // deal with overlay data
 function overlayData() {
 
-    topInfo.select("g").remove()
+    topInfo.select("g").remove() 
 
     // compute the density data
     densityData = d3.contourDensity()
                         .x(function(d) { return x(d.MappedFixationPointX); })
                         .y(function(d) { return y(d.MappedFixationPointY); })
                         .weight(function(d) { return d.FixationDuration; })
-                        //.size([ (containerW-margRight), (containerH) ])
                         .size([ (containerW), (containerH) ])
                         .bandwidth($valueBand.val())
                         (filteredData)
@@ -151,7 +149,7 @@ function overlayData() {
                         .nice()
 
     topInfo.append("g")
-            .attr("transform", "translate("+ (containerW*0.15) +","+ 60 +")")
+            .attr("transform", "translate("+ (containerW*0.15) +","+ 65 +")")
             .call(d3.axisBottom(densScale).ticks(10, ".2f"))
 
 }
@@ -190,9 +188,9 @@ function showOverlay() {
    topInfo.append('rect')
                .attr('fill', "url(#svgGradient)")
                .attr('x', (containerW * 0.15))
-               .attr('y', 15)
+               .attr('y', 25)
                .attr('width', (containerW * 0.7))
-               .attr('height', 40);
+               .attr('height', 35);
 
    // add new overlay and points 
    overlay.selectAll("path")
@@ -260,8 +258,14 @@ export function visualize() {
 
         topInfo = d3.select("#visualization")
                     .append("svg")
-                    .attr("viewBox", "0 0 " + containerW + " "+ 80)
-
+                    .attr("viewBox", "0 0 " + containerW + " "+ 85)
+        
+        topInfo.append("text")
+                .attr("x", containerW*0.5)
+                .attr("y", 18)
+                .style("text-anchor", "middle")
+                .text("Density scale"); 
+                
         initializeGradient();
 
         svg = d3.select("#visualization")
@@ -274,7 +278,6 @@ export function visualize() {
         // x coordinates
         x = d3.scaleLinear()
                 .domain([ 0, img.naturalWidth ])
-                //.range([ 0, (containerW - margRight) ]); 
                 .range([ 0, (containerW) ]); 
 
         // y coordinates
@@ -292,7 +295,6 @@ export function visualize() {
 
         // add image
         svg.insert("image", ":first-child")
-            //.attr("width", containerW-margRight)
             .attr("width", containerW)
             .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
