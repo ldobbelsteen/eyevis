@@ -98,7 +98,6 @@ export function visualize() {
                 let x = gaze.MappedFixationPointX;
                 let y = gaze.MappedFixationPointY;
                 let color;
-                AOIs.forEach(aoi => {
                 let aoiCoords;
                 AOIs.forEach((aoi, index) => {
                     if (x >= aoi.x1 && x <= aoi.x2 && y >= aoi.y1 && y <= aoi.y2) {
