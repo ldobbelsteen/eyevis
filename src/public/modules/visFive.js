@@ -152,8 +152,8 @@ export function visualize() {
                 .on("mouseover", gaze => {
                     info.transition().duration(200).style("opacity", 1)
                     info.html(
-                        "Timestamp: " + gaze.time + "<br>" +
                         "Duration: " + gaze.duration
+                        "Start time: " + gaze.time + "ms" + "<br>" +
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
