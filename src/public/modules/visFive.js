@@ -174,6 +174,6 @@ export function visualize() {
         // Add x-axis for time
         timelines.append("g")
             .attr("transform", `translate(0, ${timelineHeight * users.length})`)
-            .call(d3.axisBottom(xScale))
+            .call(d3.axisBottom(xScale).tickSizeOuter(0))
     }
 }
