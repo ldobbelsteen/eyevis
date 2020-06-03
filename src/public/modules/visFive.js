@@ -99,15 +99,21 @@ export function visualize() {
                 let y = gaze.MappedFixationPointY;
                 let color;
                 AOIs.forEach(aoi => {
+                let aoiCoords;
+                AOIs.forEach((aoi, index) => {
                     if (x >= aoi.x1 && x <= aoi.x2 && y >= aoi.y1 && y <= aoi.y2) {
                         color = aoi.color;
+                        let x = index % gridSizeX;
+                        let y = (index - x) / gridSizeY;
+                        aoiCoords = [x + 1, y + 1];
                     }
                 });
                 gazes.push({
                     user: gaze.user,
                     time: gaze.Timestamp - startTime,
                     duration: gaze.FixationDuration,
-                    color: color
+                    color: color,
+                    aoiCoords: aoiCoords,
                 });
             });
         });
@@ -155,6 +161,7 @@ export function visualize() {
                         "Start time: " + gaze.time + "ms" + "<br>" +
                         "Duration: " + gaze.duration + "ms" + "<br>" +
                         "User: " + gaze.user + "<br>" +
+                        "AOI coords: " + gaze.aoiCoords
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
