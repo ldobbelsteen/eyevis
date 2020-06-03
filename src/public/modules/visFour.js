@@ -1,7 +1,7 @@
 //Chiara Liotta 1414755 - heatmap
 
 var filteredData, densityData;
-var svg, img, color, overlay, points;
+var svg, topInfo, img, color, overlay, points;
 var containerH, containerW, x, y, info;
 const container = $("#visualization");
 const $valueRad = $("#sliderRadius");
@@ -95,6 +95,11 @@ function findMinMax(data) {
 // update heatmap overlay
 function showOverlay() {
 
+     // remove all previous overlays
+     overlay.selectAll("path").remove()
+     points.selectAll("circle").remove()
+     topInfo.selectAll("rect").remove()
+
     var alpha = $valueAlpha.val()
     
     // set color gradient
@@ -107,9 +112,12 @@ function showOverlay() {
 
     color.range(classicGradient)
 
-    // remove all previous overlays
-    overlay.selectAll("path").remove()
-    points.selectAll("circle").remove()
+    topInfo.append('rect')
+                .attr('fill', "url(#svgGradient)")
+                .attr('x', (containerW * 0.15))
+                .attr('y', 15)
+                .attr('width', (containerW * 0.7))
+                .attr('height', 40);
 
     // add new overlay and points 
     overlay.selectAll("path")
@@ -148,15 +156,17 @@ function showOverlay() {
 // add heatmap overlay on image
 function heatmap() {
 
+    topInfo.select("g").remove()
+
     // gradient: still not in use
-    var defs = svg.append("defs");
+    var defs = topInfo.append("defs");
 
     var gradient = defs.append("linearGradient")
                         .attr("id", "svgGradient")
                         .attr("x1", "0%")
                         .attr("x2", "100%")
                         .attr("y1", "0%")
-                        .attr("y2", "100%");
+                        .attr("y2", "0%");
 
     gradient.append("stop")
             .attr('class', 'start')
@@ -209,7 +219,16 @@ function heatmap() {
     // implement color palette
     color = d3.scaleLinear()
                     .domain(colorDomain) 
-    
+
+    var densScale = d3.scaleLinear()
+                        .domain([minMax[0], minMax[1]])
+                        .range([0,(containerW*0.7)])
+                        .nice()
+
+    topInfo.append("g")
+            .attr("transform", "translate("+ (containerW*0.15) +","+ 60 +")")
+            .call(d3.axisBottom(densScale).ticks(10, ".2f"))
+
 }
 
 export function visualize() {
@@ -228,6 +247,11 @@ export function visualize() {
         var ratio = $("#main").width() / originalW;
         containerW = $("#main").width();
         containerH = originalH * ratio;
+
+        topInfo = d3.select("#visualization")
+                    .append("svg")
+                    .attr("viewBox", "0 0 " + containerW + " "+ 80)
+
         svg = d3.select("#visualization")
                 .append("svg")
                 .attr("id", "svg")
