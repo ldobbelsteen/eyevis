@@ -40,7 +40,8 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
                         <div>
-                            <button type="button" class="btn btn-default init" id="init-vis1">(Re)Initialize</button> <br>
+                            <button type="button" class="btn btn-default init" id="init-vis1">(Re)Initialize</button>
+                            <br>
                             <span>Color picker dot</span> <br>
                             <select class="custom-select" id="color-dot">
                                 <option selected value="steelblue">steelblue</option>
@@ -57,6 +58,9 @@
                                 <option value="yellow">yellow</option>
                                 <option value="black">black</option>
                             </select> <br>
+                            <script src="jscolor.js"></script>
+
+                            Color: <input class="jscolor" value="ab2567">
                         </div>
                     </div>
                 </li>
@@ -69,8 +73,10 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
                         <div>
-                            <button type="button" class="btn btn-default init" id="init-vis2">(Re)Initialize</button> <br>
-                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input type="number" min="2" max="8" value="3">
+                            <button type="button" class="btn btn-default init" id="init-vis2">(Re)Initialize</button>
+                            <br>
+                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input
+                                type="number" min="2" max="8" value="3">
                         </div>
                     </div>
                 </li>
@@ -83,10 +89,12 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
                         <div>
-                            <button type="button" class="btn btn-default init" id="init-vis3">(Re)Initialize</button> <br>
-                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input type="number" min="2" max="8" value="3"><br>
+                            <button type="button" class="btn btn-default init" id="init-vis3">(Re)Initialize</button>
                             <br>
-                            <span>Offset (standard or normalized)</span> <br> 
+                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input
+                                type="number" min="2" max="8" value="3"><br>
+                            <br>
+                            <span>Offset (standard or normalized)</span> <br>
                             <select class="custom-select" id="offset-option">
                                 <option selected value="d3.stackOffsetSilhouette">Standard</option>
                                 <option value="d3.stackOffsetExpand">Normalized</option>
@@ -105,30 +113,36 @@
                         <div>
                             <div>
                                 <button type="button" class="btn btn-default init4" id="init-vis4">Initialize</button>
-                                <button type="button" class="btn btn-default reset4" id="reset4">Reset zoom</button> <br><br>
-                                <span class="text-center">Hover over the dots to find out coordinates and fixation duration for each fixation point.</span> <br><br>
+                                <button type="button" class="btn btn-default reset4" id="reset4">Reset zoom</button>
+                                <br><br>
+                                <span class="text-center">Hover over the dots to find out coordinates and fixation
+                                    duration for each fixation point.</span> <br><br>
                                 <span>Circle radius</span>
                                 <div class="d-flex justify-content-center my-4 w-100">
                                     <form class="range-field">
-                                      <input id="sliderRadius" class="border-0 slider" type="range" min="0" max="5" value="1" step="0.2" />
+                                        <input id="sliderRadius" class="border-0 slider" type="range" min="0" max="5"
+                                            value="1" step="0.2" />
                                     </form>
                                     <span class="font-weight-bold text-primary ml-2 mt-1 valueRad val"></span>
                                 </div><br>
                                 <span>Bandwidth (standard deviation)</span>
                                 <div class="d-flex justify-content-center my-4 w-100">
                                     <form class="range-field">
-                                      <input id="sliderBand" class="border-0 slider" type="range" min="1" max="40" value="20" step="1" />
+                                        <input id="sliderBand" class="border-0 slider" type="range" min="1" max="40"
+                                            value="20" step="1" />
                                     </form>
                                     <span class="font-weight-bold text-primary ml-2 mt-1 valueBand val"></span>
                                 </div><br>
                                 <span>Contour opacity</span>
                                 <div class="d-flex justify-content-center my-4 w-100">
                                     <form class="range-field">
-                                      <input id="sliderAlpha" class="border-0 slider" type="range" min="0" max="1" value="0.3" step="0.1" />
+                                        <input id="sliderAlpha" class="border-0 slider" type="range" min="0" max="1"
+                                            value="0.3" step="0.1" />
                                     </form>
                                     <span class="font-weight-bold text-primary ml-2 mt-1 valueAlpha val"></span>
                                 </div> <br>
-                                <button type="button" class="btn btn-default init" id="reset-sliders4">Reset sliders</button>
+                                <button type="button" class="btn btn-default init" id="reset-sliders4">Reset
+                                    sliders</button>
                             </div>
                         </div>
                     </div>
@@ -143,7 +157,8 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis5">
                         <div>
                             <button type="button" class="btn btn-default init" id="init-vis5">(Re)Initialize</button>
-                            <span>Grid size:</span><input type="number" min="2" max="6" value="3"><span>x</span><input type="number" min="2" max="6" value="3">
+                            <span>Grid size:</span><input type="number" min="2" max="6" value="3"><span>x</span><input
+                                type="number" min="2" max="6" value="3">
                         </div>
                     </div>
                 </li>

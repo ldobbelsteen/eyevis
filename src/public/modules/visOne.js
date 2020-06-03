@@ -118,7 +118,10 @@ function drawScanpath() {
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
         .style("fill", `${dotColor}`)
-        //.style("fill", function (d, i) {})
+        // .style("fill", function (d, i) {
+        //     // console.log(i);
+        //     // console.log(`${i} + ${filteredData.length} `);
+        // })
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
             info.transition().duration(200).style("opacity", "1");
@@ -183,4 +186,35 @@ export function visualize() {
             .attr("class", "img");
     };
     img.src = `/stimuli/${window.stimulus}`;
+}
+
+function converRGBtoHSL(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+    let cmin = Math.min(r, g, b),
+        cmax = Math.max(r, g, b),
+        delta = cmax - cmin,
+        h = 0,
+        s = 0,
+        l = 0;
+
+    if (delta == 0) h = 0;
+    else if (cmax == r) h = ((g - b) / delta) % 6;
+    else if (cmax == g) h = (b - r) / delta + 2;
+    else h = (r - g) / delta + 4;
+
+    //calcualte hue
+    h = Math.round(h * 60);
+    if (h < 0) h += 360;
+
+    // Calculate lightness
+    l = (cmax + cmin) / 2;
+    l = +(l * 100).toFixed(1);
+
+    // Calculate saturation
+    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+    s = +(s * 100).toFixed(1);
+
+    return "hsl(" + h + "," + s + "%," + l + "%)";
 }
