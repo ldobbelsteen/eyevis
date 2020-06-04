@@ -7,7 +7,8 @@ var colorLine = $("#color-line");
 var colorPicker = $(".jscolor");
 var colorPickerButton = $("#colorPick");
 var color = "4682B4"; //COLOR OF THE COLOR PICKER is preset to steelblue
-var dotColor = "steelblue";
+var colorHSL = ["207", "44", "49"];
+// var dotColor = "steelblue";
 var lineColor = "red";
 var img, xOffset, yOffset, svg, info;
 var points, lines;
@@ -68,6 +69,7 @@ export function initialize() {
     //     }
     // });
     colorLine.on("change", function () {
+        lineColor = $(this).val();
         if (window.visualization == "one") {
             showLoading();
             setTimeout(drawScanpath, 10);
@@ -77,13 +79,8 @@ export function initialize() {
 
     colorPickerButton.on("click", function () {
         color = colorPicker.val();
-        lineColor = $(this).val();
-        console.log(color);
-        console.log(color.length);
-        let colorRGB = hexToRGB(color);
-        console.log(colorRGB);
-        let colorHSL = converRGBtoHSL(colorRGB);
-        console.log(colorHSL);
+        colorHSL = hexToRGB(color);
+
         if (window.visualization == "one") {
             showLoading();
             setTimeout(drawScanpath, 10);
@@ -135,11 +132,18 @@ function drawScanpath() {
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
-        .style("fill", `${color}`)
-        // .style("fill", function (d, i) {
-        //     // console.log(i);
-        //     // console.log(`${i} + ${filteredData.length} `);
-        // })
+        // .style("fill", `${color}`)
+        .style("fill", function (d, i) {
+            return (
+                "hsl(" +
+                colorHSL[0] +
+                "," +
+                (i / filteredData.length) * 100 +
+                "%," +
+                colorHSL[2] +
+                "%)"
+            );
+        })
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
             info.transition().duration(200).style("opacity", "1");
@@ -207,6 +211,7 @@ export function visualize() {
 }
 
 function converRGBtoHSL(r, g, b) {
+    let hsl = [];
     // Make r, g, and b fractions of 1
     r /= 255;
     g /= 255;
@@ -242,8 +247,11 @@ function converRGBtoHSL(r, g, b) {
     // Multiply l and s by 100
     s = +(s * 100).toFixed(1);
     l = +(l * 100).toFixed(1);
+    hsl[0] = h;
+    hsl[1] = s;
+    hsl[2] = l;
 
-    return "hsl(" + h + "," + s + "%," + l + "%)";
+    return hsl;
 }
 
 function hexToRGB(val) {
