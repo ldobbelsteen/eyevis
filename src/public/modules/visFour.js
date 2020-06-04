@@ -171,6 +171,7 @@ function showOverlay() {
                        "rgb(172, 0, 1)"]
 
     var colorBlind = ["rgb(0, 234, 255)", "rgb(24, 0, 120)"]
+    var pinkBlue = ["pink", "blue"]
 
     var color = d3.scaleLinear()
     var type = $gradType.val()
@@ -178,10 +179,13 @@ function showOverlay() {
     if ( type == "classic") {
         color.domain(colorDomain)
                 .range(classicGradient);
+    } else if ( type == "pinkBlue") {
+        color.domain([colorDomain[0], colorDomain[colorDomain.length - 1]])
+                .range(pinkBlue)
     } else if ( type == "colorBlind") {
         color.domain([colorDomain[0], colorDomain[colorDomain.length - 1]])
                 .range(colorBlind)
-    }
+    } 
  
     topInfo.append('rect')
                 .attr('fill', "url(#svgGradient)")
@@ -268,6 +272,17 @@ function colorGrandient() {
                 .attr("class", "end")
                 .attr("offset", "100%")
                 .attr("stop-color", "rgb(172, 0, 1)") //dark red
+                .attr("stop-opacity", 1);
+    } else if ( type == "pinkBlue"){
+        gradient.append("stop")
+                .attr("class", "start")
+                .attr("offset", "0%")
+                .attr("stop-color", "pink")
+                .attr("stop-opacity", 1);
+        gradient.append("stop")
+                .attr("class", "end")
+                .attr("offset", "100%")
+                .attr("stop-color", "blue") 
                 .attr("stop-opacity", 1);
     } else if ( type == "colorBlind"){
         gradient.append("stop")
