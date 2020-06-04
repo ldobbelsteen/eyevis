@@ -144,7 +144,7 @@ function overlayData() {
         densityData = d3.contourDensity()
                         .x((d) => x(d.MappedFixationPointX))
                         .y((d) => y(d.MappedFixationPointY))
-                        .weight((d) => 100)
+                        .weight(() => 500)
                         .size([ (containerW), (containerH) ])
                         .bandwidth($valueBand.val())
                         (filteredData)
