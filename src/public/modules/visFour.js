@@ -125,15 +125,16 @@ function overlayData() {
 
     // compute the density data
     densityData = d3.contourDensity()
-                        .x(function(d) { return x(d.MappedFixationPointX); })
-                        .y(function(d) { return y(d.MappedFixationPointY); })
-                        .weight(function(d) { return d.FixationDuration; })
+                        .x((d) => x(d.MappedFixationPointX))
+                        .y((d) => y(d.MappedFixationPointY))
+                        .weight((d) => d.FixationDuration)
                         .size([ (containerW), (containerH) ])
                         .bandwidth($valueBand.val())
                         (filteredData)
 
+    console.log(densityData)
     // compute array with min and max density among single points
-    var minMax = findMinMax(densityData)
+    var minMax = [d3.min(densityData, (d) => d.value ), d3.max(densityData, (d) => d.value )]
 
     // compute 5 equally sized intervals and relative color coding
     var interval = (minMax[1] - minMax[0]) / 5;
@@ -143,26 +144,14 @@ function overlayData() {
     color = d3.scaleLinear()
                     .domain(colorDomain) 
 
-    var densScale = d3.scaleLinear()
+    var densScale = d3.scaleLinear() 
                         .domain([minMax[0], minMax[1]])
                         .range([0,(containerW*0.7)])
-                        .nice()
 
     topInfo.append("g")
             .attr("transform", "translate("+ (containerW*0.15) +","+ 65 +")")
-            .call(d3.axisBottom(densScale).ticks(10, ".2f"))
+            .call(d3.axisBottom(densScale).ticks(10))
 
-}
-
-// find max and min density (using density data)
-function findMinMax(data) {
-    var max = 0
-    var min = Infinity
-    data.forEach(function (item) {
-        if (item.value > max) max = item.value;
-        if (item.value < min) min = item.value;
-    })
-    return [min,max];
 }
 
 // update heatmap overlay
@@ -197,7 +186,7 @@ function showOverlay() {
                 .data(densityData)
                 .enter().append("path")
                 .attr("d", d3.geoPath())
-                .attr("fill", function(d) { return color(d.value); })
+                .attr("fill", (d) => color(d.value) )
                 .attr("opacity", alpha)
                 .on("mouseover", function (densityData) {
                     info.transition().duration(100).style("opacity", "1");
