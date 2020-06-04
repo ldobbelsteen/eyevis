@@ -42,14 +42,14 @@
                         <div>
                             <button type="button" class="btn btn-default init" id="init-vis1">(Re)Initialize</button>
                             <br>
-                            <span>Color picker dot</span> <br>
+                            <!-- <span>Color picker dot</span> <br>
                             <select class="custom-select" id="color-dot">
                                 <option selected value="steelblue">steelblue</option>
                                 <option value="green">green</option>
                                 <option value="red">red</option>
                                 <option value="pink">pink</option>
                                 <option value="black">black</option>
-                            </select> <br>
+                            </select> <br> -->
                             <span>Color picker line</span> <br>
                             <select class="custom-select" id="color-line">
                                 <option selected value="red">red</option>
@@ -58,9 +58,10 @@
                                 <option value="yellow">yellow</option>
                                 <option value="black">black</option>
                             </select> <br>
-                            <script src="jscolor.js"></script>
 
-                            Color: <input class="jscolor" value="ab2567">
+
+                            Color: <input class="jscolor {closable:true,closeText:'Close'}" value="4682b4">
+                            <button type="button" class="btn btn-default init" id="colorPick">Change color</button>
                         </div>
                     </div>
                 </li>

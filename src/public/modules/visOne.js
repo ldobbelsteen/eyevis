@@ -2,8 +2,11 @@
 
 var filteredData;
 var container = $("#visualization");
-var colorDot = $("#color-dot");
+//var colorDot = $("#color-dot");
 var colorLine = $("#color-line");
+var colorPicker = $(".jscolor");
+var colorPickerButton = $("#colorPick");
+var color = "4682B4"; //COLOR OF THE COLOR PICKER is preset to steelblue
 var dotColor = "steelblue";
 var lineColor = "red";
 var img, xOffset, yOffset, svg, info;
@@ -56,16 +59,31 @@ export function userChange() {
 
 export function initialize() {
     updateData();
-    colorDot.on("change", function () {
-        dotColor = $(this).val();
+    // colorDot.on("change", function () {
+    //     dotColor = $(this).val();
+    //     if (window.visualization == "one") {
+    //         showLoading();
+    //         setTimeout(drawScanpath, 10);
+    //         setTimeout(hideLoading, 5);
+    //     }
+    // });
+    colorLine.on("change", function () {
         if (window.visualization == "one") {
             showLoading();
             setTimeout(drawScanpath, 10);
             setTimeout(hideLoading, 5);
         }
     });
-    colorLine.on("change", function () {
+
+    colorPickerButton.on("click", function () {
+        color = colorPicker.val();
         lineColor = $(this).val();
+        console.log(color);
+        console.log(color.length);
+        let colorRGB = hexToRGB(color);
+        console.log(colorRGB);
+        let colorHSL = converRGBtoHSL(colorRGB);
+        console.log(colorHSL);
         if (window.visualization == "one") {
             showLoading();
             setTimeout(drawScanpath, 10);
@@ -117,7 +135,7 @@ function drawScanpath() {
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
-        .style("fill", `${dotColor}`)
+        .style("fill", `${color}`)
         // .style("fill", function (d, i) {
         //     // console.log(i);
         //     // console.log(`${i} + ${filteredData.length} `);
@@ -189,32 +207,50 @@ export function visualize() {
 }
 
 function converRGBtoHSL(r, g, b) {
+    // Make r, g, and b fractions of 1
     r /= 255;
     g /= 255;
     b /= 255;
+
+    // Find greatest and smallest channel values
     let cmin = Math.min(r, g, b),
         cmax = Math.max(r, g, b),
         delta = cmax - cmin,
         h = 0,
         s = 0,
         l = 0;
-
+    // Calculate hue
+    // No difference
     if (delta == 0) h = 0;
+    // Red is max
     else if (cmax == r) h = ((g - b) / delta) % 6;
+    // Green is max
     else if (cmax == g) h = (b - r) / delta + 2;
+    // Blue is max
     else h = (r - g) / delta + 4;
 
-    //calcualte hue
     h = Math.round(h * 60);
-    if (h < 0) h += 360;
 
+    // Make negative hues positive behind 360°
+    if (h < 0) h += 360;
     // Calculate lightness
     l = (cmax + cmin) / 2;
-    l = +(l * 100).toFixed(1);
 
     // Calculate saturation
     s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    // Multiply l and s by 100
     s = +(s * 100).toFixed(1);
+    l = +(l * 100).toFixed(1);
 
     return "hsl(" + h + "," + s + "%," + l + "%)";
+}
+
+function hexToRGB(val) {
+    let rgb = [];
+    rgb[0] = parseInt(val[0].toString() + val[1].toString(), 16);
+    rgb[1] = parseInt(val[2].toString() + val[3].toString(), 16);
+    rgb[2] = parseInt(val[4].toString() + val[5].toString(), 16);
+
+    return converRGBtoHSL(rgb[0], rgb[1], rgb[2]);
 }
