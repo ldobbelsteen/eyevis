@@ -7,6 +7,7 @@ const container = $("#visualization");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
 const $valueAlpha = $("#sliderAlpha");
+const $heatType = $("#heatmapType");
 
 // show the loading overlay
 function showLoading() {
@@ -43,6 +44,13 @@ export function initialize() {
         if (window.visualization == "four") {
             showLoading();
             setTimeout(showOverlay, 10);
+            setTimeout(hideLoading, 5);
+        }
+    });
+    $heatType.on("change", function () {
+        if (window.visualization == "four") {
+            showLoading();
+            setTimeout(newUser, 10);
             setTimeout(hideLoading, 5);
         }
     });
@@ -124,13 +132,24 @@ function overlayData() {
     topInfo.select("g").remove() 
 
     // compute the density data
-    densityData = d3.contourDensity()
+    if ($heatType.val() == "duration") {
+        densityData = d3.contourDensity()
                         .x((d) => x(d.MappedFixationPointX))
                         .y((d) => y(d.MappedFixationPointY))
                         .weight((d) => d.FixationDuration)
                         .size([ (containerW), (containerH) ])
                         .bandwidth($valueBand.val())
                         (filteredData)
+    }   else if ($heatType.val() == "count") {
+        densityData = d3.contourDensity()
+                        .x((d) => x(d.MappedFixationPointX))
+                        .y((d) => y(d.MappedFixationPointY))
+                        .weight((d) => 100)
+                        .size([ (containerW), (containerH) ])
+                        .bandwidth($valueBand.val())
+                        (filteredData)
+    }
+    
 
     console.log(densityData)
     // compute array with min and max density among single points
