@@ -1,5 +1,16 @@
 // Milou Henzen (1409107) - ThemeRiver
 
+function filterData(data, filter) {
+    return data.filter((item) => {
+        for (let key in filter) {
+            if (item[key] != filter[key]) {
+                return false;
+            }
+        }
+        return true;
+    });
+}
+
 export function initialize() {}
 
 export function visualize() {
@@ -10,6 +21,12 @@ export function visualize() {
     
     // Find the offset option
     const offsetOption = $("#offset-option");
+
+    // Filter dataset data by the current stimulus
+    let data = filterData(window.data, {
+        StimuliName: window.stimulus
+    });
+    console.log(data)
 
     // Load stimulus and make it change when something changes
     const container = d3.select("#visualization");
@@ -67,7 +84,6 @@ export function visualize() {
         for (let x = 0; x < gridSizeX; x++) {
             for (let y = 0; y < gridSizeY; y++) {
                 aois.push({
-                    //color: colors(Math.random()),
                     x1: AOIsizeX * x,
                     x2: AOIsizeX * (x + 1),
                     y1: AOIsizeY * y,
@@ -77,19 +93,35 @@ export function visualize() {
                 });
             }
         }
+        console.log(aois);
 
 
         // Making array with the data
         let aoiInfo = [];
-        for (let stamp = 0; stamp <= 10000; stamp += 1000) {
+        
+        // This should be from the lowest timestamp to the highest with intervals of 1000 (or more???)
+        // But it does not work like this apparently 
+        for (let stamp = Math.min(data.Timestamp); stamp <= Math.max(data.Timestamp) ; stamp += 1000) {
             let timestampInfo = {};
             timestampInfo.x = stamp;
+
+            // This should count the number of fixations in each AOI in the time interval
             aois.forEach((aoi) => {
                 let name = "aoi_" + aoi.gridX + "_" + aoi.gridY;
-                timestampInfo[name] = Math.floor(Math.random() * 10);
-            });
-            aoiInfo.push(timestampInfo);
-        }
+                timestampInfo[name] = 
+                    data.forEach(fix => {
+                        let x = fix.MappedFixationPointX;
+                        let y = fix.MappedFixationPointY;
+                        let fixCount = 0;
+                            if (x >= aoi.x && x <= aoi.x1 && y >= aoi.y && y <= aoi.y1) {
+                                    fixCount += 1;
+                            }
+                    });
+                });
+                aoiInfo.push(timestampInfo);
+            };
+            
+        console.log(aoiInfo);
 
 
         //Getting all the names of the aois to use as keys
