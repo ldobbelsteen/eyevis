@@ -1,13 +1,14 @@
 //Chiara Liotta 1414755 - heatmap
 
 var filteredData, densityData;
-var svg, topInfo, img, color, overlay, points;
+var svg, topInfo, img, overlay, points, gradient, colorDomain;
 var containerH, containerW, x, y, info;
 const container = $("#visualization");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
 const $valueAlpha = $("#sliderAlpha");
 const $heatType = $("#heatmapType");
+const $gradType = $("#gradType");
 
 // show the loading overlay
 function showLoading() {
@@ -54,6 +55,13 @@ export function initialize() {
             setTimeout(hideLoading, 5);
         }
     });
+    $gradType.on("change", function () {
+        if (window.visualization == "four") {
+            showLoading();
+            setTimeout(showOverlay, 10);
+            setTimeout(hideLoading, 5);
+        }
+    });
 }
 
 // called when updating user, bandwidth, or resetting slider
@@ -91,39 +99,12 @@ function initializeGradient() {
 
     var defs = topInfo.append("defs");
 
-    var gradient = defs.append("linearGradient")
+    gradient = defs.append("linearGradient")
                         .attr("id", "svgGradient")
                         .attr("x1", "0%")
                         .attr("x2", "100%")
                         .attr("y1", "0%")
                         .attr("y2", "0%");
-
-    gradient.append("stop")
-            .attr("class", "start")
-            .attr("offset", "0%")
-            .attr("stop-color", "rgba(59, 238, 223)") //light blue
-            .attr("stop-opacity", 1);
-    gradient.append("stop")
-            .attr("offset", "20%")
-            .attr("stop-color", "rgb(145, 238, 146)") //light green
-            .attr("stop-opacity", 1);
-    gradient.append("stop")
-            .attr("offset", "40%")
-            .attr("stop-color", "rgb(253, 254, 87)") //yellow
-            .attr("stop-opacity", 1);
-    gradient.append("stop")
-            .attr("offset", "60%")
-            .attr("stop-color", "rgb(254, 138, 21)") //orange
-            .attr("stop-opacity", 1);
-    gradient.append("stop")
-            .attr("offset", "80%")
-            .attr("stop-color", "rgb(253, 26, 12)") //red
-            .attr("stop-opacity", 1);
-    gradient.append("stop")
-            .attr("class", "end")
-            .attr("offset", "100%")
-            .attr("stop-color", "rgb(172, 0, 1)") //dark red
-            .attr("stop-opacity", 1);
 }
 
 // deal with overlay data
@@ -157,11 +138,7 @@ function overlayData() {
 
     // compute 5 equally sized intervals and relative color coding
     var interval = (minMax[1] - minMax[0]) / 5;
-    var colorDomain = [ minMax[0], (minMax[0]+interval), (minMax[0]+2*interval), (minMax[0]+3*interval), (minMax[0]+4*interval), minMax[1] ]
-
-    // implement color palette
-    color = d3.scaleLinear()
-                    .domain(colorDomain) 
+    colorDomain = [ minMax[0], (minMax[0]+interval), (minMax[0]+2*interval), (minMax[0]+3*interval), (minMax[0]+4*interval), minMax[1] ]
 
     var densScale = d3.scaleLinear() 
                         .domain([minMax[0], minMax[1]])
@@ -181,46 +158,59 @@ function showOverlay() {
     points.selectAll("circle").remove()
     topInfo.selectAll("rect").remove()
 
-   var alpha = $valueAlpha.val()
+    var alpha = $valueAlpha.val()
+ 
+    colorGrandient();
    
-   // set color gradient
-   var classicGradient = ["rgb(59, 238, 223)",
+    // set color gradient
+    var classicGradient = ["rgb(59, 238, 223)",
                        "rgb(145, 238, 146)",
                        "rgb(253, 254, 87)",
                        "rgb(254, 138, 21)",
                        "rgb(253, 26, 12)", 
                        "rgb(172, 0, 1)"]
 
-   color.range(classicGradient)
+    var colorBlind = ["rgb(0, 234, 255)", "rgb(24, 0, 120)"]
 
-   topInfo.append('rect')
-               .attr('fill', "url(#svgGradient)")
-               .attr('x', (containerW * 0.15))
-               .attr('y', 25)
-               .attr('width', (containerW * 0.7))
-               .attr('height', 35);
+    var color = d3.scaleLinear()
+    var type = $gradType.val()
 
-   // add new overlay and points 
-   overlay.selectAll("path")
-                .data(densityData)
-                .enter().append("path")
-                .attr("d", d3.geoPath())
-                .attr("fill", (d) => color(d.value) )
-                .attr("opacity", alpha)
-                .on("mouseover", function (densityData) {
-                    info.transition().duration(100).style("opacity", "1");
-                    info.html(
-                        "density: " +
-                            densityData.value 
-                    );
-                    info.style("left", d3.event.pageX + 8 + "px");
-                    info.style("top", d3.event.pageY - 80 + "px");
-                })
-                .on("mouseout", function () {
-                    info.transition().duration(200).style("opacity", 0);
-                });
+    if ( type == "classic") {
+        color.domain(colorDomain)
+                .range(classicGradient);
+    } else if ( type == "colorBlind") {
+        color.domain([colorDomain[0], colorDomain[colorDomain.length - 1]])
+                .range(colorBlind)
+    }
+ 
+    topInfo.append('rect')
+                .attr('fill', "url(#svgGradient)")
+                .attr('x', (containerW * 0.15))
+                .attr('y', 25)
+                .attr('width', (containerW * 0.7))
+                .attr('height', 35);
 
-   points.selectAll("circle")
+    // add new overlay and points 
+    overlay.selectAll("path")
+                    .data(densityData)
+                    .enter().append("path")
+                    .attr("d", d3.geoPath())
+                    .attr("fill", (d) => color(d.value) )
+                    .attr("opacity", alpha)
+                    .on("mouseover", function (densityData) {
+                        info.transition().duration(100).style("opacity", "1");
+                        info.html(
+                            "density: " +
+                                densityData.value 
+                        );
+                        info.style("left", d3.event.pageX + 8 + "px");
+                        info.style("top", d3.event.pageY - 80 + "px");
+                    })
+                    .on("mouseout", function () {
+                        info.transition().duration(200).style("opacity", 0);
+                    });
+
+    points.selectAll("circle")
                 .data(filteredData)
                 .enter().append("circle")
                 .attr("cx", d => x(d.MappedFixationPointX))
@@ -245,6 +235,53 @@ function showOverlay() {
                 .on("mouseout", function () {
                    info.transition().duration(200).style("opacity", 0);
                 });
+}
+
+function colorGrandient() {
+    gradient.selectAll("stop").remove();
+
+    var type = $gradType.val();
+
+    if ( type == "classic") {
+        gradient.append("stop")
+                .attr("class", "start")
+                .attr("offset", "0%")
+                .attr("stop-color", "rgba(59, 238, 223)") //light blue
+                .attr("stop-opacity", 1);
+        gradient.append("stop")
+                .attr("offset", "20%")
+                .attr("stop-color", "rgb(145, 238, 146)") //light green
+                .attr("stop-opacity", 1);
+        gradient.append("stop")
+                .attr("offset", "40%")
+                .attr("stop-color", "rgb(253, 254, 87)") //yellow
+                .attr("stop-opacity", 1);
+        gradient.append("stop")
+                .attr("offset", "60%")
+                .attr("stop-color", "rgb(254, 138, 21)") //orange
+                .attr("stop-opacity", 1);
+        gradient.append("stop")
+                .attr("offset", "80%")
+                .attr("stop-color", "rgb(253, 26, 12)") //red
+                .attr("stop-opacity", 1);
+        gradient.append("stop")
+                .attr("class", "end")
+                .attr("offset", "100%")
+                .attr("stop-color", "rgb(172, 0, 1)") //dark red
+                .attr("stop-opacity", 1);
+    } else if ( type == "colorBlind"){
+        gradient.append("stop")
+                .attr("class", "start")
+                .attr("offset", "0%")
+                .attr("stop-color", "rgb(0, 234, 255)") //light
+                .attr("stop-opacity", 1);
+        gradient.append("stop")
+                .attr("class", "end")
+                .attr("offset", "100%")
+                .attr("stop-color", "rgb(24, 0, 120)") //dark blue
+                .attr("stop-opacity", 1);
+    }
+        
 }
 
 export function visualize() {
