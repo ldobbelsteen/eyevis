@@ -169,7 +169,7 @@ function overlayData() {
 
     topInfo.append("g")
             .attr("transform", "translate("+ (containerW*0.15) +","+ 65 +")")
-            .call(d3.axisBottom(densScale).tickValues(colorDomain).ticks(6, '.2f'))
+            .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
 
 }
 
