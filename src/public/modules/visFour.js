@@ -186,7 +186,7 @@ function showOverlay() {
                     .attr("d", d3.geoPath())
                     .attr("fill", (d) => color(d.value) )
                     .attr("opacity", alpha)
-                    .attr("transform", "translate(0,85)")
+                    .attr("transform", "translate(0,90)")
                     .on("mouseover", function (densityData) {
                         info.transition().duration(100).style("opacity", "1");
                         info.html(
@@ -206,7 +206,7 @@ function showOverlay() {
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
                 .attr("r", $valueRad.val())
-                .attr("transform", "translate(0,85)")
+                .attr("transform", "translate(0,90)")
                 // on mouseover pop-up with x and y coordinates and fixation duration
                 .on("mouseover", function (filteredData) {
                     info.transition().duration(100).style("opacity", "1");
@@ -230,7 +230,7 @@ function showOverlay() {
     svg.append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("height", 85)
+                .attr("height", 90)
                 .attr("width", containerW)
                 .attr("fill", "#d9edee")
     
@@ -339,7 +339,7 @@ export function visualize() {
                 .append("svg")
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + containerW + " "+ (containerH+85))
+                .attr("viewBox", "0 0 " + containerW + " "+ (containerH+90))
                 .append("g")
     
 
@@ -360,21 +360,21 @@ export function visualize() {
 
         zoomable = svg.append("g")
                         .attr("x", 0)
-                        .attr("y", 85)
+                        .attr("y", 90)
 
          // insert overlay on svg
         overlay = zoomable.insert("g", "g")
                         .attr("x", 0)
-                        .attr("y", 85)
+                        .attr("y", 90)
         points = zoomable.append("g", "g")
                         .attr("x", 0)
-                        .attr("y", 85);
+                        .attr("y", 90);
         showOverlay();
 
         // add image
         var svgImg = zoomable.insert("image", ":first-child")
                         .attr("x", 0)
-                        .attr("y", 85)
+                        .attr("y", 90)
                         .attr("width", containerW)
                         .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
