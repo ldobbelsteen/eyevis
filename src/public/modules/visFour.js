@@ -1,8 +1,8 @@
 //Chiara Liotta 1414755 - heatmap
 
 var filteredData, densityData;
-var svg, topInfo, img, overlay, points, gradient, colorDomain;
-var containerH, containerW, x, y, info;
+var svg, img, overlay, points, gradient, colorDomain;
+var containerH, containerW, x, y, info, zoomable;
 const container = $("#visualization");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
@@ -97,7 +97,7 @@ function updateData() {
 
 function initializeGradient() {
 
-    var defs = topInfo.append("defs");
+    var defs = svg.append("defs");
 
     gradient = defs.append("linearGradient")
                         .attr("id", "svgGradient")
@@ -109,8 +109,6 @@ function initializeGradient() {
 
 // deal with overlay data
 function overlayData() {
-
-    topInfo.select("g").remove() 
 
     // compute the density data
     if ($heatType.val() == "duration") {
@@ -140,14 +138,6 @@ function overlayData() {
     var interval = (minMax[1] - minMax[0]) / 5;
     colorDomain = [ minMax[0], (minMax[0]+interval), (minMax[0]+2*interval), (minMax[0]+3*interval), (minMax[0]+4*interval), minMax[1] ]
 
-    var densScale = d3.scaleLinear() 
-                        .domain([minMax[0], minMax[1]])
-                        .range([0,(containerW*0.7)])
-
-    topInfo.append("g")
-            .attr("transform", "translate("+ (containerW*0.15) +","+ 65 +")")
-            .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
-
 }
 
 // update heatmap overlay
@@ -156,7 +146,9 @@ function showOverlay() {
     // remove all previous overlays
     overlay.selectAll("path").remove()
     points.selectAll("circle").remove()
-    topInfo.selectAll("rect").remove()
+    svg.selectAll("rect").remove()
+    svg.selectAll("text").remove()
+    svg.selectAll("g.axis").remove()
 
     var alpha = $valueAlpha.val()
  
@@ -187,13 +179,6 @@ function showOverlay() {
                 .range(colorBlind)
     } 
  
-    topInfo.append('rect')
-                .attr('fill', "url(#svgGradient)")
-                .attr('x', (containerW * 0.15))
-                .attr('y', 25)
-                .attr('width', (containerW * 0.7))
-                .attr('height', 35);
-
     // add new overlay and points 
     overlay.selectAll("path")
                     .data(densityData)
@@ -201,6 +186,7 @@ function showOverlay() {
                     .attr("d", d3.geoPath())
                     .attr("fill", (d) => color(d.value) )
                     .attr("opacity", alpha)
+                    .attr("transform", "translate(0,85)")
                     .on("mouseover", function (densityData) {
                         info.transition().duration(100).style("opacity", "1");
                         info.html(
@@ -220,6 +206,7 @@ function showOverlay() {
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
                 .attr("r", $valueRad.val())
+                .attr("transform", "translate(0,85)")
                 // on mouseover pop-up with x and y coordinates and fixation duration
                 .on("mouseover", function (filteredData) {
                     info.transition().duration(100).style("opacity", "1");
@@ -239,6 +226,38 @@ function showOverlay() {
                 .on("mouseout", function () {
                    info.transition().duration(200).style("opacity", 0);
                 });
+
+    svg.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("height", 85)
+                .attr("width", containerW)
+                .attr("fill", "#d9edee")
+    
+    svg.append("rect")
+                .attr('fill', "url(#svgGradient)")
+                .attr('x', (containerW * 0.15))
+                .attr('y', 25)
+                .attr('width', (containerW * 0.7))
+                .attr('height', 35);
+
+    svg.append("text")
+                .attr("x", containerW*0.5)
+                .attr("y", 18)
+                .style("text-anchor", "middle")
+                .text("Density scale"); 
+
+    var minMax = [ d3.min(densityData, (d) => d.value ), d3.max(densityData, (d) => d.value )]
+
+    var densScale = d3.scaleLinear() 
+                .domain([minMax[0], minMax[1]])
+                .range([0,(containerW*0.7)])
+
+    svg.append("g")
+        .attr("transform", "translate("+ (containerW*0.15) +","+ 65 +")")
+        .attr("class", "axis")
+        .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
+
 }
 
 function colorGrandient() {
@@ -316,25 +335,16 @@ export function visualize() {
         containerW = $("#main").width();
         containerH = originalH * ratio;
 
-        topInfo = d3.select("#visualization")
-                    .append("svg")
-                    .attr("viewBox", "0 0 " + containerW + " "+ 85)
-        
-        topInfo.append("text")
-                .attr("x", containerW*0.5)
-                .attr("y", 18)
-                .style("text-anchor", "middle")
-                .text("Density scale"); 
-                
-        initializeGradient();
-
         svg = d3.select("#visualization")
                 .append("svg")
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + containerW + " "+ containerH)
+                .attr("viewBox", "0 0 " + containerW + " "+ (containerH+85))
                 .append("g")
+    
 
+            
+        initializeGradient();
         // x coordinates
         x = d3.scaleLinear()
                 .domain([ 0, img.naturalWidth ])
@@ -348,34 +358,44 @@ export function visualize() {
         // deal with data needed for overlay
         overlayData();
 
+        zoomable = svg.append("g")
+                        .attr("x", 0)
+                        .attr("y", 85)
+
          // insert overlay on svg
-        overlay = svg.insert("g", "g");
-        points = svg.append("g", "g");
+        overlay = zoomable.insert("g", "g")
+                        .attr("x", 0)
+                        .attr("y", 85)
+        points = zoomable.append("g", "g")
+                        .attr("x", 0)
+                        .attr("y", 85);
         showOverlay();
 
         // add image
-        svg.insert("image", ":first-child")
-            .attr("width", containerW)
-            .attr("xlink:href", `/stimuli/${window.stimulus}`)
-
+        var svgImg = zoomable.insert("image", ":first-child")
+                        .attr("x", 0)
+                        .attr("y", 85)
+                        .attr("width", containerW)
+                        .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
         // add zoom properties
         const zoom = d3.zoom()
                         .on("zoom", zoomed);
 
         function zoomed() {
-            svg.selectAll("image").attr("transform", d3.event.transform);
-            svg.selectAll("g", "g").attr("transform", d3.event.transform);
+            svgImg.attr("transform", d3.event.transform);
+            overlay.attr("transform", d3.event.transform);
+            points.attr("transform", d3.event.transform);
         }
 
-        svg.call(zoom)
+        zoomable.call(zoom)
         
         // button to reset zoom
         $("#reset4").on("click", () => {
             if (window.visualization == "four") {
-                svg.transition()
-                    .duration(400)
-                    .call(zoom.transform, d3.zoomIdentity);
+                zoomable.transition()
+                        .duration(400)
+                        .call(zoom.transform, d3.zoomIdentity);
             }
         });
     }
