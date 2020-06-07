@@ -2,6 +2,7 @@
 
 import * as visFour from "/modules/visFour.js";
 
+
 $(document).ready(function(){
 
     var $main = $('#main')
@@ -115,6 +116,29 @@ $(document).ready(function(){
             setTimeout(visFour.newUser(), 10);
         }
     });
-    
 
-});
+    const $home = $("#retHome");
+
+    $home.on("click", () => {
+        if (window.visualization != undefined) {
+            $("#vis-descr").show();
+            $("#visualization").hide();
+            window.visualization = undefined;
+        }
+        
+    })
+
+    const vis = [ $("#init-vis1"),
+                $("#init-vis2"),
+                $("#init-vis3"),
+                $("#init-vis4"),
+                $("#init-vis5")]
+    
+    vis.forEach( (d) => {
+        d.on("click", () => {
+            $("#vis-descr").hide();
+            $("#visualization").show();
+        });
+    }) 
+    
+})

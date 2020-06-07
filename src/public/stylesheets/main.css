@@ -118,6 +118,20 @@ button:focus {
     padding: 5px 20px 10px 20px;
 }
 
+#vis-descr {
+    background-color: #d9edee;
+    border: 2px solid black;
+    border-radius: 4px;
+    text-align: justify;
+    padding: 5px 20px 5px 20px;
+}
+
+#vis-descr > h3 {
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
 #description {
     padding: 10px;
 }

@@ -168,5 +168,5 @@ $("#init-vis5").on("click", () => {
 });
 
 $("#export").on('click', function(){
-    saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", {encoderOptions: 1, backgroundColor: "#FFFFFF"});
+    saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", {encoderOptions: 1, backgroundColor: "#FFFFFF", scale:2});
 });
