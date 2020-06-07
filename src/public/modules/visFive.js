@@ -136,12 +136,10 @@ export function visualize() {
                 let y = gaze.MappedFixationPointY;
                 let color;
                 let aoiCoords;
-                AOIs.forEach((aoi, index) => {
+                AOIs.forEach(aoi => {
                     if (x >= aoi.x1 && x <= aoi.x2 && y >= aoi.y1 && y <= aoi.y2) {
                         color = aoi.color;
-                        let x = index % gridSizeX;
-                        let y = (index - x) / gridSizeY;
-                        aoiCoords = [x + 1, y + 1];
+                        aoiCoords = [aoi.x + 1, aoi.y + 1]
                     }
                 });
                 gazes.push({
