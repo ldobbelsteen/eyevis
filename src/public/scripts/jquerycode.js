@@ -137,12 +137,13 @@ $(document).ready(function(){
                 $("#init-vis5")]
     
     vis.forEach( (d) => {
+        d.prop("disabled", true)
         d.on("click", () => {
             $("#vis-descr").hide();
             $("#about").hide();
             $("#visualization").show();
             $("#export").show();
         });
-    }) 
+    })
     
 })

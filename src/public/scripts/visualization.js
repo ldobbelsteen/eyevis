@@ -76,6 +76,16 @@ function updateUsers() {
     uniqueUsers.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach((user) => {
         usersMenu.append($("<option></option>").text(user));
     });
+
+    const visButtons = [ $("#init-vis1"),
+                         $("#init-vis2"),
+                         $("#init-vis3"),
+                         $("#init-vis4"),
+                         $("#init-vis5")]
+    
+    visButtons.forEach( (d) => {
+        d.prop("disabled", false)
+    })
 }
 
 // Disable menus as they are not yet populated
