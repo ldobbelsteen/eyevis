@@ -33,7 +33,7 @@ export function visualize() {
     // Create svg for the stimulus and timelines
     let stimulus = container.append("svg");
     let timelines = container.append("svg");
-    timelines.style("margin", "0.5em")
+    timelines.style("margin", "0.5em");
 
     // Add the stimulus
     let stimulusWidth;
@@ -160,7 +160,7 @@ export function visualize() {
                     .domain(users)
                     .range([0, (users.length - 1) * timelineHeight])
 
-        // TEMPORARY
+        // Set width and height for the axes
         let yAxisWidth = 32
         let xAxisHeight = 16
 
