@@ -31,8 +31,8 @@ export function visualize() {
     let timelineHeight = parseInt(container.style("font-size"));
 
     // Create svg for the stimulus and timelines
-    let stimulus = container.append("svg");
     let timelines = container.append("svg");
+    let stimulus = container.append("svg");
     timelines.style("margin", "0.5em");
 
     // Add the stimulus
