@@ -21,7 +21,7 @@ $(document).ready(function(){
         $about.toggleClass('hide')
         var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
-        var smallerWidth = (window.innerWidth - 250) * 0.9 - 10
+        var smallerWidth = (window.innerWidth - 250) * 0.9
         $about.animate({width: hide ? hiddenW : moveRight ? smallerWidth : standardW }, { duration: 0, queue: false})
         hide ? $about.css('padding', hiddenPadding) : $about.css('padding', standardPadding)
         hide ? $about.css('margin-bottom', '20px') : $about.css('margin-bottom', '0')
