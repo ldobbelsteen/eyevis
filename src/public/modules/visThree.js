@@ -1,11 +1,12 @@
 // Milou Henzen (1409107) - ThemeRiver
+// Big thanks to Eric for writing the part that calculated the number of fixations within each AOI
 
-//compare function to sort chronologically
-
+// Compare function to sort chronologically
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
 }
 
+// Filter the data
 function filterData(data, filter) {
     return data.filter((item) => {
         for (let key in filter) {
@@ -65,8 +66,6 @@ export function visualize() {
             .attr("viewBox", "0 0 " + width + " " + height)
             .append("g");
 
-        var tooltip = d3.select("#visualization").append("div").attr("class", "info").style("opacity", 0);
-
         // Get input values for the amount of horizontal and vertical AOIs
         let gridSizeX = gridSizeInputX.val();
         let gridSizeY = gridSizeInputY.val();
@@ -92,14 +91,11 @@ export function visualize() {
                 });
             }
         }
-        console.log(aois);
 
         // Making array with the data
         let aoiInfo = [];
 
-        // This should be from the lowest timestamp to the highest with intervals of 1000 (or more???)
-        // But it does not work like this apparently
-
+        // Sorting the timestamps to be linear
         let sortedData = data.sort(compare);
 
         let i = 0,
@@ -107,6 +103,8 @@ export function visualize() {
             timestamp = [];
         timestamp[0] = 0;
 
+        // Since there is so much data every 10 entries are grouped into a time interval
+        // This way, instead of 700 entries, there are 70 which is way more manageable 
         while (i + 10 < sortedData.length) {
             timestamp[k++] = sortedData[i + 10].Timestamp;
             i += 10;
@@ -116,6 +114,7 @@ export function visualize() {
         for (let i = 1; i <= timestamp.length; i++) {
             var timestampInfo = {};
             aois.forEach((aoi) => {
+                timestampInfo.x = parseInt(timestamp[i-1]);
                 let name = "aoi_" + aoi.gridX + "_" + aoi.gridY;
                 let fixCount = 0;
                 data.forEach((fix) => {
@@ -129,14 +128,15 @@ export function visualize() {
             });
             aoiInfo.push(timestampInfo);
         }
-        console.log(aoiInfo);
+
 
         //Getting all the names of the aois to use as keys
         var keys = Object.keys(aoiInfo[0]);
         keys.shift();
+        console.log(keys);
 
-        // Color pattern
-        let colors = d3.interpolatePlasma;
+        // Color gradient
+        let colorScale = d3.scaleOrdinal(["#610057", "#6A006A","#590073", "#18007B", "#000084","#002B8D","#007D96","#009E9E","#00A77B","#00B02D","#00B900","#44C200","#9DCA00","#D3D300","#DC9800","#E54900","#ED0309","#F60961","#FF10B6","#FF136B","#FF171D","#FF661E","#FFBD28","#FFFF32","#D3FF3C","#87FF46","#51FF51","#5BFF85","#65FFD6","#6FFFFF","#79E9FF","#83A9FF","#8D8DFF","#AB97FF","#EAA1FF","#FFABFF","#FFB5F7"]);
 
         //Creating stack
         if (offset == "d3.stackOffsetSilhouette") {
@@ -199,13 +199,17 @@ export function visualize() {
                 return yScale(d[1]);
             });
 
+        // Tooltip
+        let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
+
         // Making the graph
         svg.selectAll("g")
             .data(layers)
             .enter()
             .append("g")
             .attr("fill", function (d) {
-                return colors(Math.random());
+               // return colors(Math.random());
+                return colorScale(d.key);
             });
 
         svg.selectAll("path")
@@ -214,40 +218,30 @@ export function visualize() {
             .append("path")
             .attr("d", area)
             .attr("fill", function (d) {
-                return colors(Math.random());
-            });
+                //return colors(Math.random());
+                return colorScale(d.key);
 
-        // Tooltip
-        // Is for some reason at the bottom, I don't know why, but I do kinda like it
-        svg.selectAll("path")
-            .attr("opacity", 1)
-            .on("mousemove", function (d, i) {
-                var mouseX = d3.mouse(this)[0];
-                var invertedX = xScale.invert(mouseX);
-
-                var mouseY = d3.mouse(this)[1];
-                var invertedY = yScale.invert(mouseY);
-
-                tooltip
-                    .html("AOI: " + keys[i] + "<br>timestamp: " + parseInt(invertedX) + "<br>fixCount: " + "(DISCLAIMER Not based on our data yet)")
-
-                    .style("left", d3.event.pageX + "px")
-                    .style("top", d3.event.pageY - 15 + "px")
-                    .style("opacity", 0.9);
-
-                // Change opacity of aois that are not hovered over
-                svg.selectAll("path").attr("opacity", function (d, j) {
-                    if (j != i) {
-                        return 0.5;
-                    } else {
-                        return 1;
-                    }
-                });
             })
-            .on("mouseout", function (d) {
-                svg.selectAll("path").attr("opacity", 1);
-                tooltip.style("opacity", 0);
-            });
+            .on("mouseover", (function (d) {
+                console.log(d);
+                let currentKey = d.key;
+                console.log(currentKey);
+                info.transition().duration(200).style("opacity", 1)
+                info.html(
+                    "Area of interest: " + d.key + "<br>" +
+                    "Number of fixations: " + d[currentKey] + "<br>" 
+                    //+ "Start time interval: " + d.x + "ms" 
+                    )
+                info.style("left", d3.event.pageX + 8 + "px")
+                info.style("top", d3.event.pageY - 48 + "px")
+            }))
+            .on("mousemove", () => {
+                info.style("left", d3.event.pageX + 8 + "px")
+                info.style("top", d3.event.pageY - 48 + "px")
+            })
+            .on("mouseout", () => {
+                info.transition().duration(200).style("opacity", 0)
+            })
 
         // Adding x-axis
         svg.append("g")
