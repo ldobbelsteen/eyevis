@@ -7,6 +7,18 @@ body {
     background-color: #f0e9ed;
 }
 
+div.output {
+    font-family: inherit;
+    background: palevioletred;
+    position: absolute;
+    text-align: center;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    pointer-events: none;
+}
+
+/* Chiara Liotta 1414755 (from this point on) */
+
 header {
     display: flex;
     width: 100%;
@@ -41,16 +53,6 @@ nav {
     padding-right: 0 !important;
 }
 
-div.output {
-    font-family: inherit;
-    background: palevioletred;
-    position: absolute;
-    text-align: center;
-    border-radius: 0.5em;
-    padding: 0.5em;
-    pointer-events: none;
-}
-
 .xsicon {
     font-size: 10px;
 }
@@ -62,7 +64,6 @@ select {
 button:focus {
     outline: 0;
 }
-
 
 .btn-outline-dark {
     background-color: white;
@@ -183,4 +184,16 @@ button:focus {
 
 .val {
     width: 10px;
+}
+
+.gridText {
+    margin-right: 10px;
+}
+
+.smallMargTop {
+    margin-top: 10px;
+}
+
+.smallMargBottom {
+    margin-bottom: 10px;
 }
