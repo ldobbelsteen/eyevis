@@ -166,3 +166,7 @@ $("#init-vis5").on("click", () => {
     window.visualization = "five";
     visFive.visualize();
 });
+
+$("#export").on('click', function(){
+    saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", {encoderOptions: 1, backgroundColor: "#FFFFFF"});
+});
