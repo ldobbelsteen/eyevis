@@ -124,6 +124,7 @@ $(document).ready(function(){
             $("#vis-descr").show();
             $("#about").show();
             $("#visualization").hide();
+            $("#export").hide();
             window.visualization = undefined;
         }
         
@@ -140,6 +141,7 @@ $(document).ready(function(){
             $("#vis-descr").hide();
             $("#about").hide();
             $("#visualization").show();
+            $("#export").show();
         });
     }) 
     
