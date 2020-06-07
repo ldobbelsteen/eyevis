@@ -5,6 +5,8 @@ import * as visFour from "/modules/visFour.js";
 
 $(document).ready(function(){
 
+    // ---> this section deals with the resizing the main body, menu, and homepage elements
+
     var $main = $('#main')
     var $menu = $("#menu")
     var $about = $("#about")
@@ -66,6 +68,9 @@ $(document).ready(function(){
         nextSibling.innerText = fileName
     })
 
+
+    // ---> this section deals with vis 4 sliders, loading animations and some button
+
     function showLoading() {
         $("#visualization").LoadingOverlay("show", {
             background  : "rgba(255,255,255,0.80)",
@@ -117,8 +122,14 @@ $(document).ready(function(){
         }
     });
 
-    const $home = $("#retHome");
 
+    // ---> this section of code deals with elements being hidden or shown
+
+    const $home = $("#retHome"); // button to return to homepage
+    $("#visualization").hide(); // visualization div starts out hidden
+
+    // when you go back to home, show section to upload and vis descriptions
+    // but hide visualization div
     $home.on("click", () => {
         if (window.visualization != undefined) {
             $("#vis-descr").show();
@@ -130,12 +141,15 @@ $(document).ready(function(){
         
     })
 
+    // array of buttons to initialize the visualizations
     const vis = [ $("#init-vis1"),
                 $("#init-vis2"),
                 $("#init-vis3"),
                 $("#init-vis4"),
                 $("#init-vis5")]
     
+    // when you initialize a vis, hide section to upload and vis descriptions
+    // and show visualization div
     vis.forEach( (d) => {
         d.prop("disabled", true)
         d.on("click", () => {
