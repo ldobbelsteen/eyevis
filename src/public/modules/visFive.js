@@ -73,7 +73,9 @@ export function visualize() {
                     x1: AOIsizeX * x,
                     x2: AOIsizeX * (x + 1),
                     y1: AOIsizeY * y,
-                    y2: AOIsizeY * (y + 1)
+                    y2: AOIsizeY * (y + 1),
+                    x: x,
+                    y: y
                 });
             }
         }
@@ -98,6 +100,21 @@ export function visualize() {
                 .attr("height", (aoi.y2 - aoi.y1) * aoiScaleY)
                 .attr("fill", aoi.color)
                 .attr("opacity", 0.7)
+                .on("mouseover", () => {
+                    info.transition().duration(200).style("opacity", 1)
+                    info.html(
+                        "AOI coords: " + (aoi.x + 1) + "," + (aoi.y + 1)
+                    )
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mousemove", () => {
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mouseout", () => {
+                    info.transition().duration(200).style("opacity", 0)
+                })
         });
 
         // Create array of gazes by cleaning up the data for each user and adding it
