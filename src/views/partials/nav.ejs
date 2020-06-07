@@ -1,3 +1,6 @@
+<!--menu structure and style: Chiara Liotta 1414755-->
+<!--individual elements related to each vis belong to its author-->
+
 <nav class="navbar position-absolute" role="navigation">
 
     <div class="container-fluid">
@@ -14,20 +17,20 @@
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav menulinks">
                 <li>
-                    <!--Files-->
+                    <!--Dataset-->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-files">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Dataset</span>
                     </button>
-                    <!--Files: tools-->
+                    <!--Dataset: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-files">
-                        <div>
-                            <span>Select dataset, stimulus and user</span>
-                            <select class="custom-select" id="datasets-menu"></select>
+                        <div class="smallMargTop smallMargBottom">
+                            <span >Select dataset, stimulus, and user</span><br>
+                            <select class="custom-select smallMargTop" id="datasets-menu"></select>
                             <select class="custom-select" id="stimuli-menu"></select>
-                            <select class="custom-select" id="users-menu"></select>
+                            <select class="custom-select" id="users-menu"></select><br>
                         </div>
                     </div>
                 </li>
@@ -39,8 +42,8 @@
                             class="menuText"> Scanpath</span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
-                        <div>
-                            <button type="button" class="btn btn-default init" id="init-vis1">(Re)Initialize</button>
+                        <div class="smallMargTop smallMargBottom">
+                            <button type="button" class="btn btn-default init smallMargBottom" id="init-vis1">Initialize</button>
                             <br>
                             <!-- <span>Color picker dot</span> <br>
                             <select class="custom-select" id="color-dot">
@@ -50,8 +53,8 @@
                                 <option value="pink">pink</option>
                                 <option value="black">black</option>
                             </select> <br> -->
-                            <span>Color picker line</span> <br>
-                            <select class="custom-select" id="color-line">
+                            <span class="smallMargTop">Color picker line</span> <br>
+                            <select class="custom-select smallMargTop" id="color-line">
                                 <option selected value="red">red</option>
                                 <option value="green">green</option>
                                 <option value="white">white</option>
@@ -60,8 +63,8 @@
                             </select> <br>
 
 
-                            Color: <input class="jscolor {closable:true,closeText:'Close'}" value="4682b4">
-                            <button type="button" class="btn btn-default init" id="colorPick">Change color</button>
+                            <span class="gridText">Color: </span><input class="jscolor {closable:true,closeText:'Close'} smallMargTop smallMargBottom" value="4682b4"> <br>
+                            <button type="button" class="btn btn-default init smallMargTop" id="colorPick">Change color</button>
                         </div>
                     </div>
                 </li>
@@ -73,11 +76,11 @@
                             class="menuText">Sankey diagram</span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
-                        <div>
-                            <button type="button" class="btn btn-default init" id="init-vis2">(Re)Initialize</button>
+                        <div class="smallMargTop smallMargBottom">
+                            <button type="button" class="btn btn-default init" id="init-vis2">Initialize</button>
                             <br>
-                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input
-                                type="number" min="2" max="8" value="3">
+                            <span class="gridText smallMargTop">Grid size:</span><input class="gridText smallMargTop" type="number" min="2" max="8" value="3"><span class="gridText">x</span><input
+                                type="number" min="2" max="8" value="3"><br>
                         </div>
                     </div>
                 </li>
@@ -89,14 +92,14 @@
                             class="menuText"> ThemeRiver </span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
-                        <div>
-                            <button type="button" class="btn btn-default init" id="init-vis3">(Re)Initialize</button>
+                        <div class="smallMargTop smallMargBottom">
+                            <button type="button" class="btn btn-default init" id="init-vis3">Initialize</button>
                             <br>
-                            <span>Grid size:</span><input type="number" min="2" max="8" value="3"><span>x</span><input
+                            <span class="gridText smallMargTop">Grid size:</span><input class="smallMargTop gridText" type="number" min="2" max="8" value="3" ><span class="gridText">x</span><input
                                 type="number" min="2" max="8" value="3"><br>
                             <br>
-                            <span>Offset (standard or normalized)</span> <br>
-                            <select class="custom-select" id="offset-option">
+                            <span class="smallMargTop">Offset (standard or normalized)</span> <br>
+                            <select class="custom-select smallMargTop" id="offset-option">
                                 <option selected value="d3.stackOffsetSilhouette">Standard</option>
                                 <option value="d3.stackOffsetExpand">Normalized</option>
                             </select>
@@ -111,32 +114,36 @@
                             class="menuText"> Heatmap</span>
                     </button>
                     <div class="collapse navbar-collapse text-justify" id="navbar-collapse-vis4">
-                        <div>
+                        <div class="smallMargTop smallMargBottom">
                             <div>
-                                <button type="button" class="btn btn-default init4" id="init-vis4">Initialize</button>
-                                <button type="button" class="btn btn-default reset4" id="reset4">Reset zoom</button>
-                                <br><br>
-                                <span>Heatmap type</span> <br><br>
-                                <select class="custom-select" id="heatmapType">
-                                    <option selected value="duration">Relative gaze duration</option>
-                                    <option value="count">Fixation count</option>
-                                </select> <br><br>
-                                <span>Color gradient</span> <br><br>
-                                <select class="custom-select" id="gradType">
-                                    <option selected value="classic">Classic</option>
-                                    <option value="pinkBlue">Pink to blue</option>
-                                    <option value="colorBlind">Color-blind friendly (blue)</option>
-                                </select> <br><br>
+                                <button type="button" class="btn btn-default init4 smallMargBottom" id="init-vis4">Initialize</button>
+                                <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset zoom</button>
+                                <br>
+                                <span class="smallMargTop">Heatmap type</span> <br>
+                                <div class="smallMargTop smallMargBottom">
+                                    <select class="custom-select" id="heatmapType">
+                                        <option selected value="duration">Relative gaze duration</option>
+                                        <option value="count">Fixation count</option>
+                                    </select>
+                                </div>
+                                <span>Color gradient</span> <br>
+                                <div class="smallMargTop smallMargBottom">
+                                    <select class="custom-select" id="gradType">
+                                        <option selected value="classic">Classic</option>
+                                        <option value="pinkBlue">Pink to blue</option>
+                                        <option value="colorBlind">Color-blind friendly (blue)</option>
+                                    </select> <br>
+                                </div>
                                 <span class="text-center">Hover over the dots to find out coordinates and fixation
                                     duration for each fixation point.</span> <br><br>
-                                <span>Circle radius</span>
-                                <div class="d-flex justify-content-center my-4 w-100">
+                                <span class="smallMargTop">Circle radius</span>
+                                <div class="d-flex justify-content-center my-4 w-100 smallMargTop">
                                     <form class="range-field">
                                         <input id="sliderRadius" class="border-0 slider" type="range" min="0" max="5"
                                             value="1" step="0.2" />
                                     </form>
                                     <span class="font-weight-bold text-primary ml-2 mt-1 valueRad val"></span>
-                                </div><br>
+                                </div>
                                 <span>Bandwidth (standard deviation)</span>
                                 <div class="d-flex justify-content-center my-4 w-100">
                                     <form class="range-field">
@@ -144,7 +151,7 @@
                                             value="20" step="1" />
                                     </form>
                                     <span class="font-weight-bold text-primary ml-2 mt-1 valueBand val"></span>
-                                </div><br>
+                                </div>
                                 <span>Contour opacity</span>
                                 <div class="d-flex justify-content-center my-4 w-100">
                                     <form class="range-field">
@@ -167,16 +174,16 @@
                             class="menuText">Scarf plot</span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis5">
-                        <div>
-                            <button type="button" class="btn btn-default init" id="init-vis5">(Re)Initialize</button>
-                            <span>Grid size:</span><input type="number" min="2" max="6" value="3"><span>x</span><input
+                        <div class="smallMargTop smallMargBottom">
+                            <button type="button" class="btn btn-default init" id="init-vis5">Initialize</button> <br><br>
+                            <span class="gridText">Grid size:</span><input class="gridText" type="number" min="2" max="6" value="3"><span class="gridText">x</span><input
                                 type="number" min="2" max="6" value="3">
-                        </div>
+                        </div><br>
                     </div>
-                </li>
+                </li> 
                 <li id="export">
-                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn">
-                        <span class = "menuText">Save Visualization</span>
+                    <button type="button" height='20px'class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                        <span class="glyphicon glyphicon-save xsicon"></span><span class = "menuText">Save Visualization</span>
                     </button>
                 </li>
             </ul>
