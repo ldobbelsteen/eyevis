@@ -122,6 +122,7 @@ $(document).ready(function(){
     $home.on("click", () => {
         if (window.visualization != undefined) {
             $("#vis-descr").show();
+            $("#about").show();
             $("#visualization").hide();
             window.visualization = undefined;
         }
@@ -137,6 +138,7 @@ $(document).ready(function(){
     vis.forEach( (d) => {
         d.on("click", () => {
             $("#vis-descr").hide();
+            $("#about").hide();
             $("#visualization").show();
         });
     }) 
