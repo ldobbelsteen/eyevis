@@ -1,3 +1,5 @@
+// Lukas Dobbelsteen (1406264) - Scarf plot
+
 function filterData(data, filter) {
     return data.filter((item) => {
         for (let key in filter) {
