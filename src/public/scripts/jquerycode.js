@@ -127,7 +127,8 @@ $(document).ready(function(){
 
     const $home = $("#retHome"); // button to return to homepage
     $("#visualization").hide(); // visualization div starts out hidden
-
+    $("#export").hide(); // same for save vis button
+    
     // when you go back to home, show section to upload and vis descriptions
     // but hide visualization div
     $home.on("click", () => {
