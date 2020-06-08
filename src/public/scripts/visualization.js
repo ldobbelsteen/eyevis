@@ -128,7 +128,6 @@ function redraw(change) {
             visFour.initialize();
             visFour.newUser();
             visOne.initialize();
-            visOne.visualize();
             visOne.userChange();
         } else {
             visFour.initialize();
@@ -136,6 +135,7 @@ function redraw(change) {
             visOne.initialize();
             visOne.visualize();
         }
+        setTimeout(zoomBehavior,50)
     }
 }
 
@@ -185,39 +185,40 @@ $("#initialize").on("click", () => {
     visFour.visualize();
     // visFive.visualize();
 
-    function zoomBehavior() {
-        const heatmapZoom = visFour.svgHeatmap();
-        const scanpathZoom = visOne.svgScanpath();
-    
-        const zoom = d3.zoom()
-                       .on("zoom", zoomed);
-
-        function zoomed() {
-            var t = d3.event.transform;
-            heatmapZoom[0].node().__zoom = t;
-            scanpathZoom[0].node().__zoom = t;
-            heatmapZoom[1].attr("transform", d3.event.transform);
-            heatmapZoom[2].attr("transform", d3.event.transform);
-            heatmapZoom[3].attr("transform", d3.event.transform);
-            scanpathZoom[1].attr("transform", d3.event.transform);
-            scanpathZoom[2].attr("transform", d3.event.transform);
-            
-        }
-
-        heatmapZoom[0].call(zoom)
-        scanpathZoom[0].call(zoom)
-
-        $("#reset4").on("click", () => {
-            heatmapZoom[0].transition()
-                    .duration(400)
-                    .call(zoom.transform, d3.zoomIdentity);
-            scanpathZoom[0].transition()
-                    .duration(400)
-                    .call(zoom.transform, d3.zoomIdentity);
-        });
-    }
-    setTimeout(zoomBehavior,10)
+    setTimeout(zoomBehavior,10);
 });
+
+function zoomBehavior() {
+    const heatmapZoom = visFour.svgHeatmap();
+    const scanpathZoom = visOne.svgScanpath();
+
+    const zoom = d3.zoom()
+                   .on("zoom", zoomed);
+
+    function zoomed() {
+        var t = d3.event.transform;
+        heatmapZoom[0].node().__zoom = t;
+        scanpathZoom[0].node().__zoom = t;
+        heatmapZoom[1].attr("transform", d3.event.transform);
+        heatmapZoom[2].attr("transform", d3.event.transform);
+        heatmapZoom[3].attr("transform", d3.event.transform);
+        scanpathZoom[1].attr("transform", d3.event.transform);
+        scanpathZoom[2].attr("transform", d3.event.transform);
+        
+    }
+
+    heatmapZoom[0].call(zoom)
+    scanpathZoom[0].call(zoom)
+
+    $("#reset4").on("click", () => {
+        heatmapZoom[0].transition()
+                .duration(400)
+                .call(zoom.transform, d3.zoomIdentity);
+        scanpathZoom[0].transition()
+                .duration(400)
+                .call(zoom.transform, d3.zoomIdentity);
+    });
+}
 
 $("#export").on('click', function(){
     saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", {encoderOptions: 1, backgroundColor: "#FFFFFF", scale:2});
