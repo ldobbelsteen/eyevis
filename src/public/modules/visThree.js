@@ -32,7 +32,6 @@ export function visualize() {
     let data = filterData(window.data, {
         StimuliName: window.stimulus,
     });
-    console.log(data);
 
     // Load stimulus and make it change when something changes
     const container = d3.select("#visualization");
@@ -133,10 +132,12 @@ export function visualize() {
         //Getting all the names of the aois to use as keys
         var keys = Object.keys(aoiInfo[0]);
         keys.shift();
-        console.log(keys);
 
         // Color gradient
-        let colorScale = d3.scaleOrdinal(["#610057", "#6A006A","#590073", "#18007B", "#000084","#002B8D","#007D96","#009E9E","#00A77B","#00B02D","#00B900","#44C200","#9DCA00","#D3D300","#DC9800","#E54900","#ED0309","#F60961","#FF10B6","#FF136B","#FF171D","#FF661E","#FFBD28","#FFFF32","#D3FF3C","#87FF46","#51FF51","#5BFF85","#65FFD6","#6FFFFF","#79E9FF","#83A9FF","#8D8DFF","#AB97FF","#EAA1FF","#FFABFF","#FFB5F7"]);
+        let colorScale = d3.scaleOrdinal(["#610057", "#6A006A","#590073", "#18007B", "#000084","#002B8D","#007D96","#009E9E",
+        "#00A77B","#00B02D","#00B900","#44C200","#9DCA00","#D3D300","#DC9800","#E54900","#ED0309","#F60961","#FF10B6","#FF136B",
+        "#FF171D","#FF661E","#FFBD28","#FFFF32","#D3FF3C","#87FF46","#51FF51","#5BFF85","#65FFD6","#6FFFFF","#79E9FF","#83A9FF",
+        "#8D8DFF","#AB97FF","#EAA1FF","#FFABFF","#FFB5F7"]);
 
         //Creating stack
         if (offset == "d3.stackOffsetSilhouette") {
@@ -207,8 +208,8 @@ export function visualize() {
             .data(layers)
             .enter()
             .append("g")
+            .attr("clip-path", "url(#clip)")
             .attr("fill", function (d) {
-               // return colors(Math.random());
                 return colorScale(d.key);
             });
 
@@ -218,44 +219,57 @@ export function visualize() {
             .append("path")
             .attr("d", area)
             .attr("fill", function (d) {
-                //return colors(Math.random());
                 return colorScale(d.key);
 
-            })
-            .on("mouseover", (function (d) {
-                console.log(d);
+            });
+
+        // Adding the tooltip when hovered over
+        // Also changing opacity of other areas
+        svg.selectAll("path")    
+            .attr("opacity", 1)
+            .on("mouseover", (function (d, i) {
                 let currentKey = d.key;
-                console.log(currentKey);
-                info.transition().duration(200).style("opacity", 1)
+                info.transition().duration(200).style("opacity", 1);
                 info.html(
-                    "Area of interest: " + d.key + "<br>" +
-                    "Number of fixations: " + d[currentKey] + "<br>" 
+                    "Area of interest: " + d.key + "<br>" 
+                    //+"Number of fixations: " + d[currentKey] + "<br>" 
                     //+ "Start time interval: " + d.x + "ms" 
-                    )
-                info.style("left", d3.event.pageX + 8 + "px")
-                info.style("top", d3.event.pageY - 48 + "px")
-            }))
+                    );
+                info.style("left", d3.event.pageX + 8 + "px");
+                info.style("top", d3.event.pageY - 48 + "px");
+
+                svg.selectAll("path")
+                .attr("opacity", function(d, j) {
+                    if(j != i) {
+                        return 0.5;
+                    }
+                    else {
+                        return 1;
+                    }
+                });
+
+            }))     
             .on("mousemove", () => {
-                info.style("left", d3.event.pageX + 8 + "px")
-                info.style("top", d3.event.pageY - 48 + "px")
+                info.style("left", d3.event.pageX + 8 + "px");
+                info.style("top", d3.event.pageY - 48 + "px");
+
+                
             })
             .on("mouseout", () => {
                 info.transition().duration(200).style("opacity", 0)
-            })
+                svg.selectAll("path")
+                    .attr("opacity", 1);
+  
+            });
 
         // Adding x-axis
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + (height - 40) + ")")
-            .call(d3.axisBottom(xScale));
+        svg.append("g").attr("class", "x-axis").attr("transform", "translate(0," + (height - 40) + ")").call(d3.axisBottom(xScale));
 
         // Adding left y-axis
-        svg.append("g").attr("class", "y axis").attr("transform", "translate(40, 0)").call(d3.axisLeft(yAxisScale));
+        svg.append("g").attr("class", "y-axis").attr("transform", "translate(40, 0)").call(d3.axisLeft(yAxisScale));
 
         // Adding right y-axis
-        svg.append("g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(" + (width - 40) + ", 0)")
-            .call(d3.axisRight(yAxisScale));
-    }
+        svg.append("g").attr("class", "y-axis").attr("transform", "translate(" + (width - 40) + ", 0)").call(d3.axisRight(yAxisScale));
+
+  }
 }
