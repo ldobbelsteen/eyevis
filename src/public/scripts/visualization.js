@@ -76,6 +76,16 @@ function updateUsers() {
     uniqueUsers.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach((user) => {
         usersMenu.append($("<option></option>").text(user));
     });
+
+    const visButtons = [ $("#init-vis1"),
+                         $("#init-vis2"),
+                         $("#init-vis3"),
+                         $("#init-vis4"),
+                         $("#init-vis5")]
+    
+    visButtons.forEach( (d) => {
+        d.prop("disabled", false)
+    })
 }
 
 // Disable menus as they are not yet populated
@@ -165,4 +175,8 @@ $("#init-vis4").on("click", () => {
 $("#init-vis5").on("click", () => {
     window.visualization = "five";
     visFive.visualize();
+});
+
+$("#export").on('click', function(){
+    saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", {encoderOptions: 1, backgroundColor: "#FFFFFF", scale:2});
 });

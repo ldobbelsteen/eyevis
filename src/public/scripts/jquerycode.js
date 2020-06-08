@@ -1,6 +1,11 @@
+// Chiara Liotta 1414755 GUI code and vis4
+
 import * as visFour from "/modules/visFour.js";
 
+
 $(document).ready(function(){
+
+    // ---> this section deals with the resizing the main body, menu, and homepage elements
 
     var $main = $('#main')
     var $menu = $("#menu")
@@ -18,7 +23,7 @@ $(document).ready(function(){
         $about.toggleClass('hide')
         var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
-        var smallerWidth = (window.innerWidth - 250) * 0.9 - 10
+        var smallerWidth = (window.innerWidth - 250) * 0.9
         $about.animate({width: hide ? hiddenW : moveRight ? smallerWidth : standardW }, { duration: 0, queue: false})
         hide ? $about.css('padding', hiddenPadding) : $about.css('padding', standardPadding)
         hide ? $about.css('margin-bottom', '20px') : $about.css('margin-bottom', '0')
@@ -62,6 +67,9 @@ $(document).ready(function(){
         var nextSibling = e.target.nextElementSibling
         nextSibling.innerText = fileName
     })
+
+
+    // ---> this section deals with vis 4 sliders, loading animations and some button
 
     function showLoading() {
         $("#visualization").LoadingOverlay("show", {
@@ -113,6 +121,44 @@ $(document).ready(function(){
             setTimeout(visFour.newUser(), 10);
         }
     });
-    
 
-});
+
+    // ---> this section of code deals with elements being hidden or shown
+
+    const $home = $("#retHome"); // button to return to homepage
+    $("#visualization").hide(); // visualization div starts out hidden
+    $("#export").hide(); // same for save vis button
+    
+    // when you go back to home, show section to upload and vis descriptions
+    // but hide visualization div
+    $home.on("click", () => {
+        if (window.visualization != undefined) {
+            $("#vis-descr").show();
+            $("#about").show();
+            $("#visualization").hide();
+            $("#export").hide();
+            window.visualization = undefined;
+        }
+        
+    })
+
+    // array of buttons to initialize the visualizations
+    const vis = [ $("#init-vis1"),
+                $("#init-vis2"),
+                $("#init-vis3"),
+                $("#init-vis4"),
+                $("#init-vis5")]
+    
+    // when you initialize a vis, hide section to upload and vis descriptions
+    // and show visualization div
+    vis.forEach( (d) => {
+        d.prop("disabled", true)
+        d.on("click", () => {
+            $("#vis-descr").hide();
+            $("#about").hide();
+            $("#visualization").show();
+            $("#export").show();
+        });
+    })
+    
+})

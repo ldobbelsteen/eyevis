@@ -1,3 +1,5 @@
+// Lukas Dobbelsteen (1406264) - Scarf plot
+
 function filterData(data, filter) {
     return data.filter((item) => {
         for (let key in filter) {
@@ -29,9 +31,9 @@ export function visualize() {
     let timelineHeight = parseInt(container.style("font-size"));
 
     // Create svg for the stimulus and timelines
-    let stimulus = container.append("svg");
     let timelines = container.append("svg");
-    timelines.style("margin", "0.5em")
+    let stimulus = container.append("svg");
+    timelines.style("margin", "0.5em");
 
     // Add the stimulus
     let stimulusWidth;
@@ -71,7 +73,9 @@ export function visualize() {
                     x1: AOIsizeX * x,
                     x2: AOIsizeX * (x + 1),
                     y1: AOIsizeY * y,
-                    y2: AOIsizeY * (y + 1)
+                    y2: AOIsizeY * (y + 1),
+                    x: x,
+                    y: y
                 });
             }
         }
@@ -96,6 +100,21 @@ export function visualize() {
                 .attr("height", (aoi.y2 - aoi.y1) * aoiScaleY)
                 .attr("fill", aoi.color)
                 .attr("opacity", 0.7)
+                .on("mouseover", () => {
+                    info.transition().duration(200).style("opacity", 1)
+                    info.html(
+                        "AOI coords: " + (aoi.x + 1) + "," + (aoi.y + 1)
+                    )
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mousemove", () => {
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mouseout", () => {
+                    info.transition().duration(200).style("opacity", 0)
+                })
         });
 
         // Create array of gazes by cleaning up the data for each user and adding it
@@ -117,12 +136,10 @@ export function visualize() {
                 let y = gaze.MappedFixationPointY;
                 let color;
                 let aoiCoords;
-                AOIs.forEach((aoi, index) => {
+                AOIs.forEach(aoi => {
                     if (x >= aoi.x1 && x <= aoi.x2 && y >= aoi.y1 && y <= aoi.y2) {
                         color = aoi.color;
-                        let x = index % gridSizeX;
-                        let y = (index - x) / gridSizeY;
-                        aoiCoords = [x + 1, y + 1];
+                        aoiCoords = [aoi.x + 1, aoi.y + 1]
                     }
                 });
                 gazes.push({
@@ -143,7 +160,7 @@ export function visualize() {
                     .domain(users)
                     .range([0, (users.length - 1) * timelineHeight])
 
-        // TEMPORARY
+        // Set width and height for the axes
         let yAxisWidth = 32
         let xAxisHeight = 16
 

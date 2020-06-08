@@ -42,7 +42,7 @@
 
                     <!--uploading dataset and stimuli--> 
                     
-                    <form action="/upload" class="form-inline justify-content-center" enctype="multipart/form-data" method="post">
+                    <form action="/upload" class="form-inline justify-content-center" style="margin-top: 20px;" enctype="multipart/form-data" method="post">
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" accept=".zip" name= "upload" id="fileUpload">
@@ -54,14 +54,16 @@
                           </div>
                     </form>
                 
-
-                    <br>
-                    <p>Use the menu to choose your dataset, your stimulus, navigate between the various types of
+                    <p style="margin-top: 16px;">Use the menu to choose your dataset, your stimulus, navigate between the various types of
                     visualizations, or export a visualization.</p>
                 </div>
             </div>
         </div>
-        <br>
+        
+        <div id="vis-descr">
+            <h3>Visualization Types</h3>
+            <p style="text-align: center;">Description of visualization types coming soon...</p>
+        </div>
         <div id="visualization"></div>
     </main>
 </body>
