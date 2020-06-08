@@ -23,6 +23,10 @@ function showLoading() {
     });
 }
 
+export function svgScanpath() {
+    return [svg, svg.selectAll("g", "g"), svg.selectAll("image")]
+}
+
 function initializeGradient() {
     var defs = topContainer.append("defs");
 
@@ -124,9 +128,9 @@ function drawScanpath() {
     topContainer
         .append("rect")
         .attr("fill", "url(#svgGradient)")
-        .attr("x", containerW/1.5 * 0.15)
+        .attr("x", containerW * 0.15)
         .attr("y", 25)
-        .attr("width", containerW/1.5 * 0.7)
+        .attr("width", containerW * 0.7)
         .attr("height", 35);
 
     //function that draws the lines
@@ -138,16 +142,12 @@ function drawScanpath() {
         .style("stroke", `${lineColor}`)
         .style("stroke-width", 2);
 
-    // add zoom properties
-    const zoom = d3.zoom()
-                    .on("zoom", zoomed);
+    // function zoomed() {
+    //     svg.selectAll("g", "g").attr("transform", d3.event.transform);
+    //     svg.selectAll("image").attr("transform", d3.event.transform);
+    // }
 
-    function zoomed() {
-        svg.selectAll("g", "g").attr("transform", d3.event.transform);
-        svg.selectAll("image").attr("transform", d3.event.transform);
-    }
-
-    svg.call(zoom)
+    // svg.call(zoom)
 
     // button to reset zoom
     $("#reset4").on("click", () => {
@@ -202,19 +202,19 @@ export function visualize() {
     img.onload = function () {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
         //image size variables
-        var ratio = $("#main").width() / this.width;
-        containerW = $("#main").width();
+        var ratio = $("#main").width()/1.5 / this.width;
+        containerW = $("#main").width()/1.5;
         containerH = this.height * ratio;
 
         //CREATES CONTAINER TO SHOW GRADIENT SCALE
         topContainer = d3
             .select("#vis1")
             .append("svg")
-            .attr("viewBox", "0 0 " + (containerW/1.5)+ " " + 75);
+            .attr("viewBox", "0 0 " + (containerW)+ " " + 75);
 
         topContainer
             .append("text")
-            .attr("x", containerW/1.5 * 0.5)
+            .attr("x", containerW * 0.5)
             .attr("y", 18)
             .style("text-anchor", "middle")
             .text("Luminescence gradient");

@@ -1,8 +1,8 @@
 //Chiara Liotta 1414755 - heatmap
 
 var filteredData, densityData;
-var svg, img, overlay, points, gradient, colorDomain;
-var containerH, containerW, x, y, info, zoomable;
+var svg, img, overlay, points, gradient, colorDomain, svgImg;
+var containerH, containerW, x, y, info, zoomable, topInfo;
 const container = $("#vis4");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
@@ -21,6 +21,10 @@ function showLoading() {
 // hide the loading overlay
 function hideLoading() {
     container.LoadingOverlay("hide", true);
+}
+
+export function svgHeatmap() {
+    return [zoomable, svgImg, overlay, points];
 }
 
 export function initialize() {
@@ -176,7 +180,6 @@ function showOverlay() {
                     .attr("d", d3.geoPath())
                     .attr("fill", (d) => color(d.value) )
                     .attr("opacity", alpha)
-                    .attr("transform", "translate(0,75)")
                     .on("mouseover", function (densityData) {
                         info.transition().duration(100).style("opacity", "1");
                         info.html(
@@ -199,7 +202,6 @@ function showOverlay() {
                 .attr('fill', 'black')
                 .attr('stroke', 'white')
                 .attr("stroke-width", () => { return ($valueRad.val()/4) })
-                .attr("transform", "translate(0,75)")
                 // on mouseover pop-up with x and y coordinates and fixation duration
                 .on("mouseover", function (filteredData) {
                     info.transition().duration(100).style("opacity", "1");
@@ -223,14 +225,14 @@ function showOverlay() {
                    info.transition().duration(200).style("opacity", 0);
                 });
 
-    svg.append("rect")
+    topInfo.append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("height", 75)
                 .attr("width", containerW)
                 .attr("fill", "black")
     
-    svg.append("rect")
+    topInfo.append("rect")
                 .attr('fill', "url(#svgGradient4)")
                 .attr('stroke', 'white')
                 .attr('x', (containerW * 0.15))
@@ -238,7 +240,7 @@ function showOverlay() {
                 .attr('width', (containerW * 0.7))
                 .attr('height', 20);
 
-    svg.append("text")
+    topInfo.append("text")
                 .attr("x", containerW*0.5)
                 .attr("y", 18)
                 .style('fill', 'white')
@@ -251,7 +253,7 @@ function showOverlay() {
                 .domain([minMax[0], minMax[1]])
                 .range([0,(containerW*0.7)])
 
-    svg.append("g")
+    topInfo.append("g")
         .attr("transform", "translate("+ (containerW*0.15) +","+ 50 +")")
         .attr("class", "axis")
         .attr("color", "white")
@@ -334,11 +336,16 @@ export function visualize() {
         containerW = $("#main").width() /1.5 ;
         containerH = originalH * ratio;
 
+        topInfo = d3.select("#vis4")
+                        .append("svg")
+                        .attr("viewBox", "0 0 " + containerW + " "+ 75)
+                        .append("g")
+
         svg = d3.select("#vis4")
                 .append("svg")
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + containerW + " "+ (containerH+75))
+                .attr("viewBox", "0 0 " + containerW + " "+ containerH)
                 .append("g")
             
         initializeGradient();
@@ -357,37 +364,29 @@ export function visualize() {
         overlayData();
 
         zoomable = svg.append("g")
-                      .attr("x", 0)
-                      .attr("y", 75)
 
          // insert overlay on svg
         overlay = zoomable.insert("g", "g")
-                          .attr("x", 0)
-                          .attr("y", 75)
 
         points = zoomable.append("g", "g")
-                         .attr("x", 0)
-                         .attr("y", 75);
         showOverlay();
 
         // add image
-        var svgImg = zoomable.insert("image", ":first-child")
-                             .attr("x", 0)
-                             .attr("y", 75)
+        svgImg = zoomable.insert("image", ":first-child")
                              .attr("width", containerW)
                              .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
         // add zoom properties
-        const zoom = d3.zoom()
-                       .on("zoom", zoomed);
+        // const zoom = d3.zoom()
+        //                .on("zoom", zoomed);
 
-        function zoomed() {
-            svgImg.attr("transform", d3.event.transform);
-            overlay.attr("transform", d3.event.transform);
-            points.attr("transform", d3.event.transform);
-        }
+        // function zoomed() {
+        //     svgImg.attr("transform", d3.event.transform);
+        //     overlay.attr("transform", d3.event.transform);
+        //     points.attr("transform", d3.event.transform);
+        // }
 
-        zoomable.call(zoom)
+        // zoomable.call(zoom)
         
         // button to reset zoom
         $("#reset4").on("click", () => {
