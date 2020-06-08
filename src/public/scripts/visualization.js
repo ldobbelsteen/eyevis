@@ -115,31 +115,27 @@ usersMenu.on("change", () => {
 });
 
 function redraw(change) {
-    if (window.visualization === "one") {
-        if (change == "user") {
-            visOne.initialize();
-            visOne.visualize();
-            visOne.userChange();
-        } else {
-            visOne.initialize();
-            visOne.visualize();
-        }
-    } else if (window.visualization === "two") {
+    if (window.visualization === "two") {
         visTwo.initialize();
         visTwo.visualize();
     } else if (window.visualization === "three") {
         visThree.initialize();
         visThree.visualize();
-    } else if (window.visualization === "four") {
+    } else if (window.visualization === "five") {
+        visFive.visualize();
+    } else {
         if (change === "user") {
             visFour.initialize();
             visFour.newUser();
+            visOne.initialize();
+            visOne.visualize();
+            visOne.userChange();
         } else {
             visFour.initialize();
             visFour.visualize();
+            visOne.initialize();
+            visOne.visualize();
         }
-    } else if (window.visualization === "five") {
-        visFive.visualize();
     }
 }
 
