@@ -194,7 +194,6 @@ $("#initialize").on("click", () => {
 
         function zoomed() {
             var t = d3.event.transform;
-            console.log(d3.event.transform)
             heatmapZoom[0].node().__zoom = t;
             scanpathZoom[0].node().__zoom = t;
             heatmapZoom[1].attr("transform", d3.event.transform);
@@ -207,6 +206,15 @@ $("#initialize").on("click", () => {
 
         heatmapZoom[0].call(zoom)
         scanpathZoom[0].call(zoom)
+
+        $("#reset4").on("click", () => {
+            heatmapZoom[0].transition()
+                    .duration(400)
+                    .call(zoom.transform, d3.zoomIdentity);
+            scanpathZoom[0].transition()
+                    .duration(400)
+                    .call(zoom.transform, d3.zoomIdentity);
+        });
     }
     setTimeout(zoomBehavior,10)
 });

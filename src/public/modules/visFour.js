@@ -376,24 +376,6 @@ export function visualize() {
                              .attr("width", containerW)
                              .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
-        // add zoom properties
-        // const zoom = d3.zoom()
-        //                .on("zoom", zoomed);
-
-        // function zoomed() {
-        //     svgImg.attr("transform", d3.event.transform);
-        //     overlay.attr("transform", d3.event.transform);
-        //     points.attr("transform", d3.event.transform);
-        // }
-
-        // zoomable.call(zoom)
-        
-        // button to reset zoom
-        $("#reset4").on("click", () => {
-            zoomable.transition()
-                    .duration(400)
-                    .call(zoom.transform, d3.zoomIdentity);
-        });
     }
 
     // alert if the image fails to load

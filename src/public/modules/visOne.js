@@ -142,20 +142,6 @@ function drawScanpath() {
         .style("stroke", `${lineColor}`)
         .style("stroke-width", 2);
 
-    // function zoomed() {
-    //     svg.selectAll("g", "g").attr("transform", d3.event.transform);
-    //     svg.selectAll("image").attr("transform", d3.event.transform);
-    // }
-
-    // svg.call(zoom)
-
-    // button to reset zoom
-    $("#reset4").on("click", () => {
-        svg.transition()
-                .duration(400)
-                .call(zoom.transform, d3.zoomIdentity);
-    });
-
     //this creates circles with offset points, adds the hover pop-up interaction
     points
         .selectAll("dot")
