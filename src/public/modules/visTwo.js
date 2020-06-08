@@ -1,5 +1,4 @@
 // Tristan Tummers 1330713 - Sankey diagram
-
 var filteredData;
 
 // Select visualization container and inputs
@@ -51,8 +50,8 @@ export function visualize() {
     container.html("");
 
     // Create SVG for stimulus and sankey sankeydiagram
-    let stimulus = container.append("svg");
     let sankeyDiagram = container.append("svg");
+    let stimulus = container.append("svg");
 
     // Add stimulus img
     let containerWidth = parseInt(container.style("width"));
@@ -69,11 +68,12 @@ export function visualize() {
         stimulus.attr("viewBox", [0, 0, containerWidth, img.node().getBBox().height]);
         gridSizeInputX.on("change", updateSankey);
         gridSizeInputY.on("change", updateSankey);
-        console.log("F");
         updateSankey();
     }
-    image.scr = stimulusLink;
-    image.onerror = function() {console.log("Image failed!");};
+    image.src = stimulusLink;
+    image.onerror = () => {
+        console.log("Image failed!");
+    }
 
     function updateSankey() {
 
@@ -91,7 +91,6 @@ export function visualize() {
         // Add the AOIs to the array
         let iOfAOI = 0;
         for (let x = 0; x < gridSizeX; x++) {
-            iOfAOI++;
             for (let y = 0; y < gridSizeY; y++) {
                 iOfAOI++;
                 AOIs.push({
@@ -111,8 +110,11 @@ export function visualize() {
             aoi.color = colors(interval * index);
         });
 
+        console.log(AOIs);
+
         // Overlay the AOIs over the stimulus
-        stimulus.selectAll("rect").remove()
+        stimulus.selectAll("rect").remove();
+        stimulus.selectAll("text").remove();
         let viewBox = stimulus.attr("viewBox").split(",");
         let aoiScaleX = viewBox[2] / stimulusWidth;
         let aoiScaleY = viewBox[3] / stimulusHeight;
@@ -123,7 +125,12 @@ export function visualize() {
                 .attr("width", (aoi.x2 - aoi.x1) * aoiScaleX)
                 .attr("height", (aoi.y2 - aoi.y1) * aoiScaleY)
                 .attr("fill", aoi.color)
-                .attr("opacity", 0.7)
+                .attr("opacity", 0.7);
+            stimulus.append("text")
+                .attr("x", aoi.x1 * aoiScaleX + 10)
+                .attr("y", aoi.y1 * aoiScaleY + 10)
+                .attr("dy", ".35em")
+                .text(aoi.id);
         });
 
         // Assign fixations to areas of interest
@@ -137,7 +144,7 @@ export function visualize() {
                     gazeAOIs.push({
                         timestamp: gaze.Timestamp,
                         user: gaze.user,
-                        aoi: aoi
+                        aoi: aoi.id
                     });
                 }
             })
@@ -145,7 +152,7 @@ export function visualize() {
 
         // Create an array of transistions between the AOIs
         let transistions = [];
-        let users = [...new Set(filterData.map((item) => item.user))];
+        let users = [...new Set(filteredData.map((item) => item.user))];
         users.forEach((user) => {
             let userData = filterData(gazeAOIs, {
                 user: user
@@ -153,7 +160,7 @@ export function visualize() {
 
             let sortedData = userData.sort(compare);
 
-            for (let i = 0; i < sortedData.length; i++) {
+            for (let i = 0; i < sortedData.length -1; i++) {
                 let source = sortedData[i].aoi;
                 let target = sortedData[i+1].aoi;
 
@@ -169,29 +176,65 @@ export function visualize() {
         // Get sankeyData data
         let sankeyData = [];
         transistions.forEach((trans) => {
-            let alreadyIn = [];
-            if (trans in alreadyIn) {
-                sankeyData.forEach((finalTrans) => {
-                    if (trans.source == finalTrans.source && trans.target == finalTrans.target) {
-                        finalTrans.value +=1;
-                    }
-                });
-            } else {
+
+            let finalTrans = sankeyData.find((element) => {return element.source === trans.source && element.target === trans.target;});
+
+            if (finalTrans === undefined) {
                 sankeyData.push({
                     source: trans.source,
                     target: trans.target,
                     value: 1
                 });
-                alreadyIn.push(trans);
+            } else {
+                finalTrans.value += 1;
             }
         });
+
+        console.log(sankeyData);
 
         // Reset sankey diagram
         sankeyDiagram.html("");
 
         // Set Sankey diagram properties
-        let sankey = d3.sankey()(sankeyData);
+        let sankey = d3.sankey();
 
-        let path = sankey.link();
+        let path = sankey.links();
+
+        console.log(path);
+
+        let graph = {"nodes": [], "links": []};
+
+        AOIs.forEach((d) => {
+            graph.nodes.push({
+                "name": d.id
+            });
+        });
+        sankeyData.forEach((d) => {
+            graph.links.push({
+                "source": d.source,
+                "target": d.target,
+                "value": +d.value
+            });
+        });
+
+        console.log(graph);
+
+        sankey
+          .nodes(graph.nodes)
+          .links(graph.links);
+
+        // add links
+        let link = sankeyDiagram.append("g").selectAll(".link")
+            .data(graph.links)
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", path)
+            .style;
+
+        // add nodes
+        let node = sankeyDiagram.append("g").selectAll(".node")
+            .data(graph.nodes);
+
+
     }
 }
