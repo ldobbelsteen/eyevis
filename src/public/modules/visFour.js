@@ -232,7 +232,7 @@ function showOverlay() {
                 .attr("y", 0)
                 .attr("height", 90)
                 .attr("width", containerW)
-                .attr("fill", "#d9edee")
+                .attr("fill", "black")
     
     svg.append("rect")
                 .attr('fill', "url(#svgGradient)")
@@ -244,6 +244,7 @@ function showOverlay() {
     svg.append("text")
                 .attr("x", containerW*0.5)
                 .attr("y", 18)
+                .style('fill', 'white')
                 .style("text-anchor", "middle")
                 .text("Density scale"); 
 
@@ -256,6 +257,7 @@ function showOverlay() {
     svg.append("g")
         .attr("transform", "translate("+ (containerW*0.15) +","+ 65 +")")
         .attr("class", "axis")
+        .attr("color", "white")
         .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
 
 }
@@ -341,10 +343,9 @@ export function visualize() {
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + containerW + " "+ (containerH+90))
                 .append("g")
-    
-
             
         initializeGradient();
+
         // x coordinates
         x = d3.scaleLinear()
                 .domain([ 0, img.naturalWidth ])
@@ -359,28 +360,29 @@ export function visualize() {
         overlayData();
 
         zoomable = svg.append("g")
-                        .attr("x", 0)
-                        .attr("y", 90)
+                      .attr("x", 0)
+                      .attr("y", 90)
 
          // insert overlay on svg
         overlay = zoomable.insert("g", "g")
-                        .attr("x", 0)
-                        .attr("y", 90)
+                          .attr("x", 0)
+                          .attr("y", 90)
+
         points = zoomable.append("g", "g")
-                        .attr("x", 0)
-                        .attr("y", 90);
+                         .attr("x", 0)
+                         .attr("y", 90);
         showOverlay();
 
         // add image
         var svgImg = zoomable.insert("image", ":first-child")
-                        .attr("x", 0)
-                        .attr("y", 90)
-                        .attr("width", containerW)
-                        .attr("xlink:href", `/stimuli/${window.stimulus}`)
+                             .attr("x", 0)
+                             .attr("y", 90)
+                             .attr("width", containerW)
+                             .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
         // add zoom properties
         const zoom = d3.zoom()
-                        .on("zoom", zoomed);
+                       .on("zoom", zoomed);
 
         function zoomed() {
             svgImg.attr("transform", d3.event.transform);
