@@ -196,7 +196,8 @@ export function visualize() {
         sankeyDiagram.html("");
 
         // Set Sankey diagram properties
-        let sankey = d3.sankey();
+        let sankey = d3.sankey()
+            .nodeWidth(36);
 
         let path = sankey.links();
 
@@ -221,20 +222,32 @@ export function visualize() {
 
         sankey
           .nodes(graph.nodes)
-          .links(graph.links);
+          .links(graph.links)
+          .layout(1);
 
         // add links
-        let link = sankeyDiagram.append("g").selectAll(".link")
-            .data(graph.links)
-            .enter().append("path")
-            .attr("class", "link")
-            .attr("d", path)
-            .style;
+        let link = sankeyDiagram.append("g")
+                .selectAll(".link")
+                .data(graph.links)
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .attr("d", sankey.link() )
+                .style("stroke-width", function(d) { return Math.max(1, d.dy); })
+                .sort(function(a, b) { return b.dy - a.dy; });
 
         // add nodes
-        let node = sankeyDiagram.append("g").selectAll(".node")
-            .data(graph.nodes);
+        var node = sankeyDiagram.append("g")
+            .selectAll(".node")
+            .data(graph.nodes)
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
-
+        node.append("rect")
+            .attr("height", (d) => {return d.dy;})
+            .attr("width", sankey.nodeWidth)
+            //.style("fill", (d) => { d.color = color(d.name.replace(/ .*/, "")); return d.color; })
+            .style("stroke",(d) => {return d3.rgb(d.color).darker(2);});
     }
 }
