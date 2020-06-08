@@ -71,8 +71,8 @@ $(document).ready(function(){
 
     // ---> this section deals with vis 4 sliders, loading animations and some button
 
-    function showLoading() {
-        $("#vis1").LoadingOverlay("show", {
+    function showLoading4() {
+        $("#vis4").LoadingOverlay("show", {
             background  : "rgba(255,255,255,0.80)",
             fade: [10,300]
         });
@@ -115,11 +115,9 @@ $(document).ready(function(){
             resetSlider($sliderB, $valueBand, 20);
             resetSlider($sliderR, $valueRad, 1.6);
         }
-        //if (window.visualization == "four") {
-            showLoading();
-            reset();
-            setTimeout(visFour.newUser(), 10);
-        //}
+        showLoading4();
+        reset();
+        setTimeout(visFour.newUser(), 10)
     });
 
 
