@@ -145,7 +145,6 @@ $(document).ready(function(){
     // array of buttons to initialize the visualizations
     const vis = [ $("#init-vis2"),
                 $("#init-vis3"),
-                $("#init-vis4"),
                 $("#init-vis5")]
     
     // when you initialize a vis, hide section to upload and vis descriptions

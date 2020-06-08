@@ -130,7 +130,6 @@ function redraw(change) {
             visOne.initialize();
             visOne.userChange();
         } else {
-            visFour.initialize();
             visFour.visualize();
             visOne.initialize();
             visOne.visualize();
@@ -138,13 +137,6 @@ function redraw(change) {
         setTimeout(zoomBehavior,50)
     }
 }
-
-$("#init-vis1").on("click", () => {
-    window.visualization = "one";
-    container.empty();
-    visOne.initialize();
-    visOne.visualize();
-});
 
 $("#init-vis2").on("click", () => {
     window.visualization = "two";
@@ -158,13 +150,6 @@ $("#init-vis3").on("click", () => {
     container.empty();
     visThree.initialize();
     visThree.visualize();
-});
-
-$("#init-vis4").on("click", () => {
-    window.visualization = "four";
-    container.empty();
-    visFour.initialize();
-    visFour.visualize();
 });
 
 $("#init-vis5").on("click", () => {

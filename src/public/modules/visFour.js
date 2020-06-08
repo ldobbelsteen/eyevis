@@ -2,7 +2,7 @@
 
 var filteredData, densityData;
 var svg, img, overlay, points, gradient, colorDomain, svgImg;
-var containerH, containerW, x, y, info, zoomable, topInfo;
+var containerH, containerW, x, y, zoomable, topInfo;
 const container = $("#vis4");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
@@ -28,7 +28,6 @@ export function svgHeatmap() {
 }
 
 export function initialize() {
-    updateData();
 
     // sliders
     $valueRad.on("change", () => {
@@ -91,7 +90,7 @@ function updateData() {
 
 function initializeGradient() {
 
-    var defs = svg.append("defs");
+    var defs = topInfo.append("defs");
 
     gradient = defs.append("linearGradient")
                         .attr("id", "svgGradient4")
@@ -132,6 +131,42 @@ function overlayData() {
     var interval = (minMax[1] - minMax[0]) / 5;
     colorDomain = [ minMax[0], (minMax[0]+interval), (minMax[0]+2*interval), (minMax[0]+3*interval), (minMax[0]+4*interval), minMax[1] ]
 
+    var densScale = d3.scaleLinear() 
+                .domain([minMax[0], minMax[1]])
+                .range([0,(containerW*0.7)])
+    
+    svg.selectAll("rect").remove()
+    svg.selectAll("text").remove()
+    svg.selectAll("g.axis").remove()
+
+    topInfo.append("g")
+        .attr("transform", "translate("+ (containerW*0.15) +","+ 50 +")")
+        .attr("class", "axis")
+        .attr("color", "white")
+        .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
+
+    topInfo.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("height", 75)
+            .attr("width", containerW)
+            .attr("fill", "black")
+    
+    topInfo.append("rect")
+                .attr('fill', "url(#svgGradient4)")
+                .attr('stroke', 'white')
+                .attr('x', (containerW * 0.15))
+                .attr('y', 25)
+                .attr('width', (containerW * 0.7))
+                .attr('height', 20);
+
+    topInfo.append("text")
+                .attr("x", containerW*0.5)
+                .attr("y", 18)
+                .style('fill', 'white')
+                .style("text-anchor", "middle")
+                .text("Density scale");
+
 }
 
 // update heatmap overlay
@@ -139,14 +174,11 @@ function showOverlay() {
 
     // remove all previous overlays
     overlay.selectAll("path").remove()
-    points.selectAll("circle").remove()
-    svg.selectAll("rect").remove()
-    svg.selectAll("text").remove()
-    svg.selectAll("g.axis").remove()
+    points.selectAll("circle").remove();
 
     var alpha = $valueAlpha.val()
  
-    colorGrandient();
+    colorGradient();
    
     // set color gradient
     var classicGradient = ["rgb(59, 238, 223)",
@@ -172,6 +204,8 @@ function showOverlay() {
         color.domain([colorDomain[0], colorDomain[colorDomain.length - 1]])
                 .range(colorBlind)
     } 
+
+    var pop = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
  
     // add new overlay and points 
     overlay.selectAll("path")
@@ -181,16 +215,19 @@ function showOverlay() {
                     .attr("fill", (d) => color(d.value) )
                     .attr("opacity", alpha)
                     .on("mouseover", function (densityData) {
-                        info.transition().duration(100).style("opacity", "1");
-                        info.html(
+                        overlay.selectAll("path").style("opacity", "0.2");
+                        d3.select(this).style("opacity", "1");
+                        pop.transition().duration(100).style("opacity", "1");
+                        pop.html(
                             "density: " +
                                 densityData.value 
                         );
-                        info.style("left", d3.event.pageX + 8 + "px");
-                        info.style("top", d3.event.pageY - 80 + "px");
+                        pop.style("left", d3.event.pageX + 8 + "px");
+                        pop.style("top", d3.event.pageY - 80 + "px");
                     })
                     .on("mouseout", function () {
-                        info.transition().duration(200).style("opacity", 0);
+                        overlay.selectAll("path").style("opacity", alpha);
+                        pop.transition().duration(200).style("opacity", 0);
                     });
 
     points.selectAll("circle")
@@ -203,12 +240,12 @@ function showOverlay() {
                 .attr('stroke', 'white')
                 .attr("stroke-width", () => { return ($valueRad.val()/4) })
                 // on mouseover pop-up with x and y coordinates and fixation duration
-                .on("mouseover", function (filteredData) {
-                    info.transition().duration(100).style("opacity", "1");
-                    info.html(
+                .on("mouseover", (filteredData) => {
+                    pop.transition().duration(100).style("opacity", "1");
+                    pop.html(
                        "x: " +
                            filteredData.MappedFixationPointX +
-                           "<br>" +
+                           ";    " +
                            "y: " +
                            filteredData.MappedFixationPointY +
                            "<br>" +
@@ -218,50 +255,15 @@ function showOverlay() {
                            "Fixation Duration: " +
                            filteredData.FixationDuration 
                     );
-                    info.style("left", d3.event.pageX + 8 + "px");
-                    info.style("top", d3.event.pageY - 80 + "px");
+                    pop.style("left", d3.event.pageX + 8 + "px");
+                    pop.style("top", d3.event.pageY - 80 + "px");
                 })
                 .on("mouseout", function () {
-                   info.transition().duration(200).style("opacity", 0);
+                   pop.transition().duration(200).style("opacity", 0);
                 });
-
-    topInfo.append("rect")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("height", 75)
-                .attr("width", containerW)
-                .attr("fill", "black")
-    
-    topInfo.append("rect")
-                .attr('fill', "url(#svgGradient4)")
-                .attr('stroke', 'white')
-                .attr('x', (containerW * 0.15))
-                .attr('y', 25)
-                .attr('width', (containerW * 0.7))
-                .attr('height', 20);
-
-    topInfo.append("text")
-                .attr("x", containerW*0.5)
-                .attr("y", 18)
-                .style('fill', 'white')
-                .style("text-anchor", "middle")
-                .text("Density scale"); 
-
-    var minMax = [ d3.min(densityData, (d) => d.value ), d3.max(densityData, (d) => d.value )]
-
-    var densScale = d3.scaleLinear() 
-                .domain([minMax[0], minMax[1]])
-                .range([0,(containerW*0.7)])
-
-    topInfo.append("g")
-        .attr("transform", "translate("+ (containerW*0.15) +","+ 50 +")")
-        .attr("class", "axis")
-        .attr("color", "white")
-        .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
-
 }
 
-function colorGrandient() {
+function colorGradient() {
     gradient.selectAll("stop").remove();
 
     var type = $gradType.val();
@@ -322,10 +324,11 @@ function colorGrandient() {
 export function visualize() {
 
     // get container ready
-    d3.select("#vis4").html("");
+    container.html("");
+    updateData();
 
     // pop-up with x, y, fixation duration
-    info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
+
 
     // prepare image and scale vis
     img = new Image();
