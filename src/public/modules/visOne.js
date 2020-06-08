@@ -12,6 +12,8 @@ var colorHSL = ["207", "44", "49"];
 var lineColor = "red";
 var img, xOffset, yOffset, svg, info;
 var points, lines;
+var topContainer, containerH, containerW, gradient;
+var startColor, endColor;
 
 //loading animation functions
 function showLoading() {
@@ -19,6 +21,26 @@ function showLoading() {
         background: "rgba(255,255,255,0.80)",
         fade: [10, 300],
     });
+}
+
+function initializeGradient() {
+    var defs = topContainer.append("defs");
+
+    gradient = defs.append("linearGradient").attr("id", "svgGradient").attr("x1", "0%").attr("x2", "100%").attr("y1", "0%").attr("y2", "0%");
+}
+
+function colorGrandient() {
+    // startColor = "hsl(" + colorHSL[0] + "," + 0 + "%," + colorHSL[2] + "%)";
+    // endColor = "hsl(" + colorHSL[0] + "," + 100 + "%," + colorHSL[2] + "%)";
+    // console.log(startColor);
+    // console.log(endColor);
+    // console.log("calculated outputs");
+    startColor = HSLToHex(colorHSL[0], 0, colorHSL[2]);
+    endColor = HSLToHex(colorHSL[0], 100, colorHSL[2]);
+
+    gradient.selectAll("stop").remove();
+    gradient.append("stop").attr("class", "start").attr("offset", "0%").attr("stop-color", `${startColor}`).attr("stop-opacity", 1);
+    gradient.append("stop").attr("class", "end").attr("offset", "100%").attr("stop-color", `${endColor}`).attr("stop-opacity", 1);
 }
 
 function hideLoading() {
@@ -60,14 +82,7 @@ export function userChange() {
 
 export function initialize() {
     updateData();
-    // colorDot.on("change", function () {
-    //     dotColor = $(this).val();
-    //     if (window.visualization == "one") {
-    //         showLoading();
-    //         setTimeout(drawScanpath, 10);
-    //         setTimeout(hideLoading, 5);
-    //     }
-    // });
+
     colorLine.on("change", function () {
         lineColor = $(this).val();
         if (window.visualization == "one") {
@@ -90,6 +105,13 @@ export function initialize() {
 }
 
 function drawScanpath() {
+    //delete previous svg lines, points and gradients
+    lines.selectAll("path").remove();
+    points.selectAll("circle").remove();
+    topContainer.selectAll("rect").remove();
+
+    colorGrandient();
+
     //sorts data chronologically, needed for lines
     let sortedData = filteredData.sort(compare);
 
@@ -102,9 +124,14 @@ function drawScanpath() {
             return yOffset(d.MappedFixationPointY);
         });
 
-    //delete previous lines and points
-    lines.selectAll("path").remove();
-    points.selectAll("circle").remove();
+    //container showing luminescence gradient
+    topContainer
+        .append("rect")
+        .attr("fill", "url(#svgGradient)")
+        .attr("x", containerW * 0.15)
+        .attr("y", 25)
+        .attr("width", containerW * 0.7)
+        .attr("height", 35);
 
     //function that draws the lines
     lines
@@ -134,15 +161,7 @@ function drawScanpath() {
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
         // .style("fill", `${color}`)
         .style("fill", function (d, i) {
-            return (
-                "hsl(" +
-                colorHSL[0] +
-                "," +
-                (i / filteredData.length) * 100 +
-                "%," +
-                colorHSL[2] +
-                "%)"
-            );
+            return "hsl(" + colorHSL[0] + "," + (i / filteredData.length) * 100 + "%," + colorHSL[2] + "%)";
         })
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
@@ -178,15 +197,25 @@ export function visualize() {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
         //image size variables
         var ratio = $("#main").width() / this.width;
-        let containerW = $("#main").width();
-        let containerH = this.height * ratio;
+        containerW = $("#main").width();
+        containerH = this.height * ratio;
 
-        svg = d3
+        //CREATES CONTAINER TO SHOW GRADIENT SCALE
+        topContainer = d3
             .select("#visualization")
             .append("svg")
-            .attr("width", containerW)
-            .attr("height", containerH)
-            .append("g");
+            .attr("viewBox", "0 0 " + containerW + " " + 85);
+
+        topContainer
+            .append("text")
+            .attr("x", containerW * 0.5)
+            .attr("y", 18)
+            .style("text-anchor", "middle")
+            .text("Luminescence gradient");
+
+        initializeGradient();
+
+        svg = d3.select("#visualization").append("svg").attr("width", containerW).attr("height", containerH).append("g");
 
         // x coordinates that will be offset when image is sacled to fit screen
         xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, containerW]);
@@ -202,10 +231,7 @@ export function visualize() {
 
         //first image is removed and then redrawn, so prevent overlapping images
         svg.selectAll(".img").remove();
-        svg.insert("image", ":first-child")
-            .attr("width", containerW)
-            .attr("xlink:href", `/stimuli/${window.stimulus}`)
-            .attr("class", "img");
+        svg.insert("image", ":first-child").attr("width", containerW).attr("xlink:href", `/stimuli/${window.stimulus}`).attr("class", "img");
     };
     img.src = `/stimuli/${window.stimulus}`;
 }
@@ -261,4 +287,53 @@ function hexToRGB(val) {
     rgb[2] = parseInt(val[4].toString() + val[5].toString(), 16);
 
     return converRGBtoHSL(rgb[0], rgb[1], rgb[2]);
+}
+
+function HSLToHex(h, s, l) {
+    s /= 100;
+    l /= 100;
+
+    let c = (1 - Math.abs(2 * l - 1)) * s,
+        x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
+        m = l - c / 2,
+        r = 0,
+        g = 0,
+        b = 0;
+
+    if (0 <= h && h < 60) {
+        r = c;
+        g = x;
+        b = 0;
+    } else if (60 <= h && h < 120) {
+        r = x;
+        g = c;
+        b = 0;
+    } else if (120 <= h && h < 180) {
+        r = 0;
+        g = c;
+        b = x;
+    } else if (180 <= h && h < 240) {
+        r = 0;
+        g = x;
+        b = c;
+    } else if (240 <= h && h < 300) {
+        r = x;
+        g = 0;
+        b = c;
+    } else if (300 <= h && h < 360) {
+        r = c;
+        g = 0;
+        b = x;
+    }
+    // Having obtained RGB, convert channels to hex
+    r = Math.round((r + m) * 255).toString(16);
+    g = Math.round((g + m) * 255).toString(16);
+    b = Math.round((b + m) * 255).toString(16);
+
+    // Prepend 0s, if necessary
+    if (r.length == 1) r = "0" + r;
+    if (g.length == 1) g = "0" + g;
+    if (b.length == 1) b = "0" + b;
+
+    return "#" + r + g + b;
 }
