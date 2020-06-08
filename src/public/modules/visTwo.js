@@ -54,7 +54,7 @@ export function visualize() {
     let stimulus = container.append("svg");
 
     // Add stimulus img
-    let containerWidth = parseInt(container.style("width"));
+    let containerWidth = $("main").width();
     let stimulusWidth;
     let stimulusHeight;
     let stimulusLink = "/stimuli/" + window.stimulus;
