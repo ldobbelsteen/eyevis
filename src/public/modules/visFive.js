@@ -27,7 +27,7 @@ export function visualize() {
     });
 
     // Get the container width and set desired timeline height
-    let containerWidth = parseInt(container.style("width"));
+    let containerWidth = $("main").width();
     let timelineHeight = parseInt(container.style("font-size"));
 
     // Create svg for the stimulus and timelines

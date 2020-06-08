@@ -174,6 +174,7 @@ $("#init-vis4").on("click", () => {
 
 $("#init-vis5").on("click", () => {
     window.visualization = "five";
+    container.empty();
     visFive.visualize();
 });
 
