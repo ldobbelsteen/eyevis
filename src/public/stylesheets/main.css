@@ -164,6 +164,14 @@ button:focus {
     overflow: hidden;
 }
 
+#visualizationGrid {
+    border: 2px solid black;
+    background-color: #d9edee;
+    text-align: center;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
 .init {
     width: 100%;
     margin-top: 7px;
@@ -204,3 +212,9 @@ button:focus {
 .smallMargBottom {
     margin-bottom: 10px;
 }
+
+.grid-container {
+    display: grid;
+    grid-gap: 10px;
+}
+

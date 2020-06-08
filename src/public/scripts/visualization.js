@@ -80,7 +80,6 @@ function updateUsers() {
     const visButtons = [ $("#init-vis1"),
                          $("#init-vis2"),
                          $("#init-vis3"),
-                         $("#init-vis4"),
                          $("#init-vis5")]
     
     visButtons.forEach( (d) => {
@@ -176,6 +175,19 @@ $("#init-vis5").on("click", () => {
     window.visualization = "five";
     container.empty();
     visFive.visualize();
+});
+
+$("#initialize").on("click", () => {
+
+    visOne.initialize();
+    visOne.visualize();
+    // visTwo.initialize();
+    // visTwo.visualize();
+    // visThree.initialize();
+    // visThree.visualize();
+    visFour.initialize();
+    visFour.visualize();
+    // visFive.visualize();
 });
 
 $("#export").on('click', function(){

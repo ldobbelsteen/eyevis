@@ -37,6 +37,9 @@
                             <select class="custom-select" id="stimuli-menu"></select>
                             <select class="custom-select" id="users-menu"></select><br>
                         </div>
+                        <span>Linked view WIP, shows scanpath and heatmap for now, although zoom not linked yet</span>
+                        <button type="button" class="btn btn-default init4 smallMargBottom" id="initialize">Initialize</button> 
+                        <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset zoom</button>
                     </div>
                 </li>
                 <li id="vis-one">
@@ -48,8 +51,6 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
                         <div class="smallMargTop smallMargBottom">
-                            <button type="button" id="init-vis1" class="btn btn-default init smallMargBottom">Initialize</button>
-                            <br>
                             <!-- <span>Color picker dot</span> <br>
                             <select class="custom-select" id="color-dot">
                                 <option selected value="steelblue">steelblue</option>
@@ -121,9 +122,6 @@
                     <div class="collapse navbar-collapse text-justify" id="navbar-collapse-vis4">
                         <div class="smallMargTop smallMargBottom">
                             <div>
-                                <button type="button" class="btn btn-default init4 smallMargBottom" id="init-vis4">Initialize</button>
-                                <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset zoom</button>
-                                <br>
                                 <span class="smallMargTop">Heatmap type</span> <br>
                                 <div class="smallMargTop smallMargBottom">
                                     <select class="custom-select" id="heatmapType">
@@ -145,14 +143,14 @@
                                 <div class="d-flex justify-content-center my-4 w-100 smallMargTop">
                                     <form class="range-field">
                                         <input id="sliderRadius" class="border-0 slider" type="range" min="0" max="5"
-                                            value="1" step="0.2" />
+                                            value="1.6" step="0.1" />
                                     </form>
                                     <span class="font-weight-bold text-primary ml-2 mt-1 valueRad val"></span>
                                 </div>
                                 <span>Bandwidth (standard deviation)</span>
                                 <div class="d-flex justify-content-center my-4 w-100">
                                     <form class="range-field">
-                                        <input id="sliderBand" class="border-0 slider" type="range" min="1" max="40"
+                                        <input id="sliderBand" class="border-0 slider" type="range" min="0" max="40"
                                             value="20" step="1" />
                                     </form>
                                     <span class="font-weight-bold text-primary ml-2 mt-1 valueBand val"></span>

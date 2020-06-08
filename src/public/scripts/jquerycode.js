@@ -72,7 +72,7 @@ $(document).ready(function(){
     // ---> this section deals with vis 4 sliders, loading animations and some button
 
     function showLoading() {
-        $("#visualization").LoadingOverlay("show", {
+        $("#vis1").LoadingOverlay("show", {
             background  : "rgba(255,255,255,0.80)",
             fade: [10,300]
         });
@@ -113,20 +113,21 @@ $(document).ready(function(){
         function reset() {
             resetSlider($sliderA, $valueAlpha, 0.3);
             resetSlider($sliderB, $valueBand, 20);
-            resetSlider($sliderR, $valueRad, 1);
+            resetSlider($sliderR, $valueRad, 1.6);
         }
-        if (window.visualization == "four") {
+        //if (window.visualization == "four") {
             showLoading();
             reset();
             setTimeout(visFour.newUser(), 10);
-        }
+        //}
     });
 
 
     // ---> this section of code deals with elements being hidden or shown
 
     const $home = $("#retHome"); // button to return to homepage
-    $("#visualization").hide(); // visualization div starts out hidden
+    $("#visualization").hide();
+    $("#visualizationGrid").hide(); // visualization div starts out hidden
     $("#export").hide(); // same for save vis button
     
     // when you go back to home, show section to upload and vis descriptions
@@ -134,6 +135,7 @@ $(document).ready(function(){
     $home.on("click", () => {
         if (window.visualization != undefined) {
             $("#vis-descr").show();
+            $("#visualizationGrid").hide();
             $("#about").show();
             $("#visualization").hide();
             $("#export").hide();
@@ -143,8 +145,7 @@ $(document).ready(function(){
     })
 
     // array of buttons to initialize the visualizations
-    const vis = [ $("#init-vis1"),
-                $("#init-vis2"),
+    const vis = [ $("#init-vis2"),
                 $("#init-vis3"),
                 $("#init-vis4"),
                 $("#init-vis5")]
@@ -154,11 +155,25 @@ $(document).ready(function(){
     vis.forEach( (d) => {
         d.prop("disabled", true)
         d.on("click", () => {
+            $("#visualizationGrid").hide();
             $("#vis-descr").hide();
             $("#about").hide();
             $("#visualization").show();
             $("#export").show();
+            $(".grid-container").css("padding", "0")
         });
     })
+
+    $("#initialize").on("click", () => {
+        $("#vis-descr").hide();
+        $("#about").hide();
+        $("#visualization").hide();
+        $("#visualizationGrid").show();
+        $("#export").show();
+        $(".grid-container").css("padding", "10px")
+        var colW = ( $main.width() - 35 ) /2
+        $(".grid-container").css("grid-template-columns", ""+ colW + "px " + colW + "px")
+    });
+
     
 })

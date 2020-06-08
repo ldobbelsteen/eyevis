@@ -1,7 +1,7 @@
 //Eric Abraham 1408828 scanpath visualization
 
 var filteredData;
-var container = $("#visualization");
+var container = $("#vis1");
 //var colorDot = $("#color-dot");
 var colorLine = $("#color-line");
 var colorPicker = $(".jscolor");
@@ -85,22 +85,18 @@ export function initialize() {
 
     colorLine.on("change", function () {
         lineColor = $(this).val();
-        if (window.visualization == "one") {
-            showLoading();
-            setTimeout(drawScanpath, 10);
-            setTimeout(hideLoading, 5);
-        }
+        showLoading();
+        setTimeout(drawScanpath, 10);
+        setTimeout(hideLoading, 5);
     });
 
     colorPickerButton.on("click", function () {
         color = colorPicker.val();
         colorHSL = hexToRGB(color);
-
-        if (window.visualization == "one") {
-            showLoading();
-            setTimeout(drawScanpath, 10);
-            setTimeout(hideLoading, 5);
-        }
+        showLoading();
+        setTimeout(drawScanpath, 10);
+        setTimeout(hideLoading, 5);
+        
     });
 }
 
@@ -128,9 +124,9 @@ function drawScanpath() {
     topContainer
         .append("rect")
         .attr("fill", "url(#svgGradient)")
-        .attr("x", containerW * 0.15)
+        .attr("x", containerW/1.5 * 0.15)
         .attr("y", 25)
-        .attr("width", containerW * 0.7)
+        .attr("width", containerW/1.5 * 0.7)
         .attr("height", 35);
 
     //function that draws the lines
@@ -142,13 +138,23 @@ function drawScanpath() {
         .style("stroke", `${lineColor}`)
         .style("stroke-width", 2);
 
-    //zoom and pan functions
-    svg.call(
-        d3.zoom().on("zoom", function () {
-            svg.selectAll("g", "g").attr("transform", d3.event.transform);
-            svg.selectAll("image").attr("transform", d3.event.transform);
-        })
-    );
+    // add zoom properties
+    const zoom = d3.zoom()
+                    .on("zoom", zoomed);
+
+    function zoomed() {
+        svg.selectAll("g", "g").attr("transform", d3.event.transform);
+        svg.selectAll("image").attr("transform", d3.event.transform);
+    }
+
+    svg.call(zoom)
+
+    // button to reset zoom
+    $("#reset4").on("click", () => {
+        svg.transition()
+                .duration(400)
+                .call(zoom.transform, d3.zoomIdentity);
+    });
 
     //this creates circles with offset points, adds the hover pop-up interaction
     points
@@ -202,20 +208,20 @@ export function visualize() {
 
         //CREATES CONTAINER TO SHOW GRADIENT SCALE
         topContainer = d3
-            .select("#visualization")
+            .select("#vis1")
             .append("svg")
-            .attr("viewBox", "0 0 " + containerW + " " + 85);
+            .attr("viewBox", "0 0 " + (containerW/1.5)+ " " + 75);
 
         topContainer
             .append("text")
-            .attr("x", containerW * 0.5)
+            .attr("x", containerW/1.5 * 0.5)
             .attr("y", 18)
             .style("text-anchor", "middle")
             .text("Luminescence gradient");
 
         initializeGradient();
 
-        svg = d3.select("#visualization").append("svg").attr("width", containerW).attr("height", containerH).append("g");
+        svg = d3.select("#vis1").append("svg").attr("viewBox", "0 0 " + containerW + " "+ containerH).append("g");
 
         // x coordinates that will be offset when image is sacled to fit screen
         xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, containerW]);

@@ -3,7 +3,7 @@
 var filteredData, densityData;
 var svg, img, overlay, points, gradient, colorDomain;
 var containerH, containerW, x, y, info, zoomable;
-const container = $("#visualization");
+const container = $("#vis4");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
 const $valueAlpha = $("#sliderAlpha");
@@ -28,39 +28,29 @@ export function initialize() {
 
     // sliders
     $valueRad.on("change", () => {
-        if (window.visualization == "four") {
-            showLoading();
-            setTimeout(showOverlay, 10);
-            setTimeout(hideLoading, 5);
-        }
+        showLoading();
+        setTimeout(showOverlay, 10);
+        setTimeout(hideLoading, 5);
     });
     $valueBand.on("change", () => {
-        if (window.visualization == "four") {
-            showLoading();
-            setTimeout(newUser, 10);
-            setTimeout(hideLoading, 5);
-        }
+        showLoading();
+        setTimeout(newUser, 10);
+        setTimeout(hideLoading, 5);
     });
     $valueAlpha.on("change", () => {
-        if (window.visualization == "four") {
-            showLoading();
-            setTimeout(showOverlay, 10);
-            setTimeout(hideLoading, 5);
-        }
+        showLoading();
+        setTimeout(showOverlay, 10);
+        setTimeout(hideLoading, 5);
     });
     $heatType.on("change", function () {
-        if (window.visualization == "four") {
-            showLoading();
-            setTimeout(newUser, 10);
-            setTimeout(hideLoading, 5);
-        }
+        showLoading();
+        setTimeout(newUser, 10);
+        setTimeout(hideLoading, 5);
     });
     $gradType.on("change", function () {
-        if (window.visualization == "four") {
-            showLoading();
-            setTimeout(showOverlay, 10);
-            setTimeout(hideLoading, 5);
-        }
+        showLoading();
+        setTimeout(showOverlay, 10);
+        setTimeout(hideLoading, 5);
     });
 }
 
@@ -100,7 +90,7 @@ function initializeGradient() {
     var defs = svg.append("defs");
 
     gradient = defs.append("linearGradient")
-                        .attr("id", "svgGradient")
+                        .attr("id", "svgGradient4")
                         .attr("x1", "0%")
                         .attr("x2", "100%")
                         .attr("y1", "0%")
@@ -186,7 +176,7 @@ function showOverlay() {
                     .attr("d", d3.geoPath())
                     .attr("fill", (d) => color(d.value) )
                     .attr("opacity", alpha)
-                    .attr("transform", "translate(0,90)")
+                    .attr("transform", "translate(0,75)")
                     .on("mouseover", function (densityData) {
                         info.transition().duration(100).style("opacity", "1");
                         info.html(
@@ -206,7 +196,10 @@ function showOverlay() {
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
                 .attr("r", $valueRad.val())
-                .attr("transform", "translate(0,90)")
+                .attr('fill', 'black')
+                .attr('stroke', 'white')
+                .attr("stroke-width", () => { return ($valueRad.val()/4) })
+                .attr("transform", "translate(0,75)")
                 // on mouseover pop-up with x and y coordinates and fixation duration
                 .on("mouseover", function (filteredData) {
                     info.transition().duration(100).style("opacity", "1");
@@ -217,8 +210,11 @@ function showOverlay() {
                            "y: " +
                            filteredData.MappedFixationPointY +
                            "<br>" +
+                           "User: " +
+                           filteredData.user + 
+                           "<br>" +
                            "Fixation Duration: " +
-                           filteredData.FixationDuration
+                           filteredData.FixationDuration 
                     );
                     info.style("left", d3.event.pageX + 8 + "px");
                     info.style("top", d3.event.pageY - 80 + "px");
@@ -230,16 +226,17 @@ function showOverlay() {
     svg.append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("height", 90)
+                .attr("height", 75)
                 .attr("width", containerW)
                 .attr("fill", "black")
     
     svg.append("rect")
-                .attr('fill', "url(#svgGradient)")
+                .attr('fill', "url(#svgGradient4)")
+                .attr('stroke', 'white')
                 .attr('x', (containerW * 0.15))
                 .attr('y', 25)
                 .attr('width', (containerW * 0.7))
-                .attr('height', 35);
+                .attr('height', 20);
 
     svg.append("text")
                 .attr("x", containerW*0.5)
@@ -255,7 +252,7 @@ function showOverlay() {
                 .range([0,(containerW*0.7)])
 
     svg.append("g")
-        .attr("transform", "translate("+ (containerW*0.15) +","+ 65 +")")
+        .attr("transform", "translate("+ (containerW*0.15) +","+ 50 +")")
         .attr("class", "axis")
         .attr("color", "white")
         .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
@@ -323,7 +320,7 @@ function colorGrandient() {
 export function visualize() {
 
     // get container ready
-    d3.select("#visualization").html("");
+    d3.select("#vis4").html("");
 
     // pop-up with x, y, fixation duration
     info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
@@ -333,15 +330,15 @@ export function visualize() {
     function loadImg() {
         var originalW = img.width;
         var originalH = img.height;
-        var ratio = $("#main").width() / originalW;
-        containerW = $("#main").width();
+        var ratio = ($("#main").width() / 1.5 )/ originalW;
+        containerW = $("#main").width() /1.5 ;
         containerH = originalH * ratio;
 
-        svg = d3.select("#visualization")
+        svg = d3.select("#vis4")
                 .append("svg")
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + containerW + " "+ (containerH+90))
+                .attr("viewBox", "0 0 " + containerW + " "+ (containerH+75))
                 .append("g")
             
         initializeGradient();
@@ -361,22 +358,22 @@ export function visualize() {
 
         zoomable = svg.append("g")
                       .attr("x", 0)
-                      .attr("y", 90)
+                      .attr("y", 75)
 
          // insert overlay on svg
         overlay = zoomable.insert("g", "g")
                           .attr("x", 0)
-                          .attr("y", 90)
+                          .attr("y", 75)
 
         points = zoomable.append("g", "g")
                          .attr("x", 0)
-                         .attr("y", 90);
+                         .attr("y", 75);
         showOverlay();
 
         // add image
         var svgImg = zoomable.insert("image", ":first-child")
                              .attr("x", 0)
-                             .attr("y", 90)
+                             .attr("y", 75)
                              .attr("width", containerW)
                              .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
@@ -394,11 +391,9 @@ export function visualize() {
         
         // button to reset zoom
         $("#reset4").on("click", () => {
-            if (window.visualization == "four") {
-                zoomable.transition()
-                        .duration(400)
-                        .call(zoom.transform, d3.zoomIdentity);
-            }
+            zoomable.transition()
+                    .duration(400)
+                    .call(zoom.transform, d3.zoomIdentity);
         });
     }
 
