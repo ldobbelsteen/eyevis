@@ -160,6 +160,8 @@ $("#init-vis5").on("click", () => {
 
 $("#initialize").on("click", () => {
 
+    window.visualization = undefined
+
     visOne.initialize();
     visOne.visualize();
     // visTwo.initialize();

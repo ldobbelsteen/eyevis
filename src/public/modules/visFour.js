@@ -28,6 +28,7 @@ export function svgHeatmap() {
 }
 
 export function initialize() {
+    updateData();
 
     // sliders
     $valueRad.on("change", () => {
@@ -206,6 +207,7 @@ function showOverlay() {
     } 
 
     var pop = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
+    var info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
  
     // add new overlay and points 
     overlay.selectAll("path")
@@ -219,11 +221,12 @@ function showOverlay() {
                         d3.select(this).style("opacity", "1");
                         pop.transition().duration(100).style("opacity", "1");
                         pop.html(
-                            "density: " +
+                            "<strong>density:</strong> " +
                                 densityData.value 
                         );
                         pop.style("left", d3.event.pageX + 8 + "px");
-                        pop.style("top", d3.event.pageY - 80 + "px");
+                        pop.style("top", d3.event.pageY - 40 + "px");
+                        
                     })
                     .on("mouseout", function () {
                         overlay.selectAll("path").style("opacity", alpha);
@@ -243,23 +246,40 @@ function showOverlay() {
                 .on("mouseover", (filteredData) => {
                     pop.transition().duration(100).style("opacity", "1");
                     pop.html(
-                       "x: " +
+                       "<strong>x:</strong> " +
                            filteredData.MappedFixationPointX +
                            ";    " +
-                           "y: " +
+                           "<strong>y:</strong> " +
                            filteredData.MappedFixationPointY +
                            "<br>" +
-                           "User: " +
+                           "<strong>User:</strong> " +
                            filteredData.user + 
                            "<br>" +
-                           "Fixation Duration: " +
+                           "<strong>Fixation Duration:</strong> " +
                            filteredData.FixationDuration 
                     );
                     pop.style("left", d3.event.pageX + 8 + "px");
                     pop.style("top", d3.event.pageY - 80 + "px");
-                })
-                .on("mouseout", function () {
-                   pop.transition().duration(200).style("opacity", 0);
+                    info.transition().duration(200).style("opacity", "1");
+                    info.html(
+                        "x: " +
+                            filteredData.MappedFixationPointX +
+                            "<br>" +
+                            "y: " +
+                            filteredData.MappedFixationPointY +
+                            "<br>" +
+                            "User: " +
+                            filteredData.user +
+                            "<br>" +
+                            "FixationIndex: " +
+                            filteredData.FixationIndex
+                    );
+                    info.style("left", ( d3.event.pageX - container.width() - 10) + "px");
+                    info.style("top", d3.event.pageY - 100 + "px");
+                        })
+                        .on("mouseout", function () {
+                           pop.transition().duration(200).style("opacity", 0);
+                           info.transition().duration(200).style("opacity", 0);
                 });
 }
 
@@ -325,10 +345,6 @@ export function visualize() {
 
     // get container ready
     container.html("");
-    updateData();
-
-    // pop-up with x, y, fixation duration
-
 
     // prepare image and scale vis
     img = new Image();

@@ -142,6 +142,8 @@ function drawScanpath() {
         .style("stroke", `${lineColor}`)
         .style("stroke-width", 2);
 
+    var pop = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
+
     //this creates circles with offset points, adds the hover pop-up interaction
     points
         .selectAll("dot")
@@ -162,7 +164,7 @@ function drawScanpath() {
                 "x: " +
                     filteredData.MappedFixationPointX +
                     "<br>" +
-                    "y:" +
+                    "y: " +
                     filteredData.MappedFixationPointY +
                     "<br>" +
                     "User: " +
@@ -173,9 +175,26 @@ function drawScanpath() {
             );
             info.style("left", d3.event.pageX + 8 + "px");
             info.style("top", d3.event.pageY - 80 + "px");
+            pop.transition().duration(100).style("opacity", "1");
+            pop.html(
+               "<strong>x:</strong> " +
+                   filteredData.MappedFixationPointX +
+                   ";    " +
+                   "<strong>y:</strong> " +
+                   filteredData.MappedFixationPointY +
+                   "<br>" +
+                   "<strong>User:</strong> " +
+                   filteredData.user + 
+                   "<br>" +
+                   "<strong>Fixation Duration:</strong> " +
+                   filteredData.FixationDuration 
+            );
+            pop.style("left", d3.event.pageX + container.width() + 10 + "px");
+            pop.style("top", d3.event.pageY - 80 + "px");
         })
         .on("mouseout", function (filteredData) {
             info.transition().duration(200).style("opacity", 0);
+            pop.transition().duration(200).style("opacity", 0);
         });
 }
 
