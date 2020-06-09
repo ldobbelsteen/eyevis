@@ -34,21 +34,13 @@ $(document).ready(function(){
     });
 
     // main body moves right or goes back to normal position depending on menu
-    $menu.on('click dblclick',function(e){
+    $menu.on('click dblclick',function(){
         $main.toggleClass('moveRight')
-        var moveRight = $main.hasClass('moveRight')
-        var margLeft = 250 + (window.innerWidth - 250) * 0.05
-        var smallerWidth = (window.innerWidth - 250) * 0.9
-        var hide = $about.hasClass('hide')
-        $main.animate({width: moveRight ? smallerWidth : standardW }, { duration: 250, queue: false})
-        $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
-        if (!hide) {
-            $about.animate({width: moveRight ? smallerWidth : standardW }, { duration: 250, queue: false})
-        }
+        $(window).trigger("resize");
     });
 
     //support window resizing for elements involved in jQuery animations
-    window.onresize = function(event) {
+    window.onresize = function() {
         var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = 250 + (window.innerWidth - 250) * 0.05
@@ -56,7 +48,6 @@ $(document).ready(function(){
         if (!hide) {
             $about.animate({width: moveRight ? smallerWidth : standardW}, { duration: 250, queue: false})
         }
-        $about.animate({width: hide ? hiddenW : moveRight ? smallerWidth : standardW }, { duration: 0, queue: false})
         $main.animate({width: moveRight ? smallerWidth : standardW}, { duration: 250, queue: false})
         $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
     }
@@ -131,14 +122,11 @@ $(document).ready(function(){
     // when you go back to home, show section to upload and vis descriptions
     // but hide visualization div
     $home.on("click", () => {
-        if (window.visualization != undefined) {
-            $("#vis-descr").show();
-            $("#visualizationGrid").hide();
-            $("#about").show();
-            $("#visualization").hide();
-            $("#export").hide();
-            window.visualization = undefined;
-        }
+        $("#vis-descr").show();
+        $("#visualizationGrid").hide();
+        $("#about").show();
+        $("#visualization").hide();
+        $("#export").hide();
         
     })
 
@@ -167,9 +155,7 @@ $(document).ready(function(){
         $("#visualization").hide();
         $("#visualizationGrid").show();
         $("#export").show();
-        $(".grid-container").css("padding", "10px")
-        var colW = ( $main.width() - 35 ) /2
-        $(".grid-container").css("grid-template-columns", ""+ colW + "px " + colW + "px")
+        $(".grid-container").css("grid-template-columns", "auto auto")
     });
 
     
