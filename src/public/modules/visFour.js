@@ -140,12 +140,7 @@ function overlayData() {
     svg.selectAll("text").remove()
     svg.selectAll("g.axis").remove()
 
-    topInfo.append("g")
-        .attr("transform", "translate("+ (containerW*0.15) +","+ 50 +")")
-        .attr("class", "axis")
-        .attr("color", "white")
-        .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
-
+    
     topInfo.append("rect")
             .attr("x", 0)
             .attr("y", 0)
@@ -167,7 +162,13 @@ function overlayData() {
                 .style('fill', 'white')
                 .style("text-anchor", "middle")
                 .text("Density scale");
-
+                
+    topInfo.append("g")
+            .attr("transform", "translate("+ (containerW*0.15) +","+ 50 +")")
+            .attr("class", "axis")
+            .attr("color", "white")
+            .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
+    
 }
 
 // update heatmap overlay
