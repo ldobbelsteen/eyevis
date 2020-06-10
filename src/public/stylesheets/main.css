@@ -179,7 +179,14 @@ button:focus {
     text-align: center;
 }
 
-.init4, .reset4 {
+.init4 {
+    display: inline-block;
+    width: 49%;
+    margin-top: 7px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.reset4 {
     display: inline-block;
     width: 49%;
     margin-top: 7px;
@@ -188,7 +195,7 @@ button:focus {
     text-align: center;
 }
 
-.init:hover, .init4:hover, .reset4:hover {
+.init:hover, .reset4:hover {
     box-shadow: 0 0 3px #f0e9ed inset; 
     background-color: black; 
     color: white;
