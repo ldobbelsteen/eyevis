@@ -26,7 +26,7 @@ async function addDataset(name, buffer) {
     entries.forEach(entry => {
         let fileName = entry.name;
         let fileExt = path.extname(fileName);
-        if (fileExt === ".jpg" || fileExt === ".jepg" || fileExt === ".png") { // If it's a stimulus file
+        if (fileExt === ".jpg" || fileExt === ".jpeg" || fileExt === ".png") { // If it's a stimulus file
             zip.extractEntryTo(entry, stimuliDir, false, true); // Copy to the stimuli folder
         }
         if (fileExt === ".csv") { // If it's a csv file
