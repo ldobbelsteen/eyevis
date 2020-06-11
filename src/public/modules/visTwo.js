@@ -190,27 +190,20 @@ export function visualize() {
             }
         });
 
-        console.log(sankeyData);
-
         // Reset sankey diagram
         sankeyDiagram.html("");
 
         // Set Sankey diagram properties
-        let sankey = d3.sankey()
-            .nodeWidth(36);
+        let diagram = d3.sankey()
+            .nodeWidth(36)
+            .nodePaddign(12);
 
-        let path = sankey.links();
-
-        console.log(path);
-
+        // Reset graph
         let graph = {"nodes": [], "links": []};
 
-        AOIs.forEach((d) => {
-            graph.nodes.push({
-                "name": d.id
-            });
-        });
         sankeyData.forEach((d) => {
+            graph.nodes.push({"name": d.source});
+            graph.nodes.push({"name": d.target});
             graph.links.push({
                 "source": d.source,
                 "target": d.target,
@@ -218,12 +211,32 @@ export function visualize() {
             });
         });
 
+        // Set the graph nodes and links good according to the properties the diagram will take
+        graph.nodes = d3.keys(d3.nest().key((d) => {return d.name;}).object(graph.nodes));
+
+        console.log(graph.nodes);
+
+        graph.links.forEach((d, i) => {
+            console.log(d);
+            graph.links[i].source = graph.nodes.indexOf(String(graph.links[i].source));
+            graph.links[i].target = graph.nodes.indexOf(String(graph.links[i].target));
+        });
+
+        graph.nodes.forEach((d, i) => {
+            graph.nodes[i] = {"name": d};
+        });
+
         console.log(graph);
 
-        sankey
-          .nodes(graph.nodes)
-          .links(graph.links)
-          .layout(1);
+        diagram.update(graph);
+
+
+
+        // let diagram = sankey(graph);
+
+        let path = sankey.links();
+
+        console.log(path);
 
         // add links
         let link = sankeyDiagram.append("g")
