@@ -130,6 +130,7 @@ function redraw(change) {
             visOne.initialize();
             visOne.userChange();
         } else {
+            visFour.initialize();
             visFour.visualize();
             visOne.initialize();
             visOne.visualize();
