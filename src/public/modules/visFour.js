@@ -240,11 +240,19 @@ function showOverlay() {
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
                 .attr("r", $valueRad.val())
+                .attr("class", function(d) { return "ptH" + d.MappedFixationPointX + "" + d.MappedFixationPointY; })
                 .attr('fill', 'black')
                 .attr('stroke', 'white')
-                .attr("stroke-width", () => { return ($valueRad.val()/4) })
+                .attr("stroke-width", $valueRad.val()/4 )
                 // on mouseover pop-up with x and y coordinates and fixation duration
-                .on("mouseover", (filteredData) => {
+                .on("mouseover", (filteredData, i) => {
+                    var x = filteredData.MappedFixationPointX;
+                    var y = filteredData.MappedFixationPointY;
+                    d3.selectAll("circle.ptH" + x + "" + y)
+                      .attr("stroke", "black")
+                      .attr("fill", "white")
+                    d3.selectAll("circle.ptS" + x + "" + y)
+                        .attr("stroke", "black")
                     pop.transition().duration(100).style("opacity", "1");
                     pop.html(
                        "<strong>x:</strong> " +
@@ -278,9 +286,16 @@ function showOverlay() {
                     info.style("left", ( d3.event.pageX - container.width() - 10) + "px");
                     info.style("top", d3.event.pageY - 100 + "px");
                         })
-                        .on("mouseout", function () {
-                           pop.transition().duration(200).style("opacity", 0);
-                           info.transition().duration(200).style("opacity", 0);
+                .on("mouseout", function (d) {
+                    var x = d.MappedFixationPointX;
+                    var y = d.MappedFixationPointY;
+                    d3.selectAll("circle.ptH" + x + "" + y)
+                      .attr("stroke", "white")
+                      .attr("fill", "black")
+                    d3.selectAll("circle.ptS" + x + "" + y)
+                        .attr("stroke", "none")
+                   pop.transition().duration(200).style("opacity", 0);
+                   info.transition().duration(200).style("opacity", 0);
                 });
 }
 

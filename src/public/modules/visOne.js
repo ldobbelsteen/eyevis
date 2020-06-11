@@ -153,12 +153,22 @@ function drawScanpath() {
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
+        .attr("class", function(d) { return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY; })
         // .style("fill", `${color}`)
         .style("fill", function (d, i) {
             return "hsl(" + colorHSL[0] + "," + (i / filteredData.length) * 100 + "%," + colorHSL[2] + "%)";
         })
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
+            var x = filteredData.MappedFixationPointX;
+            var y = filteredData.MappedFixationPointY;
+            d3.selectAll("circle.ptS" + x + "" + y)
+                        .attr("stroke", "black")
+            d3.selectAll("circle.ptH" + x + "" + y)
+                .attr("stroke", "black")
+                .attr("fill", "white")
+                .attr("stroke-width", $("#sliderRadius").val())
+                .attr("r", $("#sliderRadius").val() * 2.5)
             info.transition().duration(200).style("opacity", "1");
             info.html(
                 "x: " +
@@ -189,10 +199,19 @@ function drawScanpath() {
                    "<strong>Fixation Duration:</strong> " +
                    filteredData.FixationDuration 
             );
-            pop.style("left", d3.event.pageX + container.width() + 10 + "px");
-            pop.style("top", d3.event.pageY - 80 + "px");
+            pop.style("left", d3.event.pageX + container.width() + 15 + "px");
+            pop.style("top", d3.event.pageY - 85 + "px");
         })
         .on("mouseout", function (filteredData) {
+            var x = filteredData.MappedFixationPointX;
+            var y = filteredData.MappedFixationPointY;
+            d3.selectAll("circle.ptS" + x + "" + y)
+                        .attr("stroke", "none")
+            d3.selectAll("circle.ptH" + x + "" + y)
+                .attr("stroke", "white")
+                .attr("fill", "black")
+                .attr("r", $("#sliderRadius").val())
+                .attr("stroke-width", $("#sliderRadius").val()/4)
             info.transition().duration(200).style("opacity", 0);
             pop.transition().duration(200).style("opacity", 0);
         });
