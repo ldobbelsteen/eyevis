@@ -104,6 +104,7 @@ $(document).ready(function(){
     // when you go back to home, show section to upload and vis descriptions
     // but hide visualization div
     $home.on("click", () => {
+        window.visualization = undefined;
         $("#vis-descr").show();
         $("#visualizationGrid").hide();
         $("#about").show();
