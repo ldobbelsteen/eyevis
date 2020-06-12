@@ -246,11 +246,16 @@ function showOverlay() {
                 .attr("stroke-width", $valueRad.val()/4 )
                 // on mouseover pop-up with x and y coordinates and fixation duration
                 .on("mouseover", (filteredData, i) => {
+                    var highlight = () => {
+                        if ($gradType.val() == "classic" ) return "#cf4af7";
+                        else if ($gradType.val() == "pinkBlue" ) return "#f5d253";
+                        else return "#fc971c";
+                    }
                     var x = filteredData.MappedFixationPointX;
                     var y = filteredData.MappedFixationPointY;
                     d3.selectAll("circle.ptH" + x + "" + y)
                       .attr("stroke", "black")
-                      .attr("fill", "white")
+                      .attr("fill", highlight)
                     d3.selectAll("circle.ptS" + x + "" + y)
                         .attr("stroke", "black")
                     pop.transition().duration(100).style("opacity", "1");

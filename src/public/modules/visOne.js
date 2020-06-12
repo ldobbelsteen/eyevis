@@ -160,14 +160,19 @@ function drawScanpath() {
         })
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
+            var highlight = () => {
+                if ($("#gradType").val() == "classic" ) return "#cf4af7";
+                else if ($("#gradType").val() == "pinkBlue" ) return "#f5d253";
+                else return "#fc971c";
+            }
             var x = filteredData.MappedFixationPointX;
             var y = filteredData.MappedFixationPointY;
             d3.selectAll("circle.ptS" + x + "" + y)
                         .attr("stroke", "black")
             d3.selectAll("circle.ptH" + x + "" + y)
                 .attr("stroke", "black")
-                .attr("fill", "white")
-                .attr("stroke-width", $("#sliderRadius").val())
+                .attr("fill", highlight)
+                .attr("stroke-width", $("#sliderRadius").val()/2)
                 .attr("r", $("#sliderRadius").val() * 2.5)
             info.transition().duration(200).style("opacity", "1");
             info.html(
