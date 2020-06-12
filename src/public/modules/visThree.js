@@ -209,58 +209,58 @@ export function visualize() {
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
         // Making the graph
-        svg.selectAll("g")
-            .data(layers)
-            .enter()
-            .append("g")
-            .attr("clip-path", "url(#clip)")
-            .attr("fill", function (d) {
-                return colorScale(d.key);
-            });
+        var clippath = svg.selectAll("g")
+        .data(layers)
+        .enter()
+        .append("g")
+        .attr("clip-path", "url(#clip)")
+        .attr("fill", function (d) {
+            return colorScale(d.key);
+        });
 
-        svg.selectAll("path")
-            .data(layers)
-            .enter()
-            .append("path")
-            .attr("d", area)
-            .attr("fill", function (d) {
-                return colorScale(d.key);
+        var path = svg.selectAll("path")
+        .data(layers)
+        .enter()
+        .append("path")
+        .attr("d", area)
+        .attr("fill", function (d) {
+            return colorScale(d.key);
 
-            });
+        })
 
         // Adding the tooltip when hovered over
         // Also changing opacity of other areas
         svg.selectAll("path")    
-            .attr("opacity", 1)
-            .on("mouseover", (function (d, i) {
-                svg.selectAll("path")
-                .attr("opacity", function(d, j) {
-                    if(j != i) {
-                        return 0.5;
-                    }
-                    else {
-                        return 1;
-                    }
-                });
-
-            }))     
-            .on("mousemove", (function(d) {
-                let currentKey = d.key;
-                info.transition().duration(200).style("opacity", 1);
-                info.html(
-                    "Area of interest: " + d.key + "<br>" 
-                    //+"Number of fixations: " + d[currentKey] + "<br>" 
-                    //+ "Start time interval: " + d.x + "ms" 
-                    );
-                info.style("left", d3.event.pageX + 8 + "px");
-                info.style("top", d3.event.pageY - 48 + "px");
-            }))
-            .on("mouseout", () => {
-                info.transition().duration(200).style("opacity", 0)
-                svg.selectAll("path")
-                    .attr("opacity", 1);
-  
+        .attr("opacity", 1)
+        .on("mouseover", (function (d, i) {
+            svg.selectAll("path")
+            .attr("opacity", function(d, j) {
+                if(j != i) {
+                    return 0.5;
+                }
+                else {
+                    return 1;
+                }
             });
+
+        }))    
+        .on("mousemove", (function(d) {
+            let currentKey = d.key;
+            info.transition().duration(200).style("opacity", 1);
+            info.html(
+                "Area of interest: " + d.key + "<br>"
+                //+"Number of fixations: " + d[currentKey] + "<br>"
+                //+ "Start time interval: " + d.x + "ms"
+                );
+            info.style("left", d3.event.pageX + 8 + "px");
+            info.style("top", d3.event.pageY - 48 + "px");
+        }))
+        .on("mouseout", () => {
+            info.transition().duration(200).style("opacity", 0)
+            svg.selectAll("path")
+                .attr("opacity", 1);
+
+        })
 
         // Adding x-axis
         var xAxisPlacement = d3.axisBottom(xScale);
@@ -279,14 +279,16 @@ export function visualize() {
         const zoom = d3.zoom()
         //.scaleExtent([1/4, 9])
         .on('zoom', function () {
-          d3.select('g').attr('transform', d3.event.transform)
-          var newX = d3.event.transform.rescaleX(xScaleReference);
-          var newY = d3.event.transform.rescaleY(yScaleReference);
+        var newX = d3.event.transform.rescaleX(xScaleReference);
+        var newY = d3.event.transform.rescaleY(yScaleReference);
 
-          // update axes with these new boundaries
-          xAxis.call(xAxisPlacement.scale(newX))
-          yAxisL.call(yAxisPlacementL.scale(newY))
-          yAxisR.call(yAxisPlacementR.scale(newY))
+        // update axes with these new boundaries
+        xAxis.call(xAxisPlacement.scale(newX))
+        yAxisL.call(yAxisPlacementL.scale(newY))
+        yAxisR.call(yAxisPlacementR.scale(newY))
+
+        path.attr('transform', d3.event.transform)
+        clippath.attr('transform', d3.event.transform)
 
         });
 
