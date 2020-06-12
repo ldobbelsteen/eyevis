@@ -130,10 +130,12 @@ function redraw(change) {
             visOne.initialize();
             visOne.userChange();
         } else {
+            if (window.visualization == "linked") showLoading();
             visFour.initialize();
             visFour.visualize();
             visOne.initialize();
             visOne.visualize();
+            setTimeout(hideLoading,10)
         }
         setTimeout(zoomBehavior,50)
     }
@@ -159,9 +161,24 @@ $("#init-vis5").on("click", () => {
     visFive.visualize();
 });
 
+// show the loading overlay
+function showLoading() {
+    $("main").LoadingOverlay("show", {
+        background  : "rgba(255,255,255,0.60)",
+        fade: [10,300]
+    });
+}
+
+// hide the loading overlay
+function hideLoading() {
+    $("main").LoadingOverlay("hide", true);
+}
+
 $("#initialize").on("click", () => {
 
-    window.visualization = undefined
+    window.visualization = "linked"
+
+    showLoading();
 
     visOne.initialize();
     visOne.visualize();
@@ -174,6 +191,7 @@ $("#initialize").on("click", () => {
     // visFive.visualize();
 
     setTimeout(zoomBehavior,10);
+    setTimeout(hideLoading,10)
 });
 
 function zoomBehavior() {
