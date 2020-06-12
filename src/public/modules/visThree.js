@@ -1,6 +1,8 @@
 // Milou Henzen (1409107) - ThemeRiver
 // Big thanks to Eric for writing the part that calculated the number of fixations within each AOI
 
+const $valueInterval = $("#sliderInterval");
+
 // Compare function to sort chronologically
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -22,8 +24,8 @@ export function initialize() {}
 
 export function visualize() {
     // Find input fields and visualization container
-    const gridSizeInputX = $("#vis-three input:eq(0)");
-    const gridSizeInputY = $("#vis-three input:eq(1)");
+    const gridSizeInputX = $("#aoi input:eq(0)");
+    const gridSizeInputY = $("#aoi input:eq(1)");
 
     // Find the offset option
     const offsetOption = $("#offset-option");
@@ -100,41 +102,16 @@ export function visualize() {
         let i = 0,
             k = 0,
             timestamp = [];
-        let timeInterval = 10000,
+        let timeInterval = $valueInterval.val(),
             leftIndex = 0;
         timestamp[0] = 0;
 
-        console.log("DATA IS");
-        console.log(sortedData);
-        // Since there is so much data every 10 entries are grouped into a time interval
-        // This way, instead of 700 entries, there are 70 which is way more manageable
-        console.log(sortedData[sortedData.length - 1].Timestamp);
         //JUST ADDS TIME INTERVALS 0, 10K, 20K, ETC..
         while (k * timeInterval < sortedData[sortedData.length - 1].Timestamp) {
-            console.log("banana gang");
             timestamp[k] = k * timeInterval;
             k++;
         }
         timestamp[k] = sortedData[sortedData.length - 1].Timestamp; //LAST TIME INTERVAL SINCE IT MAY NOT ALWAYS EXACTLY FIT 10K
-
-        console.log("my name jeff");
-        console.log(timestamp);
-        // while (k * timeInterval < sortedData[sortedData.length - 1].Timestamp) {
-        //     console.log("BANÄN");
-        //     let currenTimeInterval = 0;
-        //     let rightIndex = leftIndex + 1;
-        //     while (currenTimeInterval <= timeInterval && rightIndex >= sortedData.length) {
-        //         currentTimeInterval = sortedData[rightIndex].Timestamp - sortedData[leftIndex].Timestamp;
-        //         timestamp[k] = sortedData[rightIndex].Timestamp;
-        //         rightIndex++;
-        //     }
-        //     leftIndex = rightIndex;
-        //     k++;
-        // }
-        // console.log("timestmap is");
-        // console.log(timestamp);
-
-        // if (leftIndex < sortedData.length) for (let i = leftIndex; i < sortedData.length; i++) timestamp[k] = sortedData[leftIndex].Timestamp;
 
         for (let i = 1; i <= timestamp.length; i++) {
             var timestampInfo = {};
@@ -161,43 +138,9 @@ export function visualize() {
 
         // Color gradient
         let colorScale = d3.scaleOrdinal([
-            "#610057",
-            "#6A006A",
-            "#590073",
-            "#18007B",
-            "#000084",
-            "#002B8D",
-            "#007D96",
-            "#009E9E",
-            "#00A77B",
-            "#00B02D",
-            "#00B900",
-            "#44C200",
-            "#9DCA00",
-            "#D3D300",
-            "#DC9800",
-            "#E54900",
-            "#ED0309",
-            "#F60961",
-            "#FF10B6",
-            "#FF136B",
-            "#FF171D",
-            "#FF661E",
-            "#FFBD28",
-            "#FFFF32",
-            "#D3FF3C",
-            "#87FF46",
-            "#51FF51",
-            "#5BFF85",
-            "#65FFD6",
-            "#6FFFFF",
-            "#79E9FF",
-            "#83A9FF",
-            "#8D8DFF",
-            "#AB97FF",
-            "#EAA1FF",
-            "#FFABFF",
-            "#FFB5F7",
+            "#610057","#6A006A", "#590073","#18007B", "#000084","#002B8D","#007D96","#009E9E","#00A77B","#00B02D","#00B900","#44C200","#9DCA00",
+            "#D3D300","#DC9800","#E54900","#ED0309","#F60961","#FF10B6","#FF136B","#FF171D","#FF661E","#FFBD28","#FFFF32","#D3FF3C","#87FF46",
+            "#51FF51","#5BFF85","#65FFD6","#6FFFFF","#79E9FF","#83A9FF","#8D8DFF","#AB97FF","#EAA1FF","#FFABFF","#FFB5F7",
         ]);
 
         //Creating stack

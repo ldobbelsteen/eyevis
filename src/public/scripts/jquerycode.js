@@ -69,6 +69,11 @@ $(document).ready(function(){
     const $sliderA = $('#sliderAlpha');
     updateSlider($sliderA, $valueAlpha);
 
+    //slider vis3 interval
+    const $valueInterval = $('.valueInterval');
+    const $sliderI = $('#sliderInterval');
+    updateSlider($sliderI, $valueInterval);
+
     //function to reset a slider to a value, doesn't trigger change
     function resetSlider(slider, text, value) {
         slider.val(value);
