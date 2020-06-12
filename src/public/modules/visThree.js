@@ -57,6 +57,7 @@ export function visualize() {
     image.src = stimulusLink;
 
     function themeRiver() {
+
         // Create the svg
         let svg = d3
             .select("#visualization")
@@ -127,7 +128,7 @@ export function visualize() {
             });
             aoiInfo.push(timestampInfo);
         }
-
+        console.log(aoiInfo)
 
         //Getting all the names of the aois to use as keys
         var keys = Object.keys(aoiInfo[0]);
@@ -175,6 +176,8 @@ export function visualize() {
             .scaleLinear()
             .domain([minX, maxX])
             .range([40, width - 40]);
+        
+        var xScaleReference = xScale.copy();
 
         var yScale = d3
             .scaleLinear()
@@ -185,6 +188,8 @@ export function visualize() {
             .scaleLinear()
             .domain([0, 2 * maxY])
             .range([height - 40, 40]);
+
+        var yScaleReference = yAxisScale.copy();
 
         // Making it a filled in area instead of just lines
         var area = d3
@@ -228,16 +233,6 @@ export function visualize() {
         svg.selectAll("path")    
             .attr("opacity", 1)
             .on("mouseover", (function (d, i) {
-                let currentKey = d.key;
-                info.transition().duration(200).style("opacity", 1);
-                info.html(
-                    "Area of interest: " + d.key + "<br>" 
-                    //+"Number of fixations: " + d[currentKey] + "<br>" 
-                    //+ "Start time interval: " + d.x + "ms" 
-                    );
-                info.style("left", d3.event.pageX + 8 + "px");
-                info.style("top", d3.event.pageY - 48 + "px");
-
                 svg.selectAll("path")
                 .attr("opacity", function(d, j) {
                     if(j != i) {
@@ -249,12 +244,17 @@ export function visualize() {
                 });
 
             }))     
-            .on("mousemove", () => {
+            .on("mousemove", (function(d) {
+                let currentKey = d.key;
+                info.transition().duration(200).style("opacity", 1);
+                info.html(
+                    "Area of interest: " + d.key + "<br>" 
+                    //+"Number of fixations: " + d[currentKey] + "<br>" 
+                    //+ "Start time interval: " + d.x + "ms" 
+                    );
                 info.style("left", d3.event.pageX + 8 + "px");
                 info.style("top", d3.event.pageY - 48 + "px");
-
-                
-            })
+            }))
             .on("mouseout", () => {
                 info.transition().duration(200).style("opacity", 0)
                 svg.selectAll("path")
@@ -263,13 +263,33 @@ export function visualize() {
             });
 
         // Adding x-axis
-        svg.append("g").attr("class", "x-axis").attr("transform", "translate(0," + (height - 40) + ")").call(d3.axisBottom(xScale));
+        var xAxisPlacement = d3.axisBottom(xScale);
+        var xAxis = svg.append("g").attr("class", "x-axis").attr("transform", "translate(0," + (height - 40) + ")").call(xAxisPlacement);
 
         // Adding left y-axis
-        svg.append("g").attr("class", "y-axis").attr("transform", "translate(40, 0)").call(d3.axisLeft(yAxisScale));
+        var yAxisPlacementL = d3.axisLeft(yAxisScale);
+        var yAxisL = svg.append("g").attr("class", "y-axis").attr("transform", "translate(40, 0)").call(yAxisPlacementL);
 
         // Adding right y-axis
-        svg.append("g").attr("class", "y-axis").attr("transform", "translate(" + (width - 40) + ", 0)").call(d3.axisRight(yAxisScale));
+        var yAxisPlacementR = d3.axisRight(yAxisScale);
+        var yAxisR = svg.append("g").attr("class", "y-axis").attr("transform", "translate(" + (width - 40) + ", 0)").call(yAxisPlacementR);
 
+        // Allowing zooming in on graph
+        // Axes are still weird
+        const zoom = d3.zoom()
+        //.scaleExtent([1/4, 9])
+        .on('zoom', function () {
+          d3.select('g').attr('transform', d3.event.transform)
+          var newX = d3.event.transform.rescaleX(xScaleReference);
+          var newY = d3.event.transform.rescaleY(yScaleReference);
+
+          // update axes with these new boundaries
+          xAxis.call(xAxisPlacement.scale(newX))
+          yAxisL.call(yAxisPlacementL.scale(newY))
+          yAxisR.call(yAxisPlacementR.scale(newY))
+
+        });
+
+        svg.call(zoom);
   }
 }
