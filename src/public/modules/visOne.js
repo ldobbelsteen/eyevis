@@ -206,7 +206,7 @@ function drawScanpath() {
             );
             var coords = d3.selectAll("circle.ptH" + x + "" + y).node().getBoundingClientRect()
             pop.style("left", coords.left + 10 + "px");
-            pop.style("top", coords.top - 80 + "px");
+            pop.style("top", coords.top + window.scrollY- 80 + "px");
         })
         .on("mouseout", function (filteredData) {
             var x = filteredData.MappedFixationPointX;
