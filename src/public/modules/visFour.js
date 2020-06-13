@@ -272,8 +272,9 @@ function showOverlay() {
                            "<strong>Fixation Duration:</strong> " +
                            filteredData.FixationDuration 
                     );
-                    pop.style("left", d3.event.pageX + 8 + "px");
-                    pop.style("top", d3.event.pageY - 80 + "px");
+                    var coordsH = d3.selectAll("circle.ptH" + x + "" + y).node().getBoundingClientRect()
+                    pop.style("left", coordsH.left + 8 + "px");
+                    pop.style("top", coordsH.top - 80 + "px");
                     info.transition().duration(200).style("opacity", "1");
                     info.html(
                         "x: " +
@@ -288,8 +289,9 @@ function showOverlay() {
                             "FixationIndex: " +
                             filteredData.FixationIndex
                     );
-                    info.style("left", ( d3.event.pageX - container.width() - 10) + "px");
-                    info.style("top", d3.event.pageY - 100 + "px");
+                    var coordsS = d3.selectAll("circle.ptS" + x + "" + y).node().getBoundingClientRect()
+                    info.style("left", ( coordsS.left + 10) + "px");
+                    info.style("top", coordsS.top - 80 + "px");
                         })
                 .on("mouseout", function (d) {
                     var x = d.MappedFixationPointX;

@@ -204,8 +204,9 @@ function drawScanpath() {
                    "<strong>Fixation Duration:</strong> " +
                    filteredData.FixationDuration 
             );
-            pop.style("left", d3.event.pageX + container.width() + 15 + "px");
-            pop.style("top", d3.event.pageY - 85 + "px");
+            var coords = d3.selectAll("circle.ptH" + x + "" + y).node().getBoundingClientRect()
+            pop.style("left", coords.left + 10 + "px");
+            pop.style("top", coords.top - 80 + "px");
         })
         .on("mouseout", function (filteredData) {
             var x = filteredData.MappedFixationPointX;
