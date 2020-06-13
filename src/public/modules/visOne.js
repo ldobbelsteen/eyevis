@@ -2,14 +2,13 @@
 
 var filteredData;
 var container = $("#vis1");
-//var colorDot = $("#color-dot");
-var colorLine = $("#color-line");
-var colorPicker = $(".jscolor");
-var colorPickerButton = $("#colorPick");
-var color = "4682B4"; //COLOR OF THE COLOR PICKER is preset to steelblue
-var colorHSL = ["207", "44", "49"];
-// var dotColor = "steelblue";
-var lineColor = "red";
+var colorPickerLine = $("#line");
+var colorPickerCircle = $("#circle");
+var colorPickerButton = $("#colorPick"); //button that changed both  line and circle colors
+var circleColor = "4682B4"; //COLOR OF THE CIRCLE COLOR PICKER is preset to steelblue
+var lineColor = "ff0000"; //COLOR FO THE LINE COLOR PICKER is preset to red
+var colorHSL = ["207", "44", "49"]; //hsl is presed to steelblue
+
 var img, xOffset, yOffset, svg, info;
 var points, lines;
 var topContainer, containerH, containerW, gradient;
@@ -24,7 +23,7 @@ function showLoading() {
 }
 
 export function svgScanpath() {
-    return [svg, svg.selectAll("g", "g"), svg.selectAll("image")]
+    return [svg, svg.selectAll("g", "g"), svg.selectAll("image")];
 }
 
 function initializeGradient() {
@@ -34,11 +33,6 @@ function initializeGradient() {
 }
 
 function colorGrandient() {
-    // startColor = "hsl(" + colorHSL[0] + "," + 0 + "%," + colorHSL[2] + "%)";
-    // endColor = "hsl(" + colorHSL[0] + "," + 100 + "%," + colorHSL[2] + "%)";
-    // console.log(startColor);
-    // console.log(endColor);
-    // console.log("calculated outputs");
     startColor = HSLToHex(colorHSL[0], 0, colorHSL[2]);
     endColor = HSLToHex(colorHSL[0], 100, colorHSL[2]);
 
@@ -87,20 +81,17 @@ export function userChange() {
 export function initialize() {
     updateData();
 
-    colorLine.on("change", function () {
-        lineColor = $(this).val();
-        showLoading();
-        setTimeout(drawScanpath, 10);
-        setTimeout(hideLoading, 5);
-    });
-
     colorPickerButton.on("click", function () {
-        color = colorPicker.val();
-        colorHSL = hexToRGB(color);
+        circleColor = colorPickerCircle.val();
+        lineColor = colorPickerLine.val();
+        console.log("circle color is");
+        console.log(circleColor);
+        console.log("line color is");
+        console.log(lineColor);
+        colorHSL = hexToRGB(circleColor);
         showLoading();
         setTimeout(drawScanpath, 10);
         setTimeout(hideLoading, 5);
-        
     });
 }
 
@@ -153,7 +144,9 @@ function drawScanpath() {
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
-        .attr("class", function(d) { return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY; })
+        .attr("class", function (d) {
+            return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY;
+        })
         // .style("fill", `${color}`)
         .style("fill", function (d, i) {
             return "hsl(" + colorHSL[0] + "," + (i / filteredData.length) * 100 + "%," + colorHSL[2] + "%)";
@@ -161,63 +154,64 @@ function drawScanpath() {
         .style("opacity", (row) => 0.32 * (Math.log2(row.FixationDuration) / 3))
         .on("mouseover", function (filteredData) {
             var highlight = () => {
-                if ($("#gradType").val() == "classic" ) return "#cf4af7";
-                else if ($("#gradType").val() == "pinkBlue" ) return "#f5d253";
+                if ($("#gradType").val() == "classic") return "#cf4af7";
+                else if ($("#gradType").val() == "pinkBlue") return "#f5d253";
                 else return "#fc971c";
-            }
+            };
             var x = filteredData.MappedFixationPointX;
             var y = filteredData.MappedFixationPointY;
-            d3.selectAll("circle.ptS" + x + "" + y)
-                        .attr("stroke", "black")
+            d3.selectAll("circle.ptS" + x + "" + y).attr("stroke", "black");
             d3.selectAll("circle.ptH" + x + "" + y)
                 .attr("stroke", "black")
                 .attr("fill", highlight)
-                .attr("stroke-width", $("#sliderRadius").val()/2)
-                .attr("r", $("#sliderRadius").val() * 2.5)
+                .attr("stroke-width", $("#sliderRadius").val() / 2)
+                .attr("r", $("#sliderRadius").val() * 2.5);
             info.transition().duration(200).style("opacity", "1");
             info.html(
-                "x: " +
+                "<strong>x:</strong> " +
                     filteredData.MappedFixationPointX +
-                    "<br>" +
-                    "y: " +
+                    ";    " +
+                    "<strong>y:</strong> " +
                     filteredData.MappedFixationPointY +
                     "<br>" +
-                    "User: " +
+                    "<strong>User:</strong> " +
                     filteredData.user +
                     "<br>" +
-                    "FixationIndex: " +
+                    "<strong>FixationIndex:</strong> " +
                     filteredData.FixationIndex
             );
             info.style("left", d3.event.pageX + 8 + "px");
             info.style("top", d3.event.pageY - 80 + "px");
             pop.transition().duration(100).style("opacity", "1");
             pop.html(
-               "<strong>x:</strong> " +
-                   filteredData.MappedFixationPointX +
-                   ";    " +
-                   "<strong>y:</strong> " +
-                   filteredData.MappedFixationPointY +
-                   "<br>" +
-                   "<strong>User:</strong> " +
-                   filteredData.user + 
-                   "<br>" +
-                   "<strong>Fixation Duration:</strong> " +
-                   filteredData.FixationDuration 
+                "<strong>x:</strong> " +
+                    filteredData.MappedFixationPointX +
+                    ";    " +
+                    "<strong>y:</strong> " +
+                    filteredData.MappedFixationPointY +
+                    "<br>" +
+                    "<strong>User:</strong> " +
+                    filteredData.user +
+                    "<br>" +
+                    "<strong>Fixation Duration:</strong> " +
+                    filteredData.FixationDuration
             );
-            var coords = d3.selectAll("circle.ptH" + x + "" + y).node().getBoundingClientRect()
+            var coords = d3
+                .selectAll("circle.ptH" + x + "" + y)
+                .node()
+                .getBoundingClientRect();
             pop.style("left", coords.left + 10 + "px");
-            pop.style("top", coords.top + window.scrollY- 80 + "px");
+            pop.style("top", coords.top + window.scrollY - 80 + "px");
         })
         .on("mouseout", function (filteredData) {
             var x = filteredData.MappedFixationPointX;
             var y = filteredData.MappedFixationPointY;
-            d3.selectAll("circle.ptS" + x + "" + y)
-                        .attr("stroke", "none")
+            d3.selectAll("circle.ptS" + x + "" + y).attr("stroke", "none");
             d3.selectAll("circle.ptH" + x + "" + y)
                 .attr("stroke", "white")
                 .attr("fill", "black")
                 .attr("r", $("#sliderRadius").val())
-                .attr("stroke-width", $("#sliderRadius").val()/4)
+                .attr("stroke-width", $("#sliderRadius").val() / 4);
             info.transition().duration(200).style("opacity", 0);
             pop.transition().duration(200).style("opacity", 0);
         });
@@ -232,15 +226,15 @@ export function visualize() {
     img.onload = function () {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
         //image size variables
-        var ratio = $("#main").width()/1.5 / this.width;
-        containerW = $("#main").width()/1.5;
+        var ratio = $("#main").width() / 1.5 / this.width;
+        containerW = $("#main").width() / 1.5;
         containerH = this.height * ratio;
 
         //CREATES CONTAINER TO SHOW GRADIENT SCALE
         topContainer = d3
             .select("#vis1")
             .append("svg")
-            .attr("viewBox", "0 0 " + (containerW)+ " " + 75);
+            .attr("viewBox", "0 0 " + containerW + " " + 75);
 
         topContainer
             .append("text")
@@ -251,7 +245,11 @@ export function visualize() {
 
         initializeGradient();
 
-        svg = d3.select("#vis1").append("svg").attr("viewBox", "0 0 " + containerW + " "+ containerH).append("g");
+        svg = d3
+            .select("#vis1")
+            .append("svg")
+            .attr("viewBox", "0 0 " + containerW + " " + containerH)
+            .append("g");
 
         // x coordinates that will be offset when image is sacled to fit screen
         xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, containerW]);
