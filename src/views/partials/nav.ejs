@@ -17,8 +17,9 @@
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav menulinks">
                 <li id="home">
-                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init" id="retHome">
-                        <span class="glyphicon glyphicon-home xsicon"></span><span class = "menuText"> Home</span>
+                    <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init"
+                        id="retHome">
+                        <span class="glyphicon glyphicon-home xsicon"></span><span class="menuText"> Home</span>
                     </button>
                 </li>
                 <li>
@@ -32,14 +33,16 @@
                     <!--Dataset: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-files">
                         <div class="smallMargTop smallMargBottom">
-                            <span >Select dataset, stimulus, and user</span><br>
+                            <span>Select dataset, stimulus, and user</span><br>
                             <select class="custom-select smallMargTop" id="datasets-menu"></select>
                             <select class="custom-select" id="stimuli-menu"></select>
                             <select class="custom-select" id="users-menu"></select><br>
                         </div>
                         <span>Linked view WIP, supports scanpath and heatmap for now</span>
-                        <button type="button" class="btn btn-primary init4 smallMargBottom" id="initialize">Initialize</button> 
-                        <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset zoom</button>
+                        <button type="button" class="btn btn-primary init4 smallMargBottom"
+                            id="initialize">Initialize</button>
+                        <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset
+                            zoom</button>
                     </div>
                 </li>
                 <li id="vis-one">
@@ -51,26 +54,16 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
                         <div class="smallMargTop smallMargBottom">
-                            <!-- <span>Color picker dot</span> <br>
-                            <select class="custom-select" id="color-dot">
-                                <option selected value="steelblue">steelblue</option>
-                                <option value="green">green</option>
-                                <option value="red">red</option>
-                                <option value="pink">pink</option>
-                                <option value="black">black</option>
-                            </select> <br> -->
-                            <span class="smallMargTop">Color picker line</span> <br>
-                            <select class="custom-select smallMargTop" id="color-line">
-                                <option selected value="red">red</option>
-                                <option value="green">green</option>
-                                <option value="white">white</option>
-                                <option value="yellow">yellow</option>
-                                <option value="black">black</option>
-                            </select> <br>
 
-
-                            <span class="smallMargRight">Color: </span><input class="jscolor {closable:true,closeText:'Close'} smallMargTop smallMargBottom" value="4682b4"> <br>
-                            <button type="button" class="btn btn-default init smallMargTop" id="colorPick">Change color</button>
+                            <span class="smallMargRight">Color Picker Line: </span><input
+                                class="jscolor  {closable:true,closeText:'Close'} smallMargTop smallMargBottom"
+                                value="ff0000" id="line"> <br>
+                            <span class="smallMargRight">Color Picker Circle: </span><input
+                                class="jscolor {closable:true,closeText:'Close'} smallMargTop smallMargBottom"
+                                value="4682b4" id="circle"> <br>
+                            <span>Button changes both line and circle color if modified</span>
+                            <button type="button" class="btn btn-default init smallMargTop" id="colorPick">Change
+                                color</button>
                         </div>
                     </div>
                 </li>
@@ -140,6 +133,9 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-aoi">
                         <!--please put the common grid selector HERE-->
+                        <span class="smallMargRight smallMargTop">Grid size:</span><input
+                            class="smallMargTop smallMargRight" type="number" min="2" max="6" value="3"><span
+                            class="smallMargRight">x</span><input type="number" min="2" max="6" value="3"><br>
                         <p class="smallMargTop">Common grid selector coming soon...</p>
                     </div>
                 </li>
@@ -154,8 +150,9 @@
                         <div class="smallMargTop smallMargBottom">
                             <button type="button" class="btn btn-default init" id="init-vis2">Initialize</button>
                             <br>
-                            <span class="smallMargRight smallMargTop">Grid size:</span><input class="smallMargRight smallMargTop" type="number" min="2" max="10" value="3"><span class="smallMargRight">x</span><input
-                                type="number" min="2" max="10" value="3"><br>
+                            <span class="smallMargRight smallMargTop">Grid size:</span><input
+                                class="smallMargRight smallMargTop" type="number" min="2" max="10" value="3"><span
+                                class="smallMargRight">x</span><input type="number" min="2" max="10" value="3"><br>
                         </div>
                     </div>
                 </li>
@@ -170,14 +167,25 @@
                         <div class="smallMargTop smallMargBottom">
                             <button type="button" class="btn btn-default init" id="init-vis3">Initialize</button>
                             <br>
-                            <span class="smallMargRight smallMargTop">Grid size:</span><input class="smallMargTop smallMargRight" type="number" min="2" max="8" value="3" ><span class="smallMargRight">x</span><input
-                                type="number" min="2" max="6" value="3"><br>
+                            <!--<span class="smallMargRight smallMargTop">Grid size:</span><input class="smallMargTop smallMargRight" type="number" min="2" max="6" value="3" ><span class="smallMargRight">x</span><input
+                                type="number" min="2" max="6" value="3"><br>-->
                             <br>
-                            <span class="smallMargTop">Offset (standard or normalized)</span> <br>
+                            <span class="smallMargTop">Time interval length</span>
+                            <div class="d-flex justify-content-center my-4 w-100">
+                                <form class="range-field">
+                                    <input id="sliderInterval" class="border-0 slider" type="range" min="1000"
+                                        max="500000" value="50000" step="1000" />
+                                </form>
+                                <span class="font-weight-bold text-primary ml-2 mt-1 valueInterval val"></span>
+                            </div>
+                            <span class="text-center">Reintialize to apply (change later)</span> <br><br><br>
+                            <span class="smallMargTop">Standard or normalized graph</span> <br>
                             <select class="custom-select smallMargTop" id="offset-option">
                                 <option selected value="d3.stackOffsetSilhouette">Standard</option>
                                 <option value="d3.stackOffsetExpand">Normalized</option>
                             </select>
+                            <span class="text-center">For normalized, it is recommended to choose a time interval length
+                                such that there are no empty time intervals</span> <br>
                         </div>
                     </div>
                 </li>
@@ -190,15 +198,19 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis5">
                         <div class="smallMargTop smallMargBottom">
-                            <button type="button" class="btn btn-default init" id="init-vis5">Initialize</button> <br><br>
-                            <span class="smallMargRight">Grid size:</span><input class="smallMargRight" type="number" min="2" max="6" value="3"><span class="smallMargRight">x</span><input
-                                type="number" min="2" max="6" value="3">
+                            <button type="button" class="btn btn-default init" id="init-vis5">Initialize</button>
+                            <br><br>
+                            <span class="smallMargRight">Grid size:</span><input class="smallMargRight" type="number"
+                                min="2" max="6" value="3"><span class="smallMargRight">x</span><input type="number"
+                                min="2" max="6" value="3">
                         </div><br>
                     </div>
                 </li>
                 <li id="export">
-                    <button type="button" height='20px'class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class = "menuText"> Save Visualization</span>
+                    <button type="button" height='20px'
+                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Save
+                            Visualization</span>
                     </button>
                 </li>
             </ul>

@@ -27,9 +27,42 @@
 
                     <p>This tool helps you analyze your eyetracking data by providing five different visualizations you can
                     choose from. <br>
-                    To get started, upload a .zip file containing a .csv file for the dataset and jpg, png or jpeg files
+                    To get started, upload a .zip file containing a .csv file for the dataset, following the predetermined format, and jpg, png or jpeg files
                     for the stimuli.
                     </p>
+                    <!--Data format button-->
+                    <button type="button"
+                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse black-btn"
+                        data-toggle="collapse" data-target="#navbar-collapse-dataformat">
+                        <span class="fas fa-chevron-circle-right js-rotate-if-collapsed"></span> <span
+                            class="menuText">Learn more about the data format</span>
+                    </button>
+                    <!--Data format explanation-->
+                    <div class="collapse navbar-collapse smallMargTop" id="navbar-collapse-dataformat" style="text-align: left;">
+                        <p style="display: flex; justify-content: center;">
+                            The dataset needs to contain at least the following 6 attributes with these exact names:
+                            <ul>
+                                <li>
+                                    <strong>Timestamp:</strong> referring to the time elapsed since the recording of the data began;
+                                </li>
+                                <li>
+                                    <strong>StimuliName:</strong> the name of the specific stimulus, used to retrieve the image;
+                                </li>
+                                <li>
+                                    <strong>FixationIndex:</strong> describing the order of the fixation points;
+                                </li>
+                                <li>
+                                    <strong>MappedFixationPointX:</strong> referring to the x-axis coordinate of each fixation point;
+                                </li>
+                                <li>
+                                    <strong>MappedFixationPointY:</strong> referring to the y-axis coordinate of each fixation point;
+                                </li>
+                                <li>
+                                    <strong>user:</strong> defining the ID of each study subject.
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
 
                     <!--uploading dataset and stimuli--> 
                     
@@ -45,16 +78,15 @@
                           </div>
                     </form>
                 
-                    <p style="margin-top: 16px;">Use the menu to choose your dataset, your stimulus, navigate between the various types of
-                    visualizations, or export a visualization.</p>
+                    <p style="margin-top: 16px;">Use the menu to choose your dataset, your stimulus, interact with the various visualization types, or export a visualization.</p>
                 </div>
             </div>
         </div>
         
         <div id="vis-descr">
-            <h3>Visualization Types</h3>
-            <p style="text-align: center;">Description of visualization types coming soon...</p>
+            <%- include("./partials/visdescription") %>
         </div>
+
         <div id="visualization"></div>
         <div id="visualizationGrid" class="grid-container">
             <div id="vis1"></div>

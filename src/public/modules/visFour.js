@@ -240,11 +240,24 @@ function showOverlay() {
                 .attr("cx", d => x(d.MappedFixationPointX))
                 .attr("cy", d => y(d.MappedFixationPointY))
                 .attr("r", $valueRad.val())
+                .attr("class", function(d) { return "ptH" + d.MappedFixationPointX + "" + d.MappedFixationPointY; })
                 .attr('fill', 'black')
                 .attr('stroke', 'white')
-                .attr("stroke-width", () => { return ($valueRad.val()/4) })
+                .attr("stroke-width", $valueRad.val()/4 )
                 // on mouseover pop-up with x and y coordinates and fixation duration
-                .on("mouseover", (filteredData) => {
+                .on("mouseover", (filteredData, i) => {
+                    var highlight = () => {
+                        if ($gradType.val() == "classic" ) return "#cf4af7";
+                        else if ($gradType.val() == "pinkBlue" ) return "#f5d253";
+                        else return "#fc971c";
+                    }
+                    var x = filteredData.MappedFixationPointX;
+                    var y = filteredData.MappedFixationPointY;
+                    d3.selectAll("circle.ptH" + x + "" + y)
+                      .attr("stroke", "black")
+                      .attr("fill", highlight)
+                    d3.selectAll("circle.ptS" + x + "" + y)
+                        .attr("stroke", "black")
                     pop.transition().duration(100).style("opacity", "1");
                     pop.html(
                        "<strong>x:</strong> " +
@@ -259,8 +272,9 @@ function showOverlay() {
                            "<strong>Fixation Duration:</strong> " +
                            filteredData.FixationDuration 
                     );
-                    pop.style("left", d3.event.pageX + 8 + "px");
-                    pop.style("top", d3.event.pageY - 80 + "px");
+                    var coordsH = d3.selectAll("circle.ptH" + x + "" + y).node().getBoundingClientRect()
+                    pop.style("left", coordsH.left + 8 + "px");
+                    pop.style("top", coordsH.top + window.scrollY - 80 + "px");
                     info.transition().duration(200).style("opacity", "1");
                     info.html(
                         "x: " +
@@ -275,12 +289,20 @@ function showOverlay() {
                             "FixationIndex: " +
                             filteredData.FixationIndex
                     );
-                    info.style("left", ( d3.event.pageX - container.width() - 10) + "px");
-                    info.style("top", d3.event.pageY - 100 + "px");
+                    var coordsS = d3.selectAll("circle.ptS" + x + "" + y).node().getBoundingClientRect()
+                    info.style("left", ( coordsS.left + 10) + "px");
+                    info.style("top", coordsS.top + window.scrollY - 80 + "px");
                         })
-                        .on("mouseout", function () {
-                           pop.transition().duration(200).style("opacity", 0);
-                           info.transition().duration(200).style("opacity", 0);
+                .on("mouseout", function (d) {
+                    var x = d.MappedFixationPointX;
+                    var y = d.MappedFixationPointY;
+                    d3.selectAll("circle.ptH" + x + "" + y)
+                      .attr("stroke", "white")
+                      .attr("fill", "black")
+                    d3.selectAll("circle.ptS" + x + "" + y)
+                        .attr("stroke", "none")
+                   pop.transition().duration(200).style("opacity", 0);
+                   info.transition().duration(200).style("opacity", 0);
                 });
 }
 

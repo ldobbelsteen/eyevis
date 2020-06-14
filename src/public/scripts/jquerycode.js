@@ -69,6 +69,11 @@ $(document).ready(function(){
     const $sliderA = $('#sliderAlpha');
     updateSlider($sliderA, $valueAlpha);
 
+    //slider vis3 interval
+    const $valueInterval = $('.valueInterval');
+    const $sliderI = $('#sliderInterval');
+    updateSlider($sliderI, $valueInterval);
+
     //function to reset a slider to a value, doesn't trigger change
     function resetSlider(slider, text, value) {
         slider.val(value);
@@ -99,6 +104,7 @@ $(document).ready(function(){
     // when you go back to home, show section to upload and vis descriptions
     // but hide visualization div
     $home.on("click", () => {
+        window.visualization = undefined;
         $("#vis-descr").show();
         $("#visualizationGrid").hide();
         $("#about").show();

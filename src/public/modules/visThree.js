@@ -1,6 +1,8 @@
 // Milou Henzen (1409107) - ThemeRiver
 // Big thanks to Eric for writing the part that calculated the number of fixations within each AOI
 
+const $valueInterval = $("#sliderInterval");
+
 // Compare function to sort chronologically
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -22,8 +24,8 @@ export function initialize() {}
 
 export function visualize() {
     // Find input fields and visualization container
-    const gridSizeInputX = $("#vis-three input:eq(0)");
-    const gridSizeInputY = $("#vis-three input:eq(1)");
+    const gridSizeInputX = $("#aoi input:eq(0)");
+    const gridSizeInputY = $("#aoi input:eq(1)");
 
     // Find the offset option
     const offsetOption = $("#offset-option");
@@ -98,22 +100,23 @@ export function visualize() {
         let sortedData = data.sort(compare);
 
         let i = 0,
-            k = 1,
+            k = 0,
             timestamp = [];
+        let timeInterval = $valueInterval.val(),
+            leftIndex = 0;
         timestamp[0] = 0;
 
-        // Since there is so much data every 10 entries are grouped into a time interval
-        // This way, instead of 700 entries, there are 70 which is way more manageable 
-        while (i + 10 < sortedData.length) {
-            timestamp[k++] = sortedData[i + 10].Timestamp;
-            i += 10;
+        //JUST ADDS TIME INTERVALS 0, 10K, 20K, ETC..
+        while (k * timeInterval < sortedData[sortedData.length - 1].Timestamp) {
+            timestamp[k] = k * timeInterval;
+            k++;
         }
-        timestamp[k] = sortedData[sortedData.length - 1].Timestamp;
+        timestamp[k] = sortedData[sortedData.length - 1].Timestamp; //LAST TIME INTERVAL SINCE IT MAY NOT ALWAYS EXACTLY FIT 10K
 
         for (let i = 1; i <= timestamp.length; i++) {
             var timestampInfo = {};
             aois.forEach((aoi) => {
-                timestampInfo.x = parseInt(timestamp[i-1]);
+                timestampInfo.x = parseInt(timestamp[i - 1]);
                 let name = "aoi_" + aoi.gridX + "_" + aoi.gridY;
                 let fixCount = 0;
                 data.forEach((fix) => {
@@ -127,17 +130,18 @@ export function visualize() {
             });
             aoiInfo.push(timestampInfo);
         }
-
+        console.log(aoiInfo);
 
         //Getting all the names of the aois to use as keys
         var keys = Object.keys(aoiInfo[0]);
         keys.shift();
 
         // Color gradient
-        let colorScale = d3.scaleOrdinal(["#610057", "#6A006A","#590073", "#18007B", "#000084","#002B8D","#007D96","#009E9E",
-        "#00A77B","#00B02D","#00B900","#44C200","#9DCA00","#D3D300","#DC9800","#E54900","#ED0309","#F60961","#FF10B6","#FF136B",
-        "#FF171D","#FF661E","#FFBD28","#FFFF32","#D3FF3C","#87FF46","#51FF51","#5BFF85","#65FFD6","#6FFFFF","#79E9FF","#83A9FF",
-        "#8D8DFF","#AB97FF","#EAA1FF","#FFABFF","#FFB5F7"]);
+        let colorScale = d3.scaleOrdinal([
+            "#610057","#6A006A", "#590073","#18007B", "#000084","#002B8D","#007D96","#009E9E","#00A77B","#00B02D","#00B900","#44C200","#9DCA00",
+            "#D3D300","#DC9800","#E54900","#ED0309","#F60961","#FF10B6","#FF136B","#FF171D","#FF661E","#FFBD28","#FFFF32","#D3FF3C","#87FF46",
+            "#51FF51","#5BFF85","#65FFD6","#6FFFFF","#79E9FF","#83A9FF","#8D8DFF","#AB97FF","#EAA1FF","#FFABFF","#FFB5F7",
+        ]);
 
         //Creating stack
         if (offset == "d3.stackOffsetSilhouette") {
@@ -176,6 +180,8 @@ export function visualize() {
             .domain([minX, maxX])
             .range([40, width - 40]);
 
+        var xScaleReference = xScale.copy();
+
         var yScale = d3
             .scaleLinear()
             .domain([minY, maxY])
@@ -185,6 +191,8 @@ export function visualize() {
             .scaleLinear()
             .domain([0, 2 * maxY])
             .range([height - 40, 40]);
+
+        var yScaleReference = yAxisScale.copy();
 
         // Making it a filled in area instead of just lines
         var area = d3
@@ -204,7 +212,8 @@ export function visualize() {
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
         // Making the graph
-        svg.selectAll("g")
+        var clippath = svg
+            .selectAll("g")
             .data(layers)
             .enter()
             .append("g")
@@ -213,63 +222,83 @@ export function visualize() {
                 return colorScale(d.key);
             });
 
-        svg.selectAll("path")
+        var path = svg
+            .selectAll("path")
             .data(layers)
             .enter()
             .append("path")
             .attr("d", area)
             .attr("fill", function (d) {
                 return colorScale(d.key);
-
             });
 
         // Adding the tooltip when hovered over
         // Also changing opacity of other areas
-        svg.selectAll("path")    
+        svg.selectAll("path")
             .attr("opacity", 1)
-            .on("mouseover", (function (d, i) {
-                let currentKey = d.key;
-                info.transition().duration(200).style("opacity", 1);
-                info.html(
-                    "Area of interest: " + d.key + "<br>" 
-                    //+"Number of fixations: " + d[currentKey] + "<br>" 
-                    //+ "Start time interval: " + d.x + "ms" 
-                    );
-                info.style("left", d3.event.pageX + 8 + "px");
-                info.style("top", d3.event.pageY - 48 + "px");
-
-                svg.selectAll("path")
-                .attr("opacity", function(d, j) {
-                    if(j != i) {
+            .on("mouseover", function (d, i) {
+                svg.selectAll("path").attr("opacity", function (d, j) {
+                    if (j != i) {
                         return 0.5;
-                    }
-                    else {
+                    } else {
                         return 1;
                     }
                 });
-
-            }))     
-            .on("mousemove", () => {
+            })
+            .on("mousemove", function (d) {
+                let currentKey = d.key;
+                info.transition().duration(200).style("opacity", 1);
+                info.html(
+                    "Area of interest: " + d.key + "<br>"
+                    //+"Number of fixations: " + d[currentKey] + "<br>"
+                    //+ "Start time interval: " + d.x + "ms"
+                );
                 info.style("left", d3.event.pageX + 8 + "px");
                 info.style("top", d3.event.pageY - 48 + "px");
-
-                
             })
             .on("mouseout", () => {
-                info.transition().duration(200).style("opacity", 0)
-                svg.selectAll("path")
-                    .attr("opacity", 1);
-  
+                info.transition().duration(200).style("opacity", 0);
+                svg.selectAll("path").attr("opacity", 1);
             });
 
         // Adding x-axis
-        svg.append("g").attr("class", "x-axis").attr("transform", "translate(0," + (height - 40) + ")").call(d3.axisBottom(xScale));
+        var xAxisPlacement = d3.axisBottom(xScale);
+        var xAxis = svg
+            .append("g")
+            .attr("class", "x-axis")
+            .attr("transform", "translate(0," + (height - 40) + ")")
+            .call(xAxisPlacement);
 
         // Adding left y-axis
-        svg.append("g").attr("class", "y-axis").attr("transform", "translate(40, 0)").call(d3.axisLeft(yAxisScale));
+        var yAxisPlacementL = d3.axisLeft(yAxisScale);
+        var yAxisL = svg.append("g").attr("class", "y-axis").attr("transform", "translate(40, 0)").call(yAxisPlacementL);
 
         // Adding right y-axis
-        svg.append("g").attr("class", "y-axis").attr("transform", "translate(" + (width - 40) + ", 0)").call(d3.axisRight(yAxisScale));
+        var yAxisPlacementR = d3.axisRight(yAxisScale);
+        var yAxisR = svg
+            .append("g")
+            .attr("class", "y-axis")
+            .attr("transform", "translate(" + (width - 40) + ", 0)")
+            .call(yAxisPlacementR);
 
-  }
+        // Allowing zooming in on graph
+        // Axes are still weird
+        const zoom = d3
+            .zoom()
+            //.scaleExtent([1/4, 9])
+            .on("zoom", function () {
+                var newX = d3.event.transform.rescaleX(xScaleReference);
+                var newY = d3.event.transform.rescaleY(yScaleReference);
+
+                // update axes with these new boundaries
+                xAxis.call(xAxisPlacement.scale(newX));
+                yAxisL.call(yAxisPlacementL.scale(newY));
+                yAxisR.call(yAxisPlacementR.scale(newY));
+
+                path.attr("transform", d3.event.transform);
+                clippath.attr("transform", d3.event.transform);
+            });
+
+        svg.call(zoom);
+    }
 }
