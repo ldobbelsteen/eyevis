@@ -3,7 +3,7 @@
 var filteredData, densityData;
 var svg, img, overlay, points, gradient, colorDomain, svgImg;
 var containerH, containerW, x, y, zoomable, topInfo;
-var xAxis, xAxisT, yAxis, yAxisL;
+var axes, xAxis, xAxisT, yAxis, yAxisL;
 var margin = {top: 30, left: 50, right: 10, bottom: 10}
 const container = $("#vis4");
 const $valueRad = $("#sliderRadius");
@@ -134,8 +134,6 @@ function overlayData() {
                         (filteredData)
     }
     
-
-    console.log(densityData)
     // compute array with min and max density among single points
     var minMax = [d3.min(densityData, (d) => d.value ), d3.max(densityData, (d) => d.value )]
 
@@ -147,9 +145,9 @@ function overlayData() {
                 .domain([minMax[0], minMax[1]])
                 .range([0,(containerW*0.7)])
     
-    svg.selectAll("rect").remove()
-    svg.selectAll("text").remove()
-    svg.selectAll("g.axis").remove()
+    topInfo.selectAll("rect").remove()
+    topInfo.selectAll("text").remove()
+    topInfo.selectAll("g.axis").remove()
 
     
     topInfo.append("rect")
@@ -205,6 +203,7 @@ function showOverlay() {
     var pinkBlue = ["pink", "blue"]
 
     var color = d3.scaleLinear()
+
     var type = $gradType.val()
 
     if ( type == "classic") {
@@ -412,8 +411,6 @@ export function visualize() {
         y = d3.scaleLinear()
                 .domain([ img.naturalHeight, 0 ])
                 .range([ (containerH) , 0 ])
-    
-            
 
         // deal with data needed for overlay
         overlayData();
@@ -425,26 +422,29 @@ export function visualize() {
         overlay = zoomable.insert("g", "g")
 
         points = zoomable.append("g", "g")
+
         showOverlay();
 
-
-        // add image
-        svgImg = zoomable.insert("image", ":first-child")
-                             .attr("width", containerW)
-                             .attr("xlink:href", `/stimuli/${window.stimulus}`)
+        axes = svg.append("g")    
+                  .attr("transform", "translate("+ margin.left + "," + margin.top + ")")
 
         xAxisT = d3.axisTop(x)
         yAxisL = d3.axisLeft(y)
+    
+        xAxis = axes.append("g")
+                    .attr("transform", "translate(0 ," + (-5) + ")")
+                    .attr("class", "x-axis")
+                    .call(xAxisT);
+     
+        yAxis = axes.append("g")
+                    .attr("transform", "translate(" + (-5) + ", 0)")
+                    .attr("class", "y-axis")
+                    .call(yAxisL);
 
-        xAxis = svg.append("g")
-                        .attr("transform", "translate("+ margin.left + "," + (margin.top - 5) + ")")
-                        .attr("class", "x-axis")
-                        .call(xAxisT);
-         
-        yAxis = svg.append("g")
-                       .attr("transform", "translate(" + (margin.left - 5) + "," + (margin.top) + ")")
-                       .attr("class", "y-axis")
-                       .call(yAxisL);
+        // add image
+        svgImg = zoomable.insert("image", ":first-child")
+                         .attr("width", containerW)
+                         .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
     }
     
