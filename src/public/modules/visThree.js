@@ -246,12 +246,13 @@ export function visualize() {
                 });
             })
             .on("mousemove", function (d) {
-                let currentKey = d.key;
+                var mouseX = d3.mouse(this)[0];
+                var invertedX = xScale.invert(mouseX);
                 info.transition().duration(200).style("opacity", 1);
                 info.html(
                     "Area of interest: " + d.key + "<br>"
-                    //+"Number of fixations: " + d[currentKey] + "<br>"
-                    //+ "Start time interval: " + d.x + "ms"
+                    +"Number of fixations: " + "sigh..." + "<br>"
+                    + "Timestamp: " + parseInt(invertedX) + "ms"
                 );
                 info.style("left", d3.event.pageX + 8 + "px");
                 info.style("top", d3.event.pageY - 48 + "px");
