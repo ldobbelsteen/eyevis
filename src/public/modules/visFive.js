@@ -16,6 +16,7 @@ export function visualize() {
     // Find input fields and visualization container
     const gridSizeInputX = $("#aoi input:eq(0)");
     const gridSizeInputY = $("#aoi input:eq(1)");
+    const colorInput = $("#colorType");
     const container = d3.select("#visualization");
 
     // Empty the container
@@ -49,6 +50,7 @@ export function visualize() {
         stimulus.attr("viewBox", [0, 0, containerWidth, img.node().getBBox().height]);
         gridSizeInputX.on("change", updateTimelines);
         gridSizeInputY.on("change", updateTimelines);
+        colorInput.on("change", updateTimelines);
         updateTimelines();
     }
     image.src = stimulusLink;
@@ -81,7 +83,21 @@ export function visualize() {
         }
 
         // Assign colors to each AOI
-        let colors = d3.interpolateTurbo;
+        let colors;
+        let selectedColorset = colorInput.val();
+        switch(selectedColorset) {
+            case "rainbow":
+                colors = d3.interpolateTurbo;
+                break;
+            case "blue":
+                colors = d3.interpolateBlues;
+                break;
+            case "cool":
+                colors = d3.interpolateCool;
+                break;
+            default:
+                console.error("Color not found!");
+        }
         let interval = 1 / (AOIs.length - 1);
         AOIs.forEach((aoi, index) => {
             aoi.color = colors(interval * index);

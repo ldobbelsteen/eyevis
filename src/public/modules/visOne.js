@@ -14,6 +14,10 @@ var points, lines;
 var topContainer, containerH, containerW, gradient;
 var startColor, endColor;
 
+var xScaleReference, yScaleReference;
+var xAxis, yAxis;
+var xAxisPlacement, yAxisPlacement;
+
 //loading animation functions
 function showLoading() {
     container.LoadingOverlay("show", {
@@ -23,7 +27,7 @@ function showLoading() {
 }
 
 export function svgScanpath() {
-    return [svg, svg.selectAll("g", "g"), svg.selectAll("image")];
+    return [svg, svg.selectAll(".lines"), svg.selectAll(".points"), svg.selectAll("image")];
 }
 
 function initializeGradient() {
@@ -126,6 +130,7 @@ function drawScanpath() {
 
     //function that draws the lines
     lines
+        .attr("class", "lines")
         .append("path")
         .attr("class", "line")
         .attr("d", line(sortedData))
@@ -137,6 +142,7 @@ function drawScanpath() {
 
     //this creates circles with offset points, adds the hover pop-up interaction
     points
+        .attr("class", "points")
         .selectAll("dot")
         .data(filteredData)
         .enter()
@@ -256,6 +262,72 @@ export function visualize() {
 
         // y coordinates that will be offset when image is scaled to fit screen
         yOffset = d3.scaleLinear().domain([img.naturalHeight, 0]).range([containerH, 0]);
+
+        console.log("DATA GIVEN IS: ");
+        console.log(filteredData);
+
+        var minX = 0;
+        console.log(`Minimum x point is: ${minX}`);
+
+        var maxX = this.width;
+        console.log(`Maximum x point is: ${maxX}`);
+
+        var minY = 0;
+        console.log(`Minimum y point is: ${minY}`);
+
+        var maxY = this.height;
+        console.log(`Maximum y point is: ${maxY}`);
+
+        // Scaling
+        var xScale = d3
+            .scaleLinear()
+            .domain([minX, maxX])
+            .range([40, containerW - 40]);
+
+        xScaleReference = xScale.copy();
+
+        var yScale = d3
+            .scaleLinear()
+            .domain([maxY, minY])
+            .range([containerH - 40, 40]);
+
+        // var yAxisScale = d3
+        //     .scaleLinear()
+        //     .domain([0,  maxY])
+        //     .range([containerH - 40, 40]);
+
+        yScaleReference = yScale.copy();
+
+        // Adding x-axis
+        xAxisPlacement = d3.axisTop(xScale);
+        xAxis = svg
+            .append("g")
+            .attr("class", "x-axis")
+            .attr("transform", "translate(-5," + 40 + ")")
+            .call(xAxisPlacement);
+
+        // Adding left y-axis
+        yAxisPlacement = d3.axisLeft(yScale);
+        yAxis = svg.append("g").attr("class", "y-axis").attr("transform", "translate(35, 10)").call(yAxisPlacement);
+
+        const zoom = d3
+            .zoom()
+            //.scaleExtent([1/4, 9])
+            .on("zoom", function () {
+                console.log("BANANA");
+                var newX = d3.event.transform.rescaleX(xScaleReference);
+                var newY = d3.event.transform.rescaleY(yScaleReference);
+
+                // update axes with these new boundaries
+                xAxis.call(xAxisPlacement.scale(newX));
+                yAxisL.call(yAxisPlacementL.scale(newY));
+                yAxisR.call(yAxisPlacementR.scale(newY));
+
+                // path.attr("transform", d3.event.transform);
+                // clippath.attr("transform", d3.event.transform);
+            });
+
+        svg.call(zoom);
 
         points = svg.insert("g", "g"); //inside this d3 object the points will be drawn
 

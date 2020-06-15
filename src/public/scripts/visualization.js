@@ -13,25 +13,16 @@ var data;
 // Filter the full dataset according to selected values
 function filterData() {
     window.data = data.filter((row) => {
-        return (
-            row.StimuliName === window.stimulus &&
-            (row.user === window.user || window.user === "All users" || window.user === undefined)
-        );
+        return row.StimuliName === window.stimulus && (row.user === window.user || window.user === "All users" || window.user === undefined);
     });
 }
 
 // List datasets and update the menu
 function updateDatasets() {
-    datasetsMenu
-        .empty()
-        .append(
-            $("<option disabled selected value> Loading list of available datasets... </option>")
-        );
+    datasetsMenu.empty().append($("<option disabled selected value> Loading list of available datasets... </option>"));
     $.get("/datasets", (list) => {
         datasetsMenu.prop("disabled", false);
-        datasetsMenu
-            .empty()
-            .append($("<option disabled selected value> -- select a dataset -- </option>"));
+        datasetsMenu.empty().append($("<option disabled selected value> -- select a dataset -- </option>"));
         list.forEach((element) => {
             let capitalized = element[0].toUpperCase() + element.slice(1);
             datasetsMenu.append($(`<option value="${element}"></option>`).text(capitalized));
@@ -41,9 +32,7 @@ function updateDatasets() {
 
 // List all of the unique stimuli and update the menu
 function updateStimuli() {
-    stimuliMenu
-        .empty()
-        .append($("<option disabled selected value> Loading selected dataset... </option>"));
+    stimuliMenu.empty().append($("<option disabled selected value> Loading selected dataset... </option>"));
     d3.tsv("/datasets/" + datasetsMenu.val()).then((result) => {
         result.forEach((row) => {
             if (row.StimuliName.includes("ö")) {
@@ -55,9 +44,7 @@ function updateStimuli() {
         });
         data = result;
         stimuliMenu.prop("disabled", false);
-        stimuliMenu
-            .empty()
-            .append($("<option disabled selected value> -- select a stimulus -- </option>"));
+        stimuliMenu.empty().append($("<option disabled selected value> -- select a stimulus -- </option>"));
         let uniqueStimuli = [...new Set(data.map((item) => item.StimuliName))];
         uniqueStimuli.sort().forEach((stimulus) => {
             let stylized = stimulus;
@@ -73,18 +60,19 @@ function updateUsers() {
     usersMenu.prop("disabled", false);
     usersMenu.empty().append($("<option selected> All users </option>"));
     let uniqueUsers = [...new Set(window.data.map((item) => item.user))];
-    uniqueUsers.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach((user) => {
-        usersMenu.append($("<option></option>").text(user));
-    });
+    uniqueUsers
+        .sort((a, b) => {
+            return a.slice(1) - b.slice(1);
+        })
+        .forEach((user) => {
+            usersMenu.append($("<option></option>").text(user));
+        });
 
-    const visButtons = [ $("#init-vis1"),
-                         $("#init-vis2"),
-                         $("#init-vis3"),
-                         $("#init-vis5")]
-    
-    visButtons.forEach( (d) => {
-        d.prop("disabled", false)
-    })
+    const visButtons = [$("#init-vis1"), $("#init-vis2"), $("#init-vis3"), $("#init-vis5")];
+
+    visButtons.forEach((d) => {
+        d.prop("disabled", false);
+    });
 }
 
 // Disable menus as they are not yet populated
@@ -135,9 +123,9 @@ function redraw(change) {
             visFour.visualize();
             visOne.initialize();
             visOne.visualize();
-            setTimeout(hideLoading,10)
+            setTimeout(hideLoading, 10);
         }
-        setTimeout(zoomBehavior,50)
+        setTimeout(zoomBehavior, 50);
     }
 }
 
@@ -164,8 +152,8 @@ $("#init-vis5").on("click", () => {
 // show the loading overlay
 function showLoading() {
     $("main").LoadingOverlay("show", {
-        background  : "rgba(255,255,255,0.60)",
-        fade: [10,300]
+        background: "rgba(255,255,255,0.60)",
+        fade: [10, 300],
     });
 }
 
@@ -175,8 +163,7 @@ function hideLoading() {
 }
 
 $("#initialize").on("click", () => {
-
-    window.visualization = "linked"
+    window.visualization = "linked";
 
     showLoading();
 
@@ -190,16 +177,15 @@ $("#initialize").on("click", () => {
     visFour.visualize();
     // visFive.visualize();
 
-    setTimeout(zoomBehavior,10);
-    setTimeout(hideLoading,10)
+    setTimeout(zoomBehavior, 10);
+    setTimeout(hideLoading, 10);
 });
 
 function zoomBehavior() {
     const heatmapZoom = visFour.svgHeatmap();
     const scanpathZoom = visOne.svgScanpath();
 
-    const zoom = d3.zoom()
-                   .on("zoom", zoomed);
+    const zoom = d3.zoom().on("zoom", zoomed);
 
     function zoomed() {
         var t = d3.event.transform;
@@ -210,22 +196,18 @@ function zoomBehavior() {
         heatmapZoom[3].attr("transform", d3.event.transform);
         scanpathZoom[1].attr("transform", d3.event.transform);
         scanpathZoom[2].attr("transform", d3.event.transform);
-        
+        scanpathZoom[3].attr("transform", d3.event.transform);
     }
 
-    heatmapZoom[0].call(zoom)
-    scanpathZoom[0].call(zoom)
+    heatmapZoom[0].call(zoom);
+    scanpathZoom[0].call(zoom);
 
     $("#reset4").on("click", () => {
-        heatmapZoom[0].transition()
-                .duration(400)
-                .call(zoom.transform, d3.zoomIdentity);
-        scanpathZoom[0].transition()
-                .duration(400)
-                .call(zoom.transform, d3.zoomIdentity);
+        heatmapZoom[0].transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+        scanpathZoom[0].transition().duration(400).call(zoom.transform, d3.zoomIdentity);
     });
 }
 
-$("#export").on('click', function(){
-    saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", {encoderOptions: 1, backgroundColor: "#FFFFFF", scale:2});
+$("#export").on("click", function () {
+    saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
