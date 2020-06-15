@@ -5,7 +5,7 @@ var img, overlay, points, gradient, svgImg;
 var imageH, imageW, x, y, colorDomain;
 var svg, axes, zoomable, topInfo;
 var xAxis, xAxisT, yAxis, yAxisL;
-var margin = {top: 35, left: 50, right: 10, bottom: 10}
+const margin = {top: 35, left: 50, right: 10, bottom: 10}
 const container = $("#vis4");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
@@ -308,7 +308,7 @@ function showOverlay() {
                     );
                     var coordsS = d3.selectAll("circle.ptS" + x + "" + y).node().getBoundingClientRect()
                     info.style("left", ( coordsS.left + 10) + "px");
-                    info.style("top", coordsS.top + window.scrollY - 80 + "px");
+                    info.style("top", coordsS.top + window.scrollY - 60 + "px");
                 })
                 .on("mouseout", function (d) {
                     var x = d.MappedFixationPointX;
@@ -447,6 +447,20 @@ export function visualize() {
         // create separate g for axes
         axes = svg.append("g")    
                   .attr("transform", "translate("+ margin.left + "," + margin.top + ")")
+
+        axes.append("rect")
+            .attr("x", (-margin.left))
+            .attr("y", (-margin.top))
+            .attr("width", containerW)
+            .attr("height", margin.top)
+            .attr("fill", "#d9edee")
+
+        axes.append("rect")
+            .attr("x", (-margin.left))
+            .attr("y", (-margin.top))
+            .attr("width", margin.left)
+            .attr("height", containerH)
+            .attr("fill", "#d9edee")
 
         // initialize axes
         xAxisT = d3.axisTop(x)
