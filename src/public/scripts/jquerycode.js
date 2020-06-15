@@ -9,7 +9,6 @@ $(document).ready(function(){
 
     var $main = $('#main')
     var $menu = $("#menu")
-    var $about = $("#about")
     var standardW = '90vw' //of main/about section
     var standardMarg = '5vw' // of main/about section
 
@@ -21,7 +20,6 @@ $(document).ready(function(){
 
     //support window resizing for elements involved in jQuery animations
     window.onresize = function() {
-        var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
         var margLeft = 250 + 20;
         var smallerWidth = (window.innerWidth - 250) - 40
