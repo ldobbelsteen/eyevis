@@ -2,7 +2,7 @@
 
 var filteredData, densityData;
 var img, overlay, points, gradient, svgImg;
-var imageH, imageW, x, y, colorDomain;
+var imageH, imageW, containerW, containerH, x, y, colorDomain;
 var svg, axes, zoomable, topInfo;
 var xAxis, xAxisT, yAxis, yAxisL;
 const margin = {top: 35, left: 50, right: 10, bottom: 10}
@@ -144,7 +144,7 @@ function overlayData() {
 
     var densScale = d3.scaleLinear() 
                 .domain([minMax[0], minMax[1]])
-                .range([0,(imageW*0.7)])
+                .range([0,(containerW*0.7)])
     
     topInfo.selectAll("rect").remove()
     topInfo.selectAll("text").remove()
@@ -154,26 +154,26 @@ function overlayData() {
            .attr("x", 0)
            .attr("y", 0)
            .attr("height", 75)
-           .attr("width", imageW)
+           .attr("width", containerW)
            .attr("fill", "black")
     
     topInfo.append("rect")
            .attr('fill', "url(#svgGradient4)")
            .attr('stroke', 'white')
-           .attr('x', (imageW * 0.15))
+           .attr('x', (containerW * 0.15))
            .attr('y', 25)
-           .attr('width', (imageW * 0.7))
+           .attr('width', (containerW * 0.7))
            .attr('height', 20);
 
     topInfo.append("text")
-           .attr("x", imageW*0.5)
+           .attr("x", containerW*0.5)
            .attr("y", 18)
            .style('fill', 'white')
            .style("text-anchor", "middle")
            .text("Density scale");
 
     topInfo.append("g")
-           .attr("transform", "translate("+ (imageW*0.15) +","+ 50 +")")
+           .attr("transform", "translate("+ (containerW*0.15) +","+ 50 +")")
            .attr("class", "axis")
            .attr("color", "white")
            .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")))
@@ -402,12 +402,12 @@ export function visualize() {
         imageH = originalH * ratio;
 
         // update container size
-        var containerW = imageW + margin.right + margin.left;
-        var containerH = imageH + margin.top + margin.bottom;
+        containerW = imageW + margin.right + margin.left;
+        containerH = imageH + margin.top + margin.bottom;
 
         topInfo = d3.select("#vis4")
                         .append("svg")
-                        .attr("viewBox", "0 0 " + imageW + " "+ 75)
+                        .attr("viewBox", "0 0 " + containerW + " "+ 75)
                         .append("g")
 
         svg = d3.select("#vis4")
@@ -453,6 +453,20 @@ export function visualize() {
             .attr("y", (-margin.top))
             .attr("width", containerW)
             .attr("height", margin.top)
+            .attr("fill", "#d9edee")
+        
+        axes.append("rect")
+            .attr("x", (-margin.left))
+            .attr("y", (imageH))
+            .attr("width", containerW)
+            .attr("height", margin.bottom)
+            .attr("fill", "#d9edee")
+
+        axes.append("rect")
+            .attr("x", (imageW))
+            .attr("y", (-margin.top))
+            .attr("width", margin.right)
+            .attr("height", containerH)
             .attr("fill", "#d9edee")
 
         axes.append("rect")

@@ -26,7 +26,7 @@ header {
     height: 90px;
     align-items: center;
     justify-content: space-around;
-    border: 2px solid black;
+    border: 1px solid black;
     margin:auto;
     margin-top: 0;
 }
@@ -130,15 +130,15 @@ button:focus {
 
 #about {
     background-color: #d9edee;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 4px;
     text-align: center;
-    padding: 5px 20px 10px 20px;
+    padding: 5px 20px 5px 20px;
 }
 
 #vis-descr {
     background-color: #d9edee;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 4px;
     text-align: justify;
     padding: 5px 20px 5px 20px;
@@ -177,7 +177,7 @@ button:focus {
 }
 
 #visualization {
-    border: 2px solid black;
+    border: 1px solid black;
     background-color: #d9edee;
     text-align: center;
     border-radius: 4px;
@@ -245,7 +245,7 @@ button:focus {
 }
 
 #vis1, #vis4 {
-    border: 1.4px solid black;
+    border: 1px solid black;
     border-radius: 4px;
     background-color: #d9edee;
 }
