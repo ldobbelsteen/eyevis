@@ -23,8 +23,8 @@ $(document).ready(function(){
     window.onresize = function() {
         var hide = $about.hasClass('hide')
         var moveRight = $main.hasClass('moveRight')
-        var margLeft = 250 + (window.innerWidth - 250) * 0.05
-        var smallerWidth = (window.innerWidth - 250) * 0.9
+        var margLeft = 250 + 20;
+        var smallerWidth = (window.innerWidth - 250) - 40
         $main.animate({width: moveRight ? smallerWidth : standardW}, { duration: 250, queue: false})
         $main.animate({marginLeft: moveRight ? margLeft : standardMarg}, { duration: 250, queue: false})
     }
