@@ -197,6 +197,7 @@ function zoomBehavior() {
         scanpathZoom[1].attr("transform", d3.event.transform);
         scanpathZoom[2].attr("transform", d3.event.transform);
         scanpathZoom[3].attr("transform", d3.event.transform);
+        visFour.rescaleAxis();
     }
 
     heatmapZoom[0].call(zoom);

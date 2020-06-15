@@ -3,6 +3,8 @@
 var filteredData, densityData;
 var svg, img, overlay, points, gradient, colorDomain, svgImg;
 var containerH, containerW, x, y, zoomable, topInfo;
+var xAxis, xAxisT, yAxis, yAxisL;
+var margin = {top: 30, left: 50, right: 10, bottom: 10}
 const container = $("#vis4");
 const $valueRad = $("#sliderRadius");
 const $valueBand =  $("#sliderBand");
@@ -25,6 +27,15 @@ function hideLoading() {
 
 export function svgHeatmap() {
     return [zoomable, svgImg, overlay, points];
+}
+
+export function rescaleAxis() {
+    var newX = d3.event.transform.rescaleX(x);
+    var newY = d3.event.transform.rescaleY(y);
+
+    // update axes with these new boundaries
+    xAxis.call(xAxisT.scale(newX));
+    yAxis.call(yAxisL.scale(newY));
 }
 
 export function initialize() {
@@ -301,8 +312,8 @@ function showOverlay() {
                       .attr("fill", "black")
                     d3.selectAll("circle.ptS" + x + "" + y)
                         .attr("stroke", "none")
-                   pop.transition().duration(200).style("opacity", 0);
-                   info.transition().duration(200).style("opacity", 0);
+                    pop.transition().duration(200).style("opacity", 0);
+                    info.transition().duration(200).style("opacity", 0);
                 });
 }
 
@@ -387,7 +398,7 @@ export function visualize() {
                 .append("svg")
                 .attr("id", "svg")
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + containerW + " "+ containerH)
+                .attr("viewBox", "0 0 " + (containerW + margin.left + margin.right)  + " "+ (containerH + margin.bottom + margin.top))
                 .append("g")
             
         initializeGradient();
@@ -400,12 +411,15 @@ export function visualize() {
         // y coordinates
         y = d3.scaleLinear()
                 .domain([ img.naturalHeight, 0 ])
-                .range([ containerH , 0 ])
+                .range([ (containerH) , 0 ])
+    
+            
 
         // deal with data needed for overlay
         overlayData();
 
         zoomable = svg.append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
          // insert overlay on svg
         overlay = zoomable.insert("g", "g")
@@ -413,12 +427,27 @@ export function visualize() {
         points = zoomable.append("g", "g")
         showOverlay();
 
+
         // add image
         svgImg = zoomable.insert("image", ":first-child")
                              .attr("width", containerW)
                              .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
+        xAxisT = d3.axisTop(x)
+        yAxisL = d3.axisLeft(y)
+
+        xAxis = svg.append("g")
+                        .attr("transform", "translate("+ margin.left + "," + (margin.top - 5) + ")")
+                        .attr("class", "x-axis")
+                        .call(xAxisT);
+         
+        yAxis = svg.append("g")
+                       .attr("transform", "translate(" + (margin.left - 5) + "," + (margin.top) + ")")
+                       .attr("class", "y-axis")
+                       .call(yAxisL);
+
     }
+    
 
     // alert if the image fails to load
     function loadFailure() {
