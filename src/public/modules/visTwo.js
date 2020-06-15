@@ -110,8 +110,6 @@ export function visualize() {
             aoi.color = colors(interval * index);
         });
 
-        console.log(AOIs);
-
         // Overlay the AOIs over the stimulus
         stimulus.selectAll("rect").remove();
         stimulus.selectAll("text").remove();
@@ -190,21 +188,31 @@ export function visualize() {
             }
         });
 
-        // Reset sankey diagram
-        sankeyDiagram.html("");
+        console.log(sankeyData);
 
-        // Set Sankey diagram properties
-        let diagram = d3.sankey()
-            .nodeWidth(36)
-            .nodePaddign(12);
+        let test = {"nodes": [], "links": []};
 
-        // Reset graph
-        let graph = {"nodes": [], "links": []};
+        AOIs.forEach((d) => {
+            test.nodes.push({name: d.id -1});
+        });
 
         sankeyData.forEach((d) => {
-            graph.nodes.push({"name": d.source});
-            graph.nodes.push({"name": d.target});
-            graph.links.push({
+            test.links.push({
+                "source": d.source - 1,
+                "target": d.target - 1,
+                "value": d.value
+            });
+        });
+
+        console.log(test);
+
+        // Reset graph
+        let data = {"nodes": [], "links": []};
+
+        sankeyData.forEach((d) => {
+            data.nodes.push({"name": d.source});
+            data.nodes.push({"name": d.target});
+            data.links.push({
                 "source": d.source,
                 "target": d.target,
                 "value": +d.value
@@ -212,29 +220,30 @@ export function visualize() {
         });
 
         // Set the graph nodes and links good according to the properties the diagram will take
-        graph.nodes = d3.keys(d3.nest().key((d) => {return d.name;}).object(graph.nodes));
+        data.nodes = d3.keys(d3.nest().key((d) => {return d.name;}).object(data.nodes));
 
-        console.log(graph.nodes);
-
-        graph.links.forEach((d, i) => {
-            console.log(d);
-            graph.links[i].source = graph.nodes.indexOf(String(graph.links[i].source));
-            graph.links[i].target = graph.nodes.indexOf(String(graph.links[i].target));
+        data.links.forEach((d, i) => {
+            data.links[i].source = data.nodes.indexOf(String(data.links[i].source));
+            data.links[i].target = data.nodes.indexOf(String(data.links[i].target));
         });
 
-        graph.nodes.forEach((d, i) => {
-            graph.nodes[i] = {"name": d};
+        data.nodes.forEach((d, i) => {
+            data.nodes[i] = {"name": d};
         });
+
+        // Reset sankey diagram
+        sankeyDiagram.html("");
+
+        // Set Sankey diagram properties
+        let sankey = d3.sankey()
+            .nodeWidth(36)
+            .nodePadding(12);
+
+        let graph = sankey(test);
 
         console.log(graph);
 
-        diagram.update(graph);
-
-
-
-        // let diagram = sankey(graph);
-
-        let path = sankey.links();
+        let path = graph.links();
 
         console.log(path);
 
@@ -245,7 +254,7 @@ export function visualize() {
                 .enter()
                 .append("path")
                 .attr("class", "link")
-                .attr("d", sankey.link() )
+                .attr("d", graph.links )
                 .style("stroke-width", function(d) { return Math.max(1, d.dy); })
                 .sort(function(a, b) { return b.dy - a.dy; });
 
@@ -259,7 +268,7 @@ export function visualize() {
 
         node.append("rect")
             .attr("height", (d) => {return d.dy;})
-            .attr("width", sankey.nodeWidth)
+            .attr("width", graph.nodeWidth)
             //.style("fill", (d) => { d.color = color(d.name.replace(/ .*/, "")); return d.color; })
             .style("stroke",(d) => {return d3.rgb(d.color).darker(2);});
     }
