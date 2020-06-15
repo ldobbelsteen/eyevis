@@ -11,12 +11,15 @@ var colorHSL = ["207", "44", "49"]; //hsl is presed to steelblue
 
 var img, xOffset, yOffset, svg, info;
 var points, lines;
-var topContainer, containerH, containerW, gradient;
+var topContainer, containerH, containerW, gradient, imageH, imageW, imgSvg;
 var startColor, endColor;
+var zoomObjects;
 
+//variables used to control the coordiante axes
 var xScaleReference, yScaleReference;
 var xAxis, yAxis;
 var xAxisPlacement, yAxisPlacement;
+var margin = { top: 35, left: 50, right: 10, bottom: 10 };
 
 //loading animation functions
 function showLoading() {
@@ -26,8 +29,15 @@ function showLoading() {
     });
 }
 
+export function rescaleAxis() {
+    let newX = d3.event.transform.rescaleX(xScaleReference);
+    let newY = d3.event.transform.rescaleY(yScaleReference);
+    xAxis.call(xAxisPlacement.scale(newX));
+    yAxis.call(yAxisPlacement.scale(newY));
+}
+
 export function svgScanpath() {
-    return [svg, svg.selectAll(".lines"), svg.selectAll(".points"), svg.selectAll("image")];
+    return [zoomObjects, lines, points, imgSvg];
 }
 
 function initializeGradient() {
@@ -233,8 +243,11 @@ export function visualize() {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
         //image size variables
         var ratio = $("#main").width() / 1.5 / this.width;
-        containerW = $("#main").width() / 1.5;
-        containerH = this.height * ratio;
+        imageW = $("#main").width() / 1.5;
+        imageH = this.height * ratio;
+
+        containerH = imageH + margin.top + margin.bottom;
+        containerW = imageW + margin.left + margin.right;
 
         //CREATES CONTAINER TO SHOW GRADIENT SCALE
         topContainer = d3
@@ -244,7 +257,7 @@ export function visualize() {
 
         topContainer
             .append("text")
-            .attr("x", containerW * 0.5)
+            .attr("x", imageW * 0.5)
             .attr("y", 18)
             .style("text-anchor", "middle")
             .text("Luminescence gradient");
@@ -257,11 +270,11 @@ export function visualize() {
             .attr("viewBox", "0 0 " + containerW + " " + containerH)
             .append("g");
 
-        // x coordinates that will be offset when image is sacled to fit screen
-        xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, containerW]);
+        // x coordinates that will be offset when image is scaled to fit screen
+        xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, imageW]);
 
         // y coordinates that will be offset when image is scaled to fit screen
-        yOffset = d3.scaleLinear().domain([img.naturalHeight, 0]).range([containerH, 0]);
+        yOffset = d3.scaleLinear().domain([img.naturalHeight, 0]).range([imageH, 0]);
 
         console.log("DATA GIVEN IS: ");
         console.log(filteredData);
@@ -278,66 +291,49 @@ export function visualize() {
         var maxY = this.height;
         console.log(`Maximum y point is: ${maxY}`);
 
+        // create separate g for axes
+        let axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
         // Scaling
-        var xScale = d3
-            .scaleLinear()
-            .domain([minX, maxX])
-            .range([40, containerW - 40]);
+        var xScale = d3.scaleLinear().domain([minX, maxX]).range([minX, imageW]);
 
         xScaleReference = xScale.copy();
 
-        var yScale = d3
-            .scaleLinear()
-            .domain([maxY, minY])
-            .range([containerH - 40, 40]);
-
-        // var yAxisScale = d3
-        //     .scaleLinear()
-        //     .domain([0,  maxY])
-        //     .range([containerH - 40, 40]);
+        var yScale = d3.scaleLinear().domain([maxY, minY]).range([imageH, minY]);
 
         yScaleReference = yScale.copy();
 
         // Adding x-axis
         xAxisPlacement = d3.axisTop(xScale);
-        xAxis = svg
+        xAxis = axes
             .append("g")
             .attr("class", "x-axis")
-            .attr("transform", "translate(-5," + 40 + ")")
+            .attr("transform", "translate(0," + -5 + ")")
             .call(xAxisPlacement);
 
         // Adding left y-axis
         yAxisPlacement = d3.axisLeft(yScale);
-        yAxis = svg.append("g").attr("class", "y-axis").attr("transform", "translate(35, 10)").call(yAxisPlacement);
+        yAxis = axes
+            .append("g")
+            .attr("class", "y-axis")
+            .attr("transform", "translate(" + -5 + ", 0)")
+            .call(yAxisPlacement);
 
-        const zoom = d3
-            .zoom()
-            //.scaleExtent([1/4, 9])
-            .on("zoom", function () {
-                console.log("BANANA");
-                var newX = d3.event.transform.rescaleX(xScaleReference);
-                var newY = d3.event.transform.rescaleY(yScaleReference);
+        zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-                // update axes with these new boundaries
-                xAxis.call(xAxisPlacement.scale(newX));
-                yAxisL.call(yAxisPlacementL.scale(newY));
-                yAxisR.call(yAxisPlacementR.scale(newY));
+        lines = zoomObjects.insert("g"); //inside this d3 object the lines will be drawn
 
-                // path.attr("transform", d3.event.transform);
-                // clippath.attr("transform", d3.event.transform);
-            });
-
-        svg.call(zoom);
-
-        points = svg.insert("g", "g"); //inside this d3 object the points will be drawn
-
-        lines = svg.insert("g", "g"); //inside this d3 object the lines will be drawn
+        points = zoomObjects.insert("g"); //inside this d3 object the points will be drawn
 
         drawScanpath();
 
         //first image is removed and then redrawn, so prevent overlapping images
         svg.selectAll(".img").remove();
-        svg.insert("image", ":first-child").attr("width", containerW).attr("xlink:href", `/stimuli/${window.stimulus}`).attr("class", "img");
+        imgSvg = zoomObjects
+            .insert("image", ":first-child")
+            .attr("width", imageW)
+            .attr("xlink:href", `/stimuli/${window.stimulus}`)
+            .attr("class", "img");
     };
     img.src = `/stimuli/${window.stimulus}`;
 }
