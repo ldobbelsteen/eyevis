@@ -14,8 +14,8 @@ function filterData(data, filter) {
 export function visualize() {
 
     // Find input fields and visualization container
-    const gridSizeInputX = $("#vis-five input:eq(0)");
-    const gridSizeInputY = $("#vis-five input:eq(1)");
+    const gridSizeInputX = $("#aoi input:eq(0)");
+    const gridSizeInputY = $("#aoi input:eq(1)");
     const container = d3.select("#visualization");
 
     // Empty the container
