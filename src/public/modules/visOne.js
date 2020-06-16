@@ -291,9 +291,45 @@ export function visualize() {
         var maxY = this.height;
         console.log(`Maximum y point is: ${maxY}`);
 
+        
+        zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        lines = zoomObjects.insert("g"); //inside this d3 object the lines will be drawn
+
+        points = zoomObjects.insert("g"); //inside this d3 object the points will be drawn
+        
         // create separate g for axes
         let axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+        axes.append("rect")
+            .attr("x", (-margin.left))
+            .attr("y", (-margin.top))
+            .attr("width", containerW)
+            .attr("height", margin.top)
+            .attr("fill", "#d9edee")
+        
+        axes.append("rect")
+            .attr("x", (-margin.left))
+            .attr("y", (imageH))
+            .attr("width", containerW)
+            .attr("height", margin.bottom)
+            .attr("fill", "#d9edee")
+
+        axes.append("rect")
+            .attr("x", (imageW))
+            .attr("y", (-margin.top))
+            .attr("width", margin.right)
+            .attr("height", containerH)
+            .attr("fill", "#d9edee")
+
+        axes.append("rect")
+            .attr("x", (-margin.left))
+            .attr("y", (-margin.top))
+            .attr("width", margin.left)
+            .attr("height", containerH)
+            .attr("fill", "#d9edee")
+            
         // Scaling
         var xScale = d3.scaleLinear().domain([minX, maxX]).range([minX, imageW]);
 
@@ -318,12 +354,6 @@ export function visualize() {
             .attr("class", "y-axis")
             .attr("transform", "translate(" + -5 + ", 0)")
             .call(yAxisPlacement);
-
-        zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        lines = zoomObjects.insert("g"); //inside this d3 object the lines will be drawn
-
-        points = zoomObjects.insert("g"); //inside this d3 object the points will be drawn
 
         drawScanpath();
 
