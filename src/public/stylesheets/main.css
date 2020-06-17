@@ -242,6 +242,7 @@ button:focus {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: auto auto;
+    grid: auto-flow dense / 1fr 1fr;
 }
 
 #vis1, #vis4 {
