@@ -307,8 +307,8 @@ function showOverlay() {
                         d.FixationIndex
                     );
                     var coordsS = d3.selectAll("circle.ptS" + x + "" + y).node().getBoundingClientRect()
-                    info.style("left", ( coordsS.left + 10) + "px");
-                    info.style("top", coordsS.top + window.scrollY - 60 + "px");
+                    info.style("left", ( (coordsS.left + coordsS.right)/2 + 10) + "px");
+                    info.style("top", (coordsS.top + coordsS.bottom)/2 + window.scrollY - 40 + "px");
                 })
                 .on("mouseout", function (d) {
                     var x = d.MappedFixationPointX;
