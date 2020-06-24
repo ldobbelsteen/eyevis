@@ -1,8 +1,6 @@
 // Milou Henzen (1409107) - ThemeRiver
 // Big thanks to Eric for writing the part that calculated the number of fixations within each AOI
 
-const $valueInterval = $("#sliderInterval");
-
 // Compare function to sort chronologically
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -20,12 +18,17 @@ function filterData(data, filter) {
     });
 }
 
+/*
 export function initialize() {}
+*/
 
 export function visualize() {
     // Find input fields and visualization container
-    const gridSizeInputX = $("#aoi input:eq(0)");
-    const gridSizeInputY = $("#aoi input:eq(1)");
+    const gridSizeInputX = $("#vis-aoi input:eq(0)");
+    const gridSizeInputY = $("#vis-aoi input:eq(1)");
+
+    const colorInput = $("#colorType");
+    const $valueInterval = $("#sliderInterval");
 
     // Find the offset option
     const offsetOption = $("#offset-option");
@@ -36,7 +39,7 @@ export function visualize() {
     });
 
     // Load stimulus and make it change when something changes
-    const container = d3.select("#visualization");
+    const container = d3.select("#vis3");
     container.html("");
     let width;
     let height;
@@ -54,6 +57,8 @@ export function visualize() {
         gridSizeInputX.on("change", themeRiver);
         gridSizeInputY.on("change", themeRiver);
         offsetOption.on("change", themeRiver);
+        colorInput.on("change", themeRiver);
+        $valueInterval.on("change", themeRiver);
         themeRiver();
     };
     image.src = stimulusLink;
@@ -61,7 +66,7 @@ export function visualize() {
     function themeRiver() {
         // Create the svg
         let svg = d3
-            .select("#visualization")
+            .select("#vis3")
             .html("")
             .append("svg")
             .attr("viewBox", "0 0 " + width + " " + height)
@@ -89,9 +94,31 @@ export function visualize() {
                     y2: AOIsizeY * (y + 1),
                     gridX: x,
                     gridY: y,
+                    name: "aoi_" + (x+1) + "_" + (y+1)
                 });
             }
         }
+
+        // Assign colors to each AOI
+        let colors;
+        let selectedColorset = colorInput.val();
+        switch(selectedColorset) {
+            case "rainbow":
+                colors = d3.interpolateTurbo;
+                break;
+            case "blue":
+                colors = d3.interpolateBlues;
+                break;
+            case "cool":
+                colors = d3.interpolateCool;
+                break;
+            default:
+                console.error("Color not found!");
+        }
+        let interval = 1 / (aois.length - 1);
+        aois.forEach((aoi, index) => {
+            aoi.color = colors(interval * index);
+        });
 
         // Making array with the data
         let aoiInfo = [];
@@ -117,7 +144,7 @@ export function visualize() {
             var timestampInfo = {};
             aois.forEach((aoi) => {
                 timestampInfo.x = parseInt(timestamp[i - 1]);
-                let name = "aoi_" + aoi.gridX + "_" + aoi.gridY;
+                let name = "aoi_" + (aoi.gridX+1) + "_" + (aoi.gridY+1);
                 let fixCount = 0;
                 data.forEach((fix) => {
                     let x = fix.MappedFixationPointX;
@@ -130,18 +157,13 @@ export function visualize() {
             });
             aoiInfo.push(timestampInfo);
         }
-        console.log(aoiInfo);
+        
+        // Removing empty last element from array
+        aoiInfo.pop();
 
         //Getting all the names of the aois to use as keys
         var keys = Object.keys(aoiInfo[0]);
         keys.shift();
-
-        // Color gradient
-        let colorScale = d3.scaleOrdinal([
-            "#610057","#6A006A", "#590073","#18007B", "#000084","#002B8D","#007D96","#009E9E","#00A77B","#00B02D","#00B900","#44C200","#9DCA00",
-            "#D3D300","#DC9800","#E54900","#ED0309","#F60961","#FF10B6","#FF136B","#FF171D","#FF661E","#FFBD28","#FFFF32","#D3FF3C","#87FF46",
-            "#51FF51","#5BFF85","#65FFD6","#6FFFFF","#79E9FF","#83A9FF","#8D8DFF","#AB97FF","#EAA1FF","#FFABFF","#FFB5F7",
-        ]);
 
         //Creating stack
         if (offset == "d3.stackOffsetSilhouette") {
@@ -213,15 +235,16 @@ export function visualize() {
 
         // Making the graph
         var clippath = svg
-            .selectAll("g")
-            .data(layers)
-            .enter()
-            .append("g")
-            .attr("clip-path", "url(#clip)")
-            .attr("fill", function (d) {
-                return colorScale(d.key);
-            });
-
+        .selectAll("g")
+        .data(layers)
+        .enter()
+        .append("g")
+        .attr("clip-path", "url(#clip)")
+        .attr("fill", function (d) {
+            let aoi = aois.find(x => x.name === d.key)
+            return aoi.color
+        });
+    
         var path = svg
             .selectAll("path")
             .data(layers)
@@ -229,8 +252,10 @@ export function visualize() {
             .append("path")
             .attr("d", area)
             .attr("fill", function (d) {
-                return colorScale(d.key);
+                let aoi = aois.find(x => x.name === d.key)
+                return aoi.color
             });
+
 
         // Adding the tooltip when hovered over
         // Also changing opacity of other areas
@@ -283,7 +308,6 @@ export function visualize() {
             .call(yAxisPlacementR);
 
         // Allowing zooming in on graph
-        // Axes are still weird
         const zoom = d3
             .zoom()
             //.scaleExtent([1/4, 9])

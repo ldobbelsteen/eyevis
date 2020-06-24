@@ -14,10 +14,10 @@ function filterData(data, filter) {
 export function visualize() {
 
     // Find input fields and visualization container
-    const gridSizeInputX = $("#aoi input:eq(0)");
-    const gridSizeInputY = $("#aoi input:eq(1)");
+    const gridSizeInputX = $("#vis-aoi input:eq(0)");
+    const gridSizeInputY = $("#vis-aoi input:eq(1)");
     const colorInput = $("#colorType");
-    const container = d3.select("#visualization");
+    const container = d3.select("#vis5");
 
     // Empty the container
     container.html("");
@@ -44,10 +44,8 @@ export function visualize() {
     image.onload = () => {
         stimulusWidth = image.naturalWidth;
         stimulusHeight = image.naturalHeight;
-        let img = stimulus.append("image")
-            .attr("width", containerWidth)
-            .attr("xlink:href", stimulusLink)
-        stimulus.attr("viewBox", [0, 0, containerWidth, img.node().getBBox().height]);
+        
+        stimulus.attr("viewBox", [0, 0, containerWidth, timelineHeight]);
         gridSizeInputX.on("change", updateTimelines);
         gridSizeInputY.on("change", updateTimelines);
         colorInput.on("change", updateTimelines);
@@ -103,35 +101,6 @@ export function visualize() {
             aoi.color = colors(interval * index);
         });
 
-        // Overlay the AOIs over the stimulus
-        stimulus.selectAll("rect").remove()
-        let viewBox = stimulus.attr("viewBox").split(",");
-        let aoiScaleX = viewBox[2] / stimulusWidth;
-        let aoiScaleY = viewBox[3] / stimulusHeight;
-        AOIs.forEach(aoi => {
-            stimulus.append("rect")
-                .attr("x", aoi.x1 * aoiScaleX)
-                .attr("y", aoi.y1 * aoiScaleY)
-                .attr("width", (aoi.x2 - aoi.x1) * aoiScaleX)
-                .attr("height", (aoi.y2 - aoi.y1) * aoiScaleY)
-                .attr("fill", aoi.color)
-                .attr("opacity", 0.7)
-                .on("mouseover", () => {
-                    info.transition().duration(200).style("opacity", 1)
-                    info.html(
-                        "AOI coords: " + (aoi.x + 1) + "," + (aoi.y + 1)
-                    )
-                    info.style("left", d3.event.pageX + 8 + "px")
-                    info.style("top", d3.event.pageY - 48 + "px")
-                })
-                .on("mousemove", () => {
-                    info.style("left", d3.event.pageX + 8 + "px")
-                    info.style("top", d3.event.pageY - 48 + "px")
-                })
-                .on("mouseout", () => {
-                    info.transition().duration(200).style("opacity", 0)
-                })
-        });
 
         // Create array of gazes by cleaning up the data for each user and adding it
         let gazes = [];

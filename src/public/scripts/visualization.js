@@ -1,6 +1,7 @@
 import * as visOne from "/modules/visOne.js";
 import * as visTwo from "/modules/visTwo.js";
 import * as visThree from "/modules/visThree.js";
+import * as visAOI from "/modules/visAOI.js";
 import * as visFour from "/modules/visFour.js";
 import * as visFive from "/modules/visFive.js";
 
@@ -68,7 +69,7 @@ function updateUsers() {
             usersMenu.append($("<option></option>").text(user));
         });
 
-    const visButtons = [$("#init-vis1"), $("#init-vis2"), $("#init-vis3"), $("#init-vis5")];
+    const visButtons = [$("#init-vis1"), $("#init-vis2"), $("#init-vis3"), $("#init-vis5"), $("#init-aoi")];
 
     visButtons.forEach((d) => {
         d.prop("disabled", false);
@@ -106,17 +107,14 @@ function redraw(change) {
     if (window.visualization === "two") {
         visTwo.initialize();
         visTwo.visualize();
-    } else if (window.visualization === "three") {
-        visThree.initialize();
-        visThree.visualize();
-    } else if (window.visualization === "five") {
-        visFive.visualize();
     } else {
         if (change === "user") {
             visFour.initialize();
             visFour.newUser();
             visOne.initialize();
             visOne.userChange();
+            visThree.visualize();
+            visFive.visualize();
         } else {
             if (window.visualization == "linked") showLoading();
             visFour.initialize();
@@ -124,6 +122,9 @@ function redraw(change) {
             visOne.initialize();
             visOne.visualize();
             setTimeout(hideLoading, 10);
+            visAOI.visualize();
+            visThree.visualize();
+            visFive.visualize();
         }
         setTimeout(zoomBehavior, 50);
     }
@@ -134,19 +135,6 @@ $("#init-vis2").on("click", () => {
     container.empty();
     visTwo.initialize();
     visTwo.visualize();
-});
-
-$("#init-vis3").on("click", () => {
-    window.visualization = "three";
-    container.empty();
-    visThree.initialize();
-    visThree.visualize();
-});
-
-$("#init-vis5").on("click", () => {
-    window.visualization = "five";
-    container.empty();
-    visFive.visualize();
 });
 
 // show the loading overlay
@@ -171,11 +159,11 @@ $("#initialize").on("click", () => {
     visOne.visualize();
     // visTwo.initialize();
     // visTwo.visualize();
-    // visThree.initialize();
-    // visThree.visualize();
+    visThree.visualize();
     visFour.initialize();
     visFour.visualize();
-    // visFive.visualize();
+    visFive.visualize();
+    visAOI.visualize();
 
     setTimeout(zoomBehavior, 10);
     setTimeout(hideLoading, 10);

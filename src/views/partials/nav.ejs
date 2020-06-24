@@ -124,12 +124,12 @@
                         </div>
                     </div>
                 </li>
-                <li id="aoi">
+                <li id="vis-aoi">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-aoi">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
-                            class="menuText">AOI grid</span>
+                            class="menuText">AOI-based visualizations</span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-aoi">
                         <span class="smallMargRight smallMargTop">Grid size:</span><input
@@ -143,38 +143,8 @@
                                 <option value="blue">Color-blind friendly (blue)</option>
                             </select> <br>
                         </div>
-                    </div>
-                </li>
-                <li id="vis-two">
-                    <button type="button"
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
-                        data-toggle="collapse" data-target="#navbar-collapse-vis2">
-                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
-                            class="menuText">Sankey diagram</span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
                         <div class="smallMargTop smallMargBottom">
-                            <button type="button" class="btn btn-default init" id="init-vis2">Initialize</button>
-                            <br>
-                            <span class="smallMargRight smallMargTop">Grid size:</span><input
-                                class="smallMargRight smallMargTop" type="number" min="2" max="10" value="3"><span
-                                class="smallMargRight">x</span><input type="number" min="2" max="10" value="3"><br>
-                        </div>
-                    </div>
-                </li>
-                <li id="vis-three">
-                    <button type="button"
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
-                        data-toggle="collapse" data-target="#navbar-collapse-vis3">
-                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
-                            class="menuText"> ThemeRiver </span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-vis3">
-                        <div class="smallMargTop smallMargBottom">
-                            <button type="button" class="btn btn-default init" id="init-vis3">Initialize</button>
-                            <br>
-                            <!--<span class="smallMargRight smallMargTop">Grid size:</span><input class="smallMargTop smallMargRight" type="number" min="2" max="6" value="3" ><span class="smallMargRight">x</span><input
-                                type="number" min="2" max="6" value="3"><br>-->
+                            <span class="smallMargTop"><b>Themeriver:</b></span>
                             <br>
                             <span class="smallMargTop">Time interval length</span>
                             <div class="d-flex justify-content-center my-4 w-100">
@@ -193,18 +163,22 @@
                             <span class="text-center">For normalized, it is recommended to choose a time interval length
                                 such that there are no empty time intervals</span> <br>
                         </div>
-                    </div>
+                    </div> 
                 </li>
-                <li id="vis-five">
+                <li id="vis-two">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
-                        data-toggle="collapse" data-target="#navbar-collapse-vis5">
+                        data-toggle="collapse" data-target="#navbar-collapse-vis2">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
-                            class="menuText">Scarf plot</span>
+                            class="menuText">Sankey diagram</span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-vis5">
+                    <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
                         <div class="smallMargTop smallMargBottom">
-                            <button type="button" class="btn btn-default init" id="init-vis5">Initialize</button>
+                            <button type="button" class="btn btn-default init" id="init-vis2">Initialize</button>
+                            <br>
+                            <span class="smallMargRight smallMargTop">Grid size:</span><input
+                                class="smallMargRight smallMargTop" type="number" min="2" max="10" value="3"><span
+                                class="smallMargRight">x</span><input type="number" min="2" max="10" value="3"><br>
                         </div>
                     </div>
                 </li>
