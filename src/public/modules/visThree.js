@@ -254,6 +254,18 @@ export function visualize() {
             .attr("fill", function (d) {
                 let aoi = aois.find(x => x.name === d.key)
                 return aoi.color
+            })
+            .attr("class", (d) => {
+                let aoi = aois.find(x => x.name === d.key)
+                var colorcode = aoi.color
+                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+                var colornumber ="";
+                for (var i=0; i < colorcode.length; i++) {
+                    if (numbers.includes(colorcode.charAt(i))) {
+                        colornumber = colornumber + colorcode.charAt(i)
+                    }
+                }
+                return "river rgb" + colornumber;
             });
 
 
@@ -264,11 +276,28 @@ export function visualize() {
             .on("mouseover", function (d, i) {
                 svg.selectAll("path").attr("opacity", function (d, j) {
                     if (j != i) {
-                        return 0.5;
+                        return 0.2;
                     } else {
                         return 1;
                     }
                 });
+                let aoi = aois.find(x => x.name === d.key)
+                var colorcode = aoi.color
+                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+                var colornumber = "";
+                for (var i=0; i < colorcode.length; i++) {
+                    if (numbers.includes(colorcode.charAt(i))) {
+                        console.log(colorcode.charAt(i))
+                        colornumber = colornumber + colorcode.charAt(i)
+                    }
+                }
+                d3.selectAll(".scarf").attr("opacity", 0.2)
+                d3.selectAll("rect.rgb" + colornumber).attr("opacity", 1)
+                d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
+                    if (colornumber == "352327") return "white"
+                    else return "black"
+                })
+                .attr("stroke-width", "8px")
             })
             .on("mousemove", function (d) {
                 var mouseX = d3.mouse(this)[0];
@@ -283,8 +312,10 @@ export function visualize() {
                 info.style("top", d3.event.pageY - 48 + "px");
             })
             .on("mouseout", () => {
+                d3.selectAll(".scarf").attr("opacity", 1)
                 info.transition().duration(200).style("opacity", 0);
                 svg.selectAll("path").attr("opacity", 1);
+                d3.selectAll(".aoi").attr("stroke", "null");
             });
 
         // Adding x-axis

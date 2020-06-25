@@ -174,6 +174,19 @@ export function visualize() {
                     return xScale(gaze.duration);
                 })
                 .attr("height", timelineHeight)
+                .attr("class", gaze => {
+                    if (gaze.color != undefined) {
+                        var colorcode = gaze.color
+                        var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+                        var colornumber = "";
+                        for (var i=0; i < colorcode.length; i++) {
+                            if (numbers.includes(colorcode.charAt(i))) {
+                                colornumber = colornumber + colorcode.charAt(i)
+                            }
+                        }
+                        return "scarf rgb" + colornumber;
+                    }   
+                })
                 .on("mouseover", gaze => {
                     info.transition().duration(200).style("opacity", 1)
                     info.html(
@@ -184,6 +197,25 @@ export function visualize() {
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
+                    var colorcode = gaze.color
+                    if (colorcode != undefined) {
+                        var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+                        var colornumber = "";
+                        for (var i=0; i < colorcode.length; i++) {
+                            if (numbers.includes(colorcode.charAt(i))) {
+                                colornumber = colornumber + colorcode.charAt(i)
+                            }
+                        }
+                        d3.selectAll(".scarf").attr("opacity", 0.2)
+                        d3.selectAll(".river").attr("opacity", 0.2)
+                        d3.selectAll(".rgb" + colornumber).attr("opacity", 1)
+                        d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
+                            if (colornumber == "352327") return "white"
+                            else return "black"
+                        })
+                        .attr("stroke-width", "8px")
+                    }
+                    
                 })
                 .on("mousemove", () => {
                     info.style("left", d3.event.pageX + 8 + "px")
@@ -191,6 +223,9 @@ export function visualize() {
                 })
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
+                    d3.selectAll(".scarf").attr("opacity",1)
+                    d3.selectAll(".river").attr("opacity",1)
+                    d3.selectAll(".aoi").attr("stroke", "null")
                 })
 
         // Add y-axis for users

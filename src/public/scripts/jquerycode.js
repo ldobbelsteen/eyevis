@@ -96,7 +96,7 @@ $(document).ready(function(){
 
     const $home = $("#retHome"); // button to return to homepage
     $("#visualization").hide();
-    $("#visualizationGrid").hide(); // visualization div starts out hidden
+    $(".allVis").hide(); // visualization div starts out hidden
     $("#export").hide(); // same for save vis button
     
     // when you go back to home, show section to upload and vis descriptions
@@ -121,7 +121,7 @@ $(document).ready(function(){
     vis.forEach( (d) => {
         d.prop("disabled", true)
         d.on("click", () => {
-            $("#visualizationGrid").hide();
+            $(".allVis").hide();
             $("#vis-descr").hide();
             $("#about").hide();
             $("#visualization").show();
@@ -134,7 +134,7 @@ $(document).ready(function(){
         $("#vis-descr").hide();
         $("#about").hide();
         $("#visualization").hide();
-        $("#visualizationGrid").show();
+        $(".allVis").show();
         $("#export").show();
     });
 

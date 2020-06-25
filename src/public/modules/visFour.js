@@ -307,7 +307,7 @@ function showOverlay() {
                         d.FixationIndex
                     );
                     var coordsS = d3.selectAll("circle.ptS" + x + "" + y).node().getBoundingClientRect()
-                    info.style("left", ( (coordsS.left + coordsS.right)/2 + 10) + "px");
+                    info.style("left", ( (coordsS.left + coordsS.right)/2 + 20) + "px");
                     info.style("top", (coordsS.top + coordsS.bottom)/2 + window.scrollY - 40 + "px");
                 })
                 .on("mouseout", function (d) {
@@ -494,6 +494,7 @@ export function visualize() {
         // add image to zoomable elements
         svgImg = zoomable.insert("image", ":first-child")
                          .attr("width", imageW)
+                         .attr("height", imageH)
                          .attr("xlink:href", `/stimuli/${window.stimulus}`)
 
     }
