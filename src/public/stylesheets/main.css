@@ -45,6 +45,7 @@ main {
     max-width: 90vw;
     margin-left: 5vw;
     margin-top: 20px;
+    margin-bottom: 20px;
     text-align: center;
 }
 
@@ -143,6 +144,7 @@ button:focus {
     text-align: justify;
     padding: 5px 20px 5px 20px;
     margin-top: 20px;
+    height:auto;
 }
 
 #vis-descr > h3 {
@@ -243,6 +245,33 @@ button:focus {
     grid-gap: 10px;
     grid-template-columns: auto auto;
     grid: auto-flow dense / 1fr 1fr;
+}
+
+.descr-grid {
+    display: grid;
+    grid-template-columns: auto;
+    grid: auto-flow dense / 1fr;
+}
+
+.descr-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+    .descr-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+img.descr {
+    padding-right:10px;
+    width: 400px;
 }
 
 #vis1, #vis4, #vis3, #aoi, #vis5 {
