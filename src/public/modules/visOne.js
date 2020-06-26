@@ -161,11 +161,7 @@ function drawScanpath() {
         .attr("x", containerW * 0.15)
         .attr("y", 25)
         .attr("width", containerW * 0.7)
-<<<<<<< HEAD
         .attr("height", 20);
-=======
-        .attr("height", 25);
->>>>>>> master
 
     //function that draws the lines
     lines
