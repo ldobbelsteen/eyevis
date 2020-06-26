@@ -51,8 +51,8 @@ export function visualize() {
         stimulusWidth = image.naturalWidth;
         stimulusHeight = image.naturalHeight;
 
-        width = parseInt(container.style("width"));
-        height = 0.6 * width;
+        width = $("main").width();
+        height = 0.7 * width;
 
         gridSizeInputX.on("change", themeRiver);
         gridSizeInputY.on("change", themeRiver);
@@ -233,6 +233,9 @@ export function visualize() {
         // Tooltip
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
+        const margin = {top: 35, left: 35, right: 35, bottom: 35}
+
+
         // Making the graph
         var clippath = svg
         .selectAll("g")
@@ -268,6 +271,18 @@ export function visualize() {
                 return "river rgb" + colornumber;
             });
 
+     
+
+        function valueCalc(name, currentTime){
+            for (let i=0 ; i<aoiInfo.length ; i++ ){
+                    if (aoiInfo[i].x <= currentTime && currentTime < aoiInfo[i+1].x){
+                        var value =  aoiInfo[i][name];
+                    }
+            }
+            return value;
+        }
+
+
 
         // Adding the tooltip when hovered over
         // Also changing opacity of other areas
@@ -287,7 +302,6 @@ export function visualize() {
                 var colornumber = "";
                 for (var i=0; i < colorcode.length; i++) {
                     if (numbers.includes(colorcode.charAt(i))) {
-                        console.log(colorcode.charAt(i))
                         colornumber = colornumber + colorcode.charAt(i)
                     }
                 }
@@ -300,14 +314,17 @@ export function visualize() {
                 .attr("stroke-width", "8px")
             })
             .on("mousemove", function (d) {
-                var mouseX = d3.mouse(this)[0];
-                var invertedX = xScale.invert(mouseX);
-                info.transition().duration(200).style("opacity", 1);
-                info.html(
-                    "Area of interest: " + d.key + "<br>"
-                    +"Number of fixations: " + "sigh..." + "<br>"
-                    + "Timestamp: " + parseInt(invertedX) + "ms"
-                );
+                    var mouseX = d3.mouse(this)[0];
+                    var invertedX = xScale.invert(mouseX);
+                    var currentTime = parseInt(invertedX);
+                    var value = valueCalc(d.key, currentTime);
+
+                    info.transition().duration(200).style("opacity", 1);
+                    info.html(
+                        "Area of interest: " + d.key + "<br>"
+                        +"Number of fixations: " + value + "<br>"
+                        + "Timestamp: " + parseInt(invertedX) + " ms"
+                    );
                 info.style("left", d3.event.pageX + 8 + "px");
                 info.style("top", d3.event.pageY - 48 + "px");
             })
