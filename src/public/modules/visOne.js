@@ -161,7 +161,11 @@ function drawScanpath() {
         .attr("x", containerW * 0.15)
         .attr("y", 25)
         .attr("width", containerW * 0.7)
+<<<<<<< HEAD
         .attr("height", 20);
+=======
+        .attr("height", 25);
+>>>>>>> master
 
     //function that draws the lines
     lines
@@ -184,7 +188,7 @@ function drawScanpath() {
         .append("circle")
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
-        .attr("r", (row) => Math.log2(row.FixationDuration) * 5 - 20)
+        .attr("r", (row) => Math.log2(row.FixationDuration) * 4.5 - 20)
         .attr("class", function (d) {
             return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY;
         })
@@ -264,8 +268,8 @@ export function visualize() {
     img.onload = function () {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
         //image size variables
-        var ratio = $("#main").width() / 1.5 / this.width;
-        imageW = $("#main").width() / 1.5;
+        var ratio = 650 / this.width;
+        imageW = 650;
         imageH = this.height * ratio;
 
         containerH = imageH + margin.top + margin.bottom;

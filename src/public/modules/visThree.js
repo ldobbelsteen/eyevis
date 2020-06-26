@@ -18,19 +18,12 @@ function filterData(data, filter) {
     });
 }
 
-/*
-export function initialize() {}
-*/
-
 export function visualize() {
-    // Find input fields and visualization container
+    // Buttons
     const gridSizeInputX = $("#vis-aoi input:eq(0)");
     const gridSizeInputY = $("#vis-aoi input:eq(1)");
-
     const colorInput = $("#colorType");
     const $valueInterval = $("#sliderInterval");
-
-    // Find the offset option
     const offsetOption = $("#offset-option");
 
     // Filter dataset data by the current stimulus
@@ -72,11 +65,9 @@ export function visualize() {
             .attr("viewBox", "0 0 " + width + " " + height)
             .append("g");
 
-        // Get input values for the amount of horizontal and vertical AOIs
+        // Get input values for the amount of horizontal and vertical AOIs, and offset option
         let gridSizeX = gridSizeInputX.val();
         let gridSizeY = gridSizeInputY.val();
-
-        // this is either d3.stackOffsetSilhouette or d3.stackOffsetExpand
         let offset = $(offsetOption).val();
 
         // Get AOI sizes
@@ -197,26 +188,15 @@ export function visualize() {
         });
 
         // Scaling
-        var xScale = d3
-            .scaleLinear()
-            .domain([minX, maxX])
-            .range([40, width - 40]);
-
+        var xScale = d3.scaleLinear().domain([minX, maxX]).range([40, width - 40]);
         var xScaleReference = xScale.copy();
 
-        var yScale = d3
-            .scaleLinear()
-            .domain([minY, maxY])
-            .range([height - 40, 40]);
+        var yScale = d3.scaleLinear().domain([minY, maxY]).range([height - 40, 40]);
 
-        var yAxisScale = d3
-            .scaleLinear()
-            .domain([0, 2 * maxY])
-            .range([height - 40, 40]);
-
+        var yAxisScale = d3.scaleLinear().domain([0, 2 * maxY]).range([height - 40, 40]);
         var yScaleReference = yAxisScale.copy();
 
-        // Making it a filled in area instead of just lines
+        // Making it a filled in areas instead of just lines
         var area = d3
             .area()
             .curve(d3.curveCardinal)
@@ -232,9 +212,6 @@ export function visualize() {
 
         // Tooltip
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
-
-        const margin = {top: 35, left: 35, right: 35, bottom: 35}
-
 
         // Making the graph
         var clippath = svg
@@ -271,8 +248,7 @@ export function visualize() {
                 return "river rgb" + colornumber;
             });
 
-     
-
+        // Function to get the value corresponding to the aoi at a certain timestamp for the tooltip
         function valueCalc(name, currentTime){
             for (let i=0 ; i<aoiInfo.length ; i++ ){
                     if (aoiInfo[i].x <= currentTime && currentTime < aoiInfo[i+1].x){
@@ -282,10 +258,7 @@ export function visualize() {
             return value;
         }
 
-
-
-        // Adding the tooltip when hovered over
-        // Also changing opacity of other areas
+        // Hover interactions
         svg.selectAll("path")
             .attr("opacity", 1)
             .on("mouseover", function (d, i) {
@@ -335,30 +308,35 @@ export function visualize() {
                 d3.selectAll(".aoi").attr("stroke", "null");
             });
 
+
+
+         // create separate g for axes, filled with background colour (top, bottom, right, left)
+         let axes = svg.append("g").attr("transform", "translate(0,0)");
+
+         axes.append("rect").attr("x", "0").attr("y", "0").attr("width", width).attr("height", "40").attr("fill", "#d9edee");
+
+         axes.append("rect").attr("x", "0").attr("y", (height-40)).attr("width", width).attr("height", "40").attr("fill", "#d9edee");
+ 
+         axes.append("rect").attr("x", (width-40)).attr("y", "0").attr("width", "40").attr("height", height).attr("fill", "#d9edee");
+
+         axes.append("rect").attr("x", "0").attr("y", "0").attr("width", "40").attr("height", height).attr("fill", "#d9edee");
+
         // Adding x-axis
         var xAxisPlacement = d3.axisBottom(xScale);
-        var xAxis = svg
-            .append("g")
-            .attr("class", "x-axis")
-            .attr("transform", "translate(0," + (height - 40) + ")")
-            .call(xAxisPlacement);
+        var xAxis = axes.append("g").attr("class", "x-axis").attr("transform", "translate(0," + (height - 40) + ")").call(xAxisPlacement).style("font-size",17);
 
         // Adding left y-axis
         var yAxisPlacementL = d3.axisLeft(yAxisScale);
-        var yAxisL = svg.append("g").attr("class", "y-axis").attr("transform", "translate(40, 0)").call(yAxisPlacementL);
+        var yAxisL = axes.append("g").attr("class", "y-axis").attr("transform", "translate(40, 0)").call(yAxisPlacementL).style("font-size",17);
 
         // Adding right y-axis
         var yAxisPlacementR = d3.axisRight(yAxisScale);
-        var yAxisR = svg
-            .append("g")
-            .attr("class", "y-axis")
-            .attr("transform", "translate(" + (width - 40) + ", 0)")
-            .call(yAxisPlacementR);
+        var yAxisR = axes.append("g").attr("class", "y-axis").attr("transform", "translate(" + (width - 40) + ", 0)").call(yAxisPlacementR).style("font-size",17);
 
+        
         // Allowing zooming in on graph
         const zoom = d3
             .zoom()
-            //.scaleExtent([1/4, 9])
             .on("zoom", function () {
                 var newX = d3.event.transform.rescaleX(xScaleReference);
                 var newY = d3.event.transform.rescaleY(yScaleReference);

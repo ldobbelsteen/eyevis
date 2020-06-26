@@ -42,17 +42,19 @@
                             id="initialize">Initialize</button>
                     </div>
                 </li>
-                <li id="point-based">
+                <li id="zoom">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
-                        data-toggle="collapse" data-target="#navbar-collapse-point">
+                        data-toggle="collapse" data-target="#navbar-collapse-zoom">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
-                            class="menuText"> Point-based visualizations</span>
+                            class="menuText"> Zoom</span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-point">
+                    <div class="collapse navbar-collapse" id="navbar-collapse-zoom">
                         <div class="smallMargTop smallMargBottom">
-                            <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset
-                                zoom</button>
+                            <span class="smallMargRight">Scanpath & Heatmap: </span>
+                            <button type="button" class="btn btn-default reset smallMargBottom" id="reset4">Reset</button>
+                            <span class="smallMargRight">ThemeRiver: </span>
+                            <button type="button" class="btn btn-default reset smallMargBottom" id="reset3">Reset</button>
                         </div>
                     </div>
                 </li>
@@ -142,7 +144,7 @@
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText">AOI-based visualizations</span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-aoi">
+                    <div class="collapse navbar-collapse text-justify" id="navbar-collapse-aoi">
                         <span class="smallMargRight smallMargTop">Grid size:</span><input
                             class="smallMargTop smallMargRight" type="number" min="2" max="6" value="3"><span
                             class="smallMargRight">x</span><input type="number" min="2" max="6" value="3"><br><br>
@@ -165,13 +167,12 @@
                                 </form>
                                 <span class="font-weight-bold text-primary ml-2 mt-1 valueInterval val"></span>
                             </div>
-                            <span class="text-center">Reintialize to apply (change later)</span> <br><br><br>
                             <span class="smallMargTop">Standard or normalized graph</span> <br>
-                            <select class="custom-select smallMargTop" id="offset-option">
+                            <select class="custom-select smallMargTop smallMargBottom" id="offset-option">
                                 <option selected value="d3.stackOffsetSilhouette">Standard</option>
                                 <option value="d3.stackOffsetExpand">Normalized</option>
                             </select>
-                            <span class="text-center">For normalized, it is recommended to choose a time interval length
+                            <span class="text-center smallMargTop">For normalized, it is recommended to choose a time interval length
                                 such that there are no empty time intervals</span> <br>
                         </div>
                     </div> 
