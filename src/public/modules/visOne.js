@@ -14,6 +14,7 @@ var points, lines;
 var topContainer, containerH, containerW, gradient, imageH, imageW, imgSvg;
 var startColor, endColor;
 var zoomObjects;
+var gradientScale;
 
 //variables used to control the coordiante axes
 var xScaleReference, yScaleReference;
@@ -98,10 +99,7 @@ export function initialize() {
     colorPickerButton.on("click", function () {
         circleColor = colorPickerCircle.val();
         lineColor = colorPickerLine.val();
-        console.log("circle color is");
-        console.log(circleColor);
-        console.log("line color is");
-        console.log(lineColor);
+        //circle color will be transformed to HSL format because it is needed to vary the lumiescence
         colorHSL = hexToRGB(circleColor);
         showLoading();
         setTimeout(drawScanpath, 10);
@@ -113,12 +111,39 @@ function drawScanpath() {
     //delete previous svg lines, points and gradients
     lines.selectAll("path").remove();
     points.selectAll("circle").remove();
+
     topContainer.selectAll("rect").remove();
+    topContainer.selectAll("text").remove();
+    topContainer.selectAll("g.axis").remove();
 
     colorGrandient();
 
     //sorts data chronologically, needed for lines
     let sortedData = filteredData.sort(compare);
+
+    //sets the scale for the gradient
+    var scaleInterval = [parseInt(sortedData[0].FixationIndex), parseInt(sortedData[sortedData.length - 1].FixationIndex)];
+    var interval = (scaleInterval[1] - scaleInterval[0]) / 5;
+    var tickVal = [
+        scaleInterval[0],
+        scaleInterval[0] + interval,
+        scaleInterval[0] + 2 * interval,
+        scaleInterval[0] + 3 * interval,
+        scaleInterval[0] + 4 * interval,
+        scaleInterval[1],
+    ];
+
+    gradientScale = d3
+        .scaleLinear()
+        .domain([sortedData[0].FixationIndex, sortedData[sortedData.length - 1].FixationIndex])
+        .range([0, containerW * 0.7]);
+
+    topContainer
+        .append("g")
+        .attr("transform", "translate(" + containerW * 0.15 + "," + 50 + ")")
+        .attr("class", "axis")
+        .attr("color", "black")
+        .call(d3.axisBottom(gradientScale).tickValues(tickVal).tickFormat(d3.format("d")).ticks(4));
 
     var line = d3
         .line()
@@ -136,7 +161,7 @@ function drawScanpath() {
         .attr("x", containerW * 0.15)
         .attr("y", 25)
         .attr("width", containerW * 0.7)
-        .attr("height", 35);
+        .attr("height", 20);
 
     //function that draws the lines
     lines
@@ -163,7 +188,7 @@ function drawScanpath() {
         .attr("class", function (d) {
             return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY;
         })
-        // .style("fill", `${color}`)
+
         .style("fill", function (d, i) {
             return "hsl(" + colorHSL[0] + "," + (i / filteredData.length) * 100 + "%," + colorHSL[2] + "%)";
         })
@@ -174,10 +199,9 @@ function drawScanpath() {
                 else if ($("#gradType").val() == "pinkBlue") return "#f5d253";
                 else return "#fc971c";
             };
-            var x = filteredData.MappedFixationPointX;
-            var y = filteredData.MappedFixationPointY;
-            d3.selectAll("circle.ptS" + x + "" + y).attr("stroke", "black");
-            d3.selectAll("circle.ptH" + x + "" + y)
+
+            d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "black");
+            d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
                 .attr("stroke", "black")
                 .attr("fill", highlight)
                 .attr("stroke-width", $("#sliderRadius").val() / 2)
@@ -213,17 +237,15 @@ function drawScanpath() {
                     filteredData.FixationDuration
             );
             var coords = d3
-                .selectAll("circle.ptH" + x + "" + y)
+                .selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
                 .node()
                 .getBoundingClientRect();
             pop.style("left", coords.left + 10 + "px");
             pop.style("top", coords.top + window.scrollY - 80 + "px");
         })
         .on("mouseout", function (filteredData) {
-            var x = filteredData.MappedFixationPointX;
-            var y = filteredData.MappedFixationPointY;
-            d3.selectAll("circle.ptS" + x + "" + y).attr("stroke", "none");
-            d3.selectAll("circle.ptH" + x + "" + y)
+            d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "none");
+            d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
                 .attr("stroke", "white")
                 .attr("fill", "black")
                 .attr("r", $("#sliderRadius").val())
@@ -257,7 +279,7 @@ export function visualize() {
 
         topContainer
             .append("text")
-            .attr("x", imageW * 0.5)
+            .attr("x", containerW * 0.5)
             .attr("y", 18)
             .style("text-anchor", "middle")
             .text("Luminescence gradient");
@@ -279,63 +301,39 @@ export function visualize() {
         console.log("DATA GIVEN IS: ");
         console.log(filteredData);
 
-        var minX = 0;
-        console.log(`Minimum x point is: ${minX}`);
-
-        var maxX = this.width;
-        console.log(`Maximum x point is: ${maxX}`);
-
-        var minY = 0;
-        console.log(`Minimum y point is: ${minY}`);
-
-        var maxY = this.height;
-        console.log(`Maximum y point is: ${maxY}`);
-
-        
         zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         lines = zoomObjects.insert("g"); //inside this d3 object the lines will be drawn
 
         points = zoomObjects.insert("g"); //inside this d3 object the points will be drawn
-        
+
         // create separate g for axes
         let axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
         axes.append("rect")
-            .attr("x", (-margin.left))
-            .attr("y", (-margin.top))
+            .attr("x", -margin.left)
+            .attr("y", -margin.top)
             .attr("width", containerW)
             .attr("height", margin.top)
-            .attr("fill", "#d9edee")
-        
-        axes.append("rect")
-            .attr("x", (-margin.left))
-            .attr("y", (imageH))
-            .attr("width", containerW)
-            .attr("height", margin.bottom)
-            .attr("fill", "#d9edee")
+            .attr("fill", "#d9edee");
+
+        axes.append("rect").attr("x", -margin.left).attr("y", imageH).attr("width", containerW).attr("height", margin.bottom).attr("fill", "#d9edee");
+
+        axes.append("rect").attr("x", imageW).attr("y", -margin.top).attr("width", margin.right).attr("height", containerH).attr("fill", "#d9edee");
 
         axes.append("rect")
-            .attr("x", (imageW))
-            .attr("y", (-margin.top))
-            .attr("width", margin.right)
-            .attr("height", containerH)
-            .attr("fill", "#d9edee")
-
-        axes.append("rect")
-            .attr("x", (-margin.left))
-            .attr("y", (-margin.top))
+            .attr("x", -margin.left)
+            .attr("y", -margin.top)
             .attr("width", margin.left)
             .attr("height", containerH)
-            .attr("fill", "#d9edee")
-            
+            .attr("fill", "#d9edee");
+
         // Scaling
-        var xScale = d3.scaleLinear().domain([minX, maxX]).range([minX, imageW]);
+        let xScale = d3.scaleLinear().domain([0, this.width]).range([0, imageW]);
 
         xScaleReference = xScale.copy();
 
-        var yScale = d3.scaleLinear().domain([maxY, minY]).range([imageH, minY]);
+        let yScale = d3.scaleLinear().domain([this.height, 0]).range([imageH, 0]);
 
         yScaleReference = yScale.copy();
 
