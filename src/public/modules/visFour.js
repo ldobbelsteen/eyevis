@@ -397,7 +397,7 @@ export function visualize() {
         var originalH = img.height;
         
         // update image size
-        imageW = $("#main").width() /1.5;
+        imageW = 650;
         var ratio = imageW / originalW;
         imageH = originalH * ratio;
 
