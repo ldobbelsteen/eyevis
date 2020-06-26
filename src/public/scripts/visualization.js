@@ -74,6 +74,8 @@ function updateUsers() {
     visButtons.forEach((d) => {
         d.prop("disabled", false);
     });
+
+    $("#initialize").prop("disabled", false)
 }
 
 // Disable menus as they are not yet populated

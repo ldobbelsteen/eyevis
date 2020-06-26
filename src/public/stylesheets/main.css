@@ -7,6 +7,32 @@ body {
     background-color: #f0e9ed;
 }
 
+html {
+    --scrollbarBG: rgba(238, 238, 238, 0);
+    --thumbBG: rgba(170,218,221,0.5);
+}
+
+#navbar-collapse-1::-webkit-scrollbar {
+    width: 3px;
+}
+
+#navbar-collapse-1 {
+    scrollbar-width: thin;
+    scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+    max-height: calc(100vh - 34px - 57px);
+    overflow-y: auto;
+}
+
+#navbar-collapse-1::-webkit-scrollbar-track {
+    background: var(--scrollbarBG);
+}
+
+#navbar-collapse-1::-webkit-scrollbar-thumb {
+    background-color: var(--thumbBG) ;
+    border-radius: 6px;
+    border: 3px solid var(--scrollbarBG);
+} 
+
 div.output {
     font-family: inherit;
     background: palevioletred;
@@ -54,7 +80,6 @@ nav {
     background-color: black;
     color: white;
     font-size: 12px;
-    position: absolute;
     top: 57px;
     border-radius: 4px;
     border-top-left-radius: 0;
@@ -62,6 +87,7 @@ nav {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+
 
 .xsicon {
     font-size: 10px;
@@ -202,14 +228,14 @@ button:focus {
 
 .init4 {
     display: inline-block;
-    width: 49%;
+    width: 100%;
     margin-top: 7px;
     margin-bottom: 5px;
     text-align: center;
 }
 .reset4 {
     display: inline-block;
-    width: 49%;
+    width: 100%;
     margin-top: 7px;
     margin-bottom: 5px;
     background-color: white;

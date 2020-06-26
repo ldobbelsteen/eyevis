@@ -1,20 +1,20 @@
 <!--menu structure and style: Chiara Liotta 1414755-->
 <!--individual elements related to each vis belong to its author-->
 
-<nav class="navbar position-absolute" role="navigation">
+<nav class="navbar position-absolute" id="navigation" role="navigation">
 
     <div class="container-fluid">
 
         <!-- Menu header  -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-clr"
-                data-toggle="collapse" data-target="#navbar-collapse-1" id="menu">
+                data-toggle="collapse" data-target="#navbar-collapse-1" id="menu" height="40px">
                 <span class="glyphicon glyphicon-align-justify"></span> <span class="menuText"> Menu</span>
             </button>
         </div>
 
         <!-- Menu links  -->
-        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="navbar-collapse-1" ss-container>
             <ul class="nav navbar-nav menulinks">
                 <li id="home">
                     <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init"
@@ -38,16 +38,27 @@
                             <select class="custom-select" id="stimuli-menu"></select>
                             <select class="custom-select" id="users-menu"></select><br>
                         </div>
-                        <span>Linked view WIP, supports scanpath and heatmap for now</span>
                         <button type="button" class="btn btn-primary init4 smallMargBottom"
                             id="initialize">Initialize</button>
-                        <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset
-                            zoom</button>
+                    </div>
+                </li>
+                <li id="point-based">
+                    <button type="button"
+                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
+                        data-toggle="collapse" data-target="#navbar-collapse-point">
+                        <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
+                            class="menuText"> Point-based visualizations</span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar-collapse-point">
+                        <div class="smallMargTop smallMargBottom">
+                            <button type="button" class="btn btn-default reset4 smallMargBottom" id="reset4">Reset
+                                zoom</button>
+                        </div>
                     </div>
                 </li>
                 <li id="vis-one">
                     <button type="button"
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
+                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-vis1">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Scanpath</span>
@@ -69,7 +80,7 @@
                 </li>
                 <li id="vis-four">
                     <button type="button"
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
+                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-vis4">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Heatmap</span>
@@ -126,7 +137,7 @@
                 </li>
                 <li id="vis-aoi">
                     <button type="button"
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
+                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-aoi">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText">AOI-based visualizations</span>
@@ -167,7 +178,7 @@
                 </li>
                 <li id="vis-two">
                     <button type="button"
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
+                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-vis2">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText">Sankey diagram</span>

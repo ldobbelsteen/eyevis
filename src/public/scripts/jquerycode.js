@@ -15,6 +15,11 @@ $(document).ready(function(){
     // main body moves right or goes back to normal position depending on menu
     $menu.on('click dblclick',function(){
         $main.toggleClass('moveRight')
+        if (!$main.hasClass('moveRight')) {
+            $('#navigation').removeClass("fixed-top");
+            $('#navigation').addClass("position-absolute");
+            $("#navbar-collapse-1").css("max-height", window.innerHeight - 34 - 57 )
+        }
         $(window).trigger("resize");
     });
 
@@ -104,7 +109,7 @@ $(document).ready(function(){
     $home.on("click", () => {
         window.visualization = undefined;
         $("#vis-descr").show();
-        $("#visualizationGrid").hide();
+        $(".allVis").hide();
         $("#about").show();
         $("#visualization").hide();
         $("#export").hide();
@@ -112,9 +117,7 @@ $(document).ready(function(){
     })
 
     // array of buttons to initialize the visualizations
-    const vis = [ $("#init-vis2"),
-                $("#init-vis3"),
-                $("#init-vis5")]
+    const vis = [ $("#init-vis2")]
     
     // when you initialize a vis, hide section to upload and vis descriptions
     // and show visualization div
@@ -130,12 +133,34 @@ $(document).ready(function(){
         });
     })
 
+    $("#initialize").prop("disabled", true)
+
     $("#initialize").on("click", () => {
         $("#vis-descr").hide();
         $("#about").hide();
         $("#visualization").hide();
         $(".allVis").show();
         $("#export").show();
+    });
+
+    // ---> deals with menu and scrolling, fixed if collapsible open
+
+    var fixmeTop = $('#navigation').offset().top;      
+
+    $(window).scroll(function() {                  
+    
+        var currentScroll = $(window).scrollTop();
+    
+        if (currentScroll >= fixmeTop && $main.hasClass('moveRight') ) {  
+            $('#navigation').addClass("fixed-top");
+            $('#navigation').removeClass("position-absolute");
+            $("#navbar-collapse-1").css("max-height", window.innerHeight - 34)
+        } else {
+            $('#navigation').removeClass("fixed-top");
+            $('#navigation').addClass("position-absolute");
+            $("#navbar-collapse-1").css("max-height", window.innerHeight - 34 - 57 )
+        }
+    
     });
 
     
