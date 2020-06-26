@@ -132,6 +132,13 @@ function redraw(change) {
     }
 }
 
+// Reset zoom of theme river
+$("#reset3").on("click", () => {
+    window.visualization = "linked";
+    container.empty();
+    visThree.visualize();
+});
+
 $("#init-vis2").on("click", () => {
     window.visualization = "two";
     container.empty();
