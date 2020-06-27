@@ -163,6 +163,14 @@ function drawScanpath() {
         .attr("width", containerW * 0.7)
         .attr("height", 20);
 
+    topContainer
+        .append("text")
+        .attr("x", containerW * 0.5)
+        .attr("y", 18)
+        .style("text-anchor", "middle")
+        .text("Luminescence gradient");
+
+
     //function that draws the lines
     lines
         .attr("class", "lines")
@@ -276,13 +284,6 @@ export function visualize() {
             .select("#vis1")
             .append("svg")
             .attr("viewBox", "0 0 " + containerW + " " + 75);
-
-        topContainer
-            .append("text")
-            .attr("x", containerW * 0.5)
-            .attr("y", 18)
-            .style("text-anchor", "middle")
-            .text("Luminescence gradient");
 
         initializeGradient();
 
