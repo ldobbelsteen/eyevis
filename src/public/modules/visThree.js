@@ -31,6 +31,7 @@ export function visualize() {
     let data = filterData(window.data, {
         StimuliName: window.stimulus,
     });
+    
 
     // Load stimulus and make it change when something changes
     const container = d3.select("#vis3");
@@ -358,5 +359,10 @@ export function visualize() {
             });
 
         svg.call(zoom);
+
+        // Reset zoom of theme river
+        $("#reset3").on("click", () => {
+            svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+        });
     }
 }
