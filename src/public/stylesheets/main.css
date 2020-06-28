@@ -7,6 +7,18 @@ body {
     background-color: #f0e9ed;
 }
 
+div.output {
+    font-family: inherit;
+    background: palevioletred;
+    color: black;
+    position: absolute;
+    text-align: center;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    pointer-events: none;
+}
+
+/* from here on: Chiara Liotta (1414755)  */
 html {
     --scrollbarBG: rgba(238, 238, 238, 0);
     --thumbBG: rgba(170,218,221,0.5);
@@ -32,17 +44,6 @@ html {
     border-radius: 6px;
     border: 3px solid var(--scrollbarBG);
 } 
-
-div.output {
-    font-family: inherit;
-    background: palevioletred;
-    color: black;
-    position: absolute;
-    text-align: center;
-    border-radius: 0.5em;
-    padding: 0.5em;
-    pointer-events: none;
-}
 
 header {
     display: flex;
@@ -194,10 +195,6 @@ button:focus {
     -webkit-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
     transform: rotate(-90deg);
-}
-
-#hide-btn {
-    text-align: left;
 }
 
 .view {

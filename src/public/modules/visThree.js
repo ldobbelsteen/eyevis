@@ -1,5 +1,6 @@
 // Milou Henzen (1409107) - ThemeRiver
 // Big thanks to Eric for writing the part that calculated the number of fixations within each AOI
+// Chiara Liotta: AOI highlight linking (exact parts mentioned)
 
 // Compare function to sort chronologically
 function compare(a, b) {
@@ -235,6 +236,7 @@ export function visualize() {
                 let aoi = aois.find(x => x.name === d.key)
                 return aoi.color
             })
+            // ---> Chiara Liotta (1414755): AOI highlight linking
             .attr("class", (d) => {
                 let aoi = aois.find(x => x.name === d.key)
                 var colorcode = aoi.color
@@ -247,6 +249,7 @@ export function visualize() {
                 }
                 return "river rgb" + colornumber;
             });
+            // --- end of Chiara's part
 
         // Function to get the value corresponding to the aoi at a certain timestamp for the tooltip
         function valueCalc(name, currentTime){
@@ -270,6 +273,7 @@ export function visualize() {
                     }
                 });
                 let aoi = aois.find(x => x.name === d.key)
+                // ---> Chiara Liotta (1414755): AOI highlight linking
                 var colorcode = aoi.color
                 var numbers = ["0","1","2","3","4","5","6","7","8","9"]
                 var colornumber = "";
@@ -285,6 +289,7 @@ export function visualize() {
                     else return "black"
                 })
                 .attr("stroke-width", "8px")
+                // --- end of Chiara's part
             })
             .on("mousemove", function (d) {
                     var mouseX = d3.mouse(this)[0];
@@ -302,10 +307,12 @@ export function visualize() {
                 info.style("top", d3.event.pageY - 48 + "px");
             })
             .on("mouseout", () => {
-                d3.selectAll(".scarf").attr("opacity", 1)
                 info.transition().duration(200).style("opacity", 0);
                 svg.selectAll("path").attr("opacity", 1);
+                // ---> Chiara Liotta (1414755): AOI highlight linking
                 d3.selectAll(".aoi").attr("stroke", "null");
+                d3.selectAll(".scarf").attr("opacity", 1)
+                // --- end of Chiara's part
             });
 
 

@@ -1,4 +1,5 @@
 // Lukas Dobbelsteen (1406264) - Scarf plot
+// Chiara Liotta: AOI highlight linking (exact parts mentioned)
 
 function filterData(data, filter) {
     return data.filter((item) => {
@@ -174,6 +175,7 @@ export function visualize() {
                     return xScale(gaze.duration);
                 })
                 .attr("height", timelineHeight)
+                // ---> Chiara Liotta (1414755): AOI highlight linking
                 .attr("class", gaze => {
                     if (gaze.color != undefined) {
                         var colorcode = gaze.color
@@ -185,8 +187,9 @@ export function visualize() {
                             }
                         }
                         return "scarf rgb" + colornumber;
-                    }   
+                    }  
                 })
+                // --- end of Chiara's part
                 .on("mouseover", gaze => {
                     info.transition().duration(200).style("opacity", 1)
                     info.html(
@@ -197,6 +200,7 @@ export function visualize() {
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
+                    // ---> Chiara Liotta (1414755): AOI highlight linking
                     var colorcode = gaze.color
                     if (colorcode != undefined) {
                         var numbers = ["0","1","2","3","4","5","6","7","8","9"]
@@ -215,7 +219,7 @@ export function visualize() {
                         })
                         .attr("stroke-width", "8px")
                     }
-                    
+                    // --- end of Chiara's part
                 })
                 .on("mousemove", () => {
                     info.style("left", d3.event.pageX + 8 + "px")
@@ -223,9 +227,11 @@ export function visualize() {
                 })
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
+                    // ---> Chiara Liotta (1414755): AOI highlight linking
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)
                     d3.selectAll(".aoi").attr("stroke", "null")
+                    // ---> end of Chiara's part
                 })
 
         // Add y-axis for users

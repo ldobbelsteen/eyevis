@@ -146,6 +146,8 @@ $("#init-vis2").on("click", () => {
     visTwo.visualize();
 });
 
+// ---> Chiara Liotta (1414755)
+
 // show the loading overlay
 function showLoading() {
     $("main").LoadingOverlay("show", {
@@ -206,6 +208,7 @@ function zoomBehavior() {
         scanpathZoom[0].transition().duration(400).call(zoom.transform, d3.zoomIdentity);
     });
 }
+// --- end of Chiara's part
 
 $("#export").on("click", function () {
     saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
