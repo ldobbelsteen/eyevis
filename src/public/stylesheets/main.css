@@ -270,6 +270,13 @@ button:focus {
     grid: auto-flow dense / 1fr 1fr;
 }
 
+.grid-container2 {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto auto;
+    grid: auto-flow dense / 1fr 1fr 1fr;
+}
+
 .descr-grid {
     display: grid;
     grid-template-columns: auto;
@@ -304,7 +311,7 @@ img.descr {
 }
 
 @media (max-width: 1000px) {
-    .grid-container {
+    .grid-container, .grid-container2 {
         display: grid;
         grid-template-columns: auto;
     }
@@ -317,4 +324,8 @@ img.descr {
     header > h1 {
         margin-bottom: 30px;
     }
+}
+
+.sep {
+    margin-top: 10px;
 }
