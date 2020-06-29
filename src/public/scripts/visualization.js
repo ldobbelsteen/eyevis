@@ -117,6 +117,8 @@ function redraw(change) {
             visOne.userChange();
             visThree.visualize();
             visFive.visualize();
+            visTwo.initialize();
+            visTwo.visualize();
         } else {
             if (window.visualization == "linked") showLoading();
             visFour.initialize();
@@ -127,6 +129,8 @@ function redraw(change) {
             visAOI.visualize();
             visThree.visualize();
             visFive.visualize();
+            visTwo.initialize();
+            visTwo.visualize();
         }
         setTimeout(zoomBehavior, 50);
     }
@@ -161,8 +165,8 @@ $("#initialize").on("click", () => {
 
     visOne.initialize();
     visOne.visualize();
-    // visTwo.initialize();
-    // visTwo.visualize();
+    visTwo.initialize();
+    visTwo.visualize();
     visThree.visualize();
     visFour.initialize();
     visFour.visualize();

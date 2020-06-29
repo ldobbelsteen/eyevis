@@ -1,10 +1,8 @@
 // Tristan Tummers 1330713 - Sankey diagram
 var filteredData;
 
-// Select visualization container and inputs
-const container = d3.select("#visualization");
-const gridSizeInputX = $("#vis-two input:eq(0)");
-const gridSizeInputY = $("#vis-two input:eq(1)");
+// Select visualization container
+const container = d3.select("#vis2");
 
 // Filter data with filter (stimuli)
 function updateData() {
@@ -47,16 +45,22 @@ export function initialize() {
 }
 
 export function visualize() {
+    const gridSizeInputX = $("#vis-two input:eq(0)");
+    const gridSizeInputY = $("#vis-two input:eq(1)");
+    const colorInput = $("colorType");
 
     // Reset visualization container
     container.html("");
 
     // Create SVG for stimulus and sankey sankeydiagram
     let sankeyDiagram = container.append("svg");
-    let stimulus = container.append("svg");
+    // let stimulus = container.append("svg");
+
+    sankeyDiagram.style("margin", "0.5em");
 
     // Add stimulus img
     let containerWidth = $("main").width();
+    let containerHeight;
     let stimulusWidth;
     let stimulusHeight;
     let stimulusLink = "/stimuli/" + window.stimulus;
@@ -64,13 +68,12 @@ export function visualize() {
     image.onload = () => {
         stimulusWidth = image.naturalWidth;
         stimulusHeight = image.naturalHeight;
-        let img = stimulus.append("image")
-            .attr("width", containerWidth)
-            .attr("xlink:href", stimulusLink)
-        stimulus.attr("viewBox", [0, 0, containerWidth, img.node().getBBox().height]);
-        sankeyDiagram.attr("viewBox", [0, 0, containerWidth, img.node().getBBox().height]);
+
+        containerHeight = 0.7 * containerWidth;
+        sankeyDiagram.attr("viewBox", [0, 0, containerWidth, containerHeight]);
         gridSizeInputX.on("change", updateSankey);
         gridSizeInputY.on("change", updateSankey);
+        colorInput.on("change", updateSankey)
         updateSankey();
     }
     image.src = stimulusLink;
@@ -107,31 +110,27 @@ export function visualize() {
         }
 
         // Assign colors to each AOI
-        let colors = d3.interpolateTurbo;
+        let colors;
+        let selectedColorset =  colorInput.val();
+        switch(selectedColorset) {
+            case undefined:
+                colors = d3.interpolateTurbo;
+                break;
+            case "rainbow":
+                colors = d3.interpolateTurbo;
+                break;
+            case "blue":
+                colors = d3.interpolateBlues;
+                break;
+            case "cool":
+                colors = d3.interpolateCool;
+                break;
+            default:
+                console.error("Color not found!");
+        }
         let interval = 1 / (AOIs.length - 1);
         AOIs.forEach((aoi, index) => {
             aoi.color = colors(interval * index);
-        });
-
-        // Overlay the AOIs over the stimulus
-        stimulus.selectAll("rect").remove();
-        stimulus.selectAll("text").remove();
-        let viewBox = stimulus.attr("viewBox").split(",");
-        let aoiScaleX = viewBox[2] / stimulusWidth;
-        let aoiScaleY = viewBox[3] / stimulusHeight;
-        AOIs.forEach(aoi => {
-            stimulus.append("rect")
-                .attr("x", aoi.x1 * aoiScaleX)
-                .attr("y", aoi.y1 * aoiScaleY)
-                .attr("width", (aoi.x2 - aoi.x1) * aoiScaleX)
-                .attr("height", (aoi.y2 - aoi.y1) * aoiScaleY)
-                .attr("fill", aoi.color)
-                .attr("opacity", 0.7);
-            stimulus.append("text")
-                .attr("x", aoi.x1 * aoiScaleX + 10)
-                .attr("y", aoi.y1 * aoiScaleY + 10)
-                .attr("dy", ".35em")
-                .text(aoi.id);
         });
 
         // Assign fixations to areas of interest
@@ -224,43 +223,18 @@ export function visualize() {
             .nodes(data.nodes)
             .links(data.links)
             .nodeWidth(36)
-            .nodePadding(12)
-            .size([300, 300])
+            .nodePadding(300)
+            .size([containerWidth, containerHeight])
+            .sinksRight(true)
             .layout(1);
 
-        // Break the circular links
-
-
-        console.log(graph.nodes);
-
         var color_node = function color_node(d){
-          if (d.group){
-            return colors(d.group.replace(/ .*/, ""));
-          } else {
-            return "#cccccc";
-          }
-        }
-
-        var color_link = function color_link(d){
-          if (d.group){
-            return colors(d.group.replace(/ .*/, ""));
-          } else {
-            return "#000000";
-          }
-        }
-
-        var opacity_link = function opacity_link(d){
-          if (d.group){
-            return 0.7;
-          } else {
-            return 0.2;
-          }
+            return colors(interval * (parseInt(d.name)-1));
         }
 
         let path = graph.link();
 
-        console.log(path);
-
+        // add in the links
         let link = sankeyDiagram.append("g")
             .selectAll(".link")
             .data(graph.links())
@@ -273,8 +247,11 @@ export function visualize() {
                 .style("stroke", "black")
                 .style("stroke-opacity", "0.5")
                 .sort(function(a, b) { return b.dy - a.dy; });
+            // .on("mousemove", (d) => {
+            //     let
+            // });
 
-            // add in the nodes
+        // add in the nodes
         let node = sankeyDiagram.append("g")
             .selectAll(".node")
             .data(graph.nodes())
@@ -291,7 +268,7 @@ export function visualize() {
             .append("rect")
                 .attr("height", function(d) { return d.dy; })
                 .attr("width", graph.nodeWidth())
-                .style("fill", function(d) { return d.color = colors(d.name.replace(/ .*/, "")); })
+                .style("fill", function(d) { return d.color = color_node(d); })
                 .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
           // Add hover text
             .append("title")
@@ -306,18 +283,56 @@ export function visualize() {
                 .attr("text-anchor", "end")
                 .attr("transform", null)
                 .text(function(d) { return d.name; })
-            // .filter(function(d) { return d.x < width / 2; })
+            .filter(function(d) { return d.x < containerWidth / 2; })
                 .attr("x", 6 + graph.nodeWidth())
                 .attr("text-anchor", "start");
 
-                // the function for moving the nodes
+        // // adjust viewBox to fit the bounds of our tree
+        // var s = d3.select(sankeyDiagram.node().parentNode);
+        // s.attr(
+        //     "viewBox",
+        //     [
+        //       d3.min(
+        //         s.selectAll('g').nodes().map(function(d){
+        //           return d.getBoundingClientRect().left
+        //         })
+        //     ) - s.node().getBoundingClientRect().left - 10,
+        //       d3.min(
+        //         s.selectAll('g').nodes().map(function(d){
+        //           return d.getBoundingClientRect().top
+        //         })
+        //     ) - s.node().getBoundingClientRect().top - 10,
+        //       d3.max(
+        //         s.selectAll('g').nodes().map(function(d){
+        //           return d.getBoundingClientRect().right
+        //         })
+        //       ) -
+        //       d3.min(
+        //         s.selectAll('g').nodes().map(function(d){
+        //           return d.getBoundingClientRect().left
+        //         })
+        //     )  + 10 + 10,
+        //       d3.max(
+        //         s.selectAll('g').nodes().map(function(d){
+        //           return d.getBoundingClientRect().bottom
+        //         })
+        //       ) -
+        //       d3.min(
+        //         s.selectAll('g').nodes().map(function(d){
+        //           return d.getBoundingClientRect().top
+        //         })
+        //     ) + 10 + 10
+        //     ].join(",")
+        //   );
+
+        // the function for moving the nodes
         function dragmove(d) {
             d3.select(this)
                 .attr("transform",
                     "translate("
                         + d.x + ","
                         + (d.y = Math.max(
-                          0, Math.min(height - d.dy, d3.event.y))
+                          0, Math.min(containerHeight - d.dy, d3.event.y))
                         ) + ")");
             graph.relayout();
             link.attr("d", graph.link() );

@@ -43,7 +43,7 @@ html {
     background-color: var(--thumbBG) ;
     border-radius: 6px;
     border: 3px solid var(--scrollbarBG);
-} 
+}
 
 header {
     display: flex;
@@ -240,8 +240,8 @@ button:focus {
 }
 
 .init:hover, .reset:hover {
-    box-shadow: 0 0 3px #f0e9ed inset; 
-    background-color: black; 
+    box-shadow: 0 0 3px #f0e9ed inset;
+    background-color: black;
     color: white;
     border-color: #f0e9ed;
 }
@@ -297,7 +297,7 @@ img.descr {
     width: 400px;
 }
 
-#vis1, #vis4, #vis3, #aoi, #vis5 {
+#vis1, #vis4, #vis3, #aoi, #vis5, #vis2 {
     border: 1px solid black;
     border-radius: 4px;
     background-color: #d9edee;
