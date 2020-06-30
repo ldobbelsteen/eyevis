@@ -2,15 +2,35 @@
 
 <html lang="en">
 
-<head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css">
-</head>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css">
+        <style>
+            html, body {
+                background-color: #d9edee;
+                margin: 0;
+                height: 100%;
+            }
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+            }
+            p {
+                font-weight: bold;
+                font-size: 1.5em;
+                padding: 1em;
+            }
+        </style>
+    </head>
 
-<body>
-    <p>Dataset has succesfully been uploaded! You will be redirected back in a moment...</p>
-    <script>
-        setTimeout(() => { document.location = document.referrer }, 3000)
-    </script>
-</body>
+    <body>
+        <div>
+            <p>Dataset has succesfully been uploaded! You will be redirected back in a moment...</p>
+        </div>
+        <script>
+            setTimeout(() => { document.location = document.referrer }, 3000)
+        </script>
+    </body>
 
 </html>
