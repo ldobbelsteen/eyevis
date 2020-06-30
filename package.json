@@ -3,7 +3,6 @@
         "adm-zip": "*",
         "ejs": "*",
         "express": "*",
-        "express-fileupload": "*",
-        "save-svg-as-png": "^1.4.17"
+        "express-fileupload": "*"
     }
 }
