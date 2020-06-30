@@ -119,20 +119,13 @@ function redraw(change) {
             visFive.visualize();
             visTwo.initialize();
             visTwo.visualize();
+            setTimeout(zoomBehavior, 50);
         } else {
-            if (window.visualization == "linked") showLoading();
-            visFour.initialize();
-            visFour.visualize();
-            visOne.initialize();
-            visOne.visualize();
-            setTimeout(hideLoading, 10);
-            visAOI.visualize();
-            visThree.visualize();
-            visFive.visualize();
-            visTwo.initialize();
-            visTwo.visualize();
+            if (window.visualization == "linked") {
+                document.getElementById("initialize").click(); 
+            }
         }
-        setTimeout(zoomBehavior, 50);
+        
     }
 }
 
@@ -173,7 +166,7 @@ $("#initialize").on("click", () => {
     visFive.visualize();
     visAOI.visualize();
 
-    setTimeout(zoomBehavior, 10);
+    setTimeout(zoomBehavior, 150);
     setTimeout(hideLoading, 10);
 });
 
