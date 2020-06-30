@@ -166,7 +166,7 @@ $("#initialize").on("click", () => {
     visFive.visualize();
     visAOI.visualize();
 
-    setTimeout(zoomBehavior, 150);
+    setTimeout(zoomBehavior, 1000);
     setTimeout(hideLoading, 10);
 });
 
