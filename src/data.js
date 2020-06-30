@@ -1,3 +1,5 @@
+// Lukas Dobbelsteen (1406264)
+
 const fs = require("fs");
 const path = require("path");
 const admzip = require("adm-zip");
