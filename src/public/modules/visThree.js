@@ -1,5 +1,5 @@
 // Milou Henzen (1409107) - ThemeRiver
-// Big thanks to Eric for writing the part that calculated the number of fixations within each AOI
+// Eric Abraham: wrote the part that calculated the number of fixations within each AOI
 // Chiara Liotta: AOI highlight linking (exact parts mentioned)
 
 // Compare function to sort chronologically
@@ -136,6 +136,8 @@ export function visualize() {
         });
         // --- end of Chiara's part
 
+        // ---> Eric Abraham's part
+
         // Sorting the timestamps to be linear
         let sortedData = cleanData.sort(compare);
 
@@ -171,8 +173,12 @@ export function visualize() {
             aoiInfo.push(timestampInfo);
         }
         
+        // --- end of Eric's part
+
         // Removing empty last element from array
-        aoiInfo.pop();
+        if (aoiInfo.length != 2){
+            aoiInfo.pop();
+        }
 
         //Getting all the names of the aois to use as keys
         var keys = Object.keys(aoiInfo[0]);
