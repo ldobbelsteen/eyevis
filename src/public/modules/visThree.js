@@ -226,6 +226,21 @@ export function visualize() {
             let aoi = aois.find(x => x.name === d.key)
             return aoi.color
         });
+
+        // ---> Chiara Liotta (1414755): AOI highlight linking
+        function colorcoding(colorcode) {
+            if (colorcode != undefined) {
+                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+                var colornumber = "";
+                for (var i=0; i < colorcode.length; i++) {
+                    if (numbers.includes(colorcode.charAt(i))) {
+                        colornumber = colornumber + colorcode.charAt(i)
+                    }
+                }
+                return colornumber;
+            }
+        }
+        // --- end of Chiara's part
     
         var path = svg
             .selectAll("path")
@@ -240,14 +255,7 @@ export function visualize() {
             // ---> Chiara Liotta (1414755): AOI highlight linking
             .attr("class", (d) => {
                 let aoi = aois.find(x => x.name === d.key)
-                var colorcode = aoi.color
-                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
-                var colornumber ="";
-                for (var i=0; i < colorcode.length; i++) {
-                    if (numbers.includes(colorcode.charAt(i))) {
-                        colornumber = colornumber + colorcode.charAt(i)
-                    }
-                }
+                var colornumber = colorcoding(aoi.color)
                 return "river rgb" + colornumber;
             });
             // --- end of Chiara's part
@@ -275,14 +283,7 @@ export function visualize() {
                 });
                 let aoi = aois.find(x => x.name === d.key)
                 // ---> Chiara Liotta (1414755): AOI highlight linking
-                var colorcode = aoi.color
-                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
-                var colornumber = "";
-                for (var i=0; i < colorcode.length; i++) {
-                    if (numbers.includes(colorcode.charAt(i))) {
-                        colornumber = colornumber + colorcode.charAt(i)
-                    }
-                }
+                var colornumber = colorcoding(aoi.color)
                 d3.selectAll(".scarf").attr("opacity", 0.2)
                 d3.selectAll("rect.rgb" + colornumber).attr("opacity", 1)
                 d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
