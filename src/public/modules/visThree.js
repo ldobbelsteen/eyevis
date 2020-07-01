@@ -31,8 +31,6 @@ export function visualize() {
     let data = filterData(window.data, {
         StimuliName: window.stimulus,
     });
-    console.log(data)
-    
 
     // Load stimulus and make it change when something changes
     const container = d3.select("#vis3");

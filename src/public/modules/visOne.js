@@ -73,7 +73,6 @@ function updateData() {
         StimuliName: window.stimulus,
         user: window.selectedUser,
     };
-    console.log(window.selectedUser);
 
     filteredData = window.data.filter((item) => {
         for (let key in filter) {
@@ -86,7 +85,6 @@ function updateData() {
         }
         return true;
     });
-    console.log(filteredData);
 }
 
 export function userChange() {
@@ -282,7 +280,6 @@ function drawScanpath() {
 }
 
 export function visualize() {
-    console.log("I AM CALLED ONCE!");
     container.html("");
     img = new Image();
     d3.selectAll(".output").remove();
