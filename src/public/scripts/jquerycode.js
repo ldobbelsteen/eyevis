@@ -154,7 +154,6 @@ $(document).ready(function(){
         $("#about").hide();
         $("#visualization").hide();
         $(".allVis").show();
-        $("#visualization").show();
         $("#exportScanpath").show();
         $("#exportHeatmap").show();
         $("#exportAOIGrid").show();
