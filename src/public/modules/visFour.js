@@ -435,7 +435,7 @@ export function visualize() {
 
         axes.append("rect")
             .attr("x", -margin.left)
-            .attr("y", -margin.top)
+            .attr("y", (-margin.top-1))
             .attr("width", containerW)
             .attr("height", margin.top)
             .attr("fill", "#d9edee");
@@ -475,11 +475,14 @@ export function visualize() {
                     .attr("transform", "translate(" + -5 + ", 0)")
                     .attr("class", "y-axis")
                     .call(yAxisL);
+
+        svg.selectAll(".img").remove();
      
         // add image to zoomable elements
         svgImg = zoomable.insert("image", ":first-child")
                          .attr("width", imageW)
                          .attr("height", imageH)
+                         .attr("class", "img")
                          .attr("xlink:href", `/stimuli/${window.stimulus}`);
     }
 

@@ -21,7 +21,8 @@ var gradientScale;
 var xScaleReference, yScaleReference;
 var xAxis, yAxis;
 var xAxisPlacement, yAxisPlacement;
-var margin = { top: 35, left: 50, right: 10, bottom: 10 };
+const margin = { top: 35, left: 50, right: 10, bottom: 10 };
+const rectHeight = 75;
 
 //loading animation functions
 function showLoading() {
@@ -139,6 +140,14 @@ function drawScanpath() {
         .domain([sortedData[0].FixationIndex, sortedData[sortedData.length - 1].FixationIndex])
         .range([0, containerW * 0.7]);
 
+    topContainer
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("height", rectHeight)
+        .attr("width", containerW)
+        .attr("fill", "#d9edee");
+    
     topContainer
         .append("g")
         .attr("transform", "translate(" + containerW * 0.15 + "," + 50 + ")")
@@ -281,26 +290,26 @@ export function visualize() {
     img.onload = function () {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
         //image size variables
-        var ratio = 650 / this.width;
+        
         imageW = 650;
+        var ratio = imageW / this.width;
         imageH = this.height * ratio;
 
         containerH = imageH + margin.top + margin.bottom;
         containerW = imageW + margin.left + margin.right;
-
-        //CREATES CONTAINER TO SHOW GRADIENT SCALE
-        topContainer = d3
-            .select("#vis1")
-            .append("svg")
-            .attr("viewBox", "0 0 " + containerW + " " + 75);
-
-        initializeGradient();
-
+        
         svg = d3
             .select("#vis1")
             .append("svg")
-            .attr("viewBox", "0 0 " + containerW + " " + containerH)
+            .attr("viewBox", "0 0 " + containerW + " " + (containerH + rectHeight))
             .append("g");
+
+        zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight ) + ")");
+
+        //CREATES CONTAINER TO SHOW GRADIENT SCALE
+        topContainer = svg.append("g")
+
+        initializeGradient();
 
         // x coordinates that will be offset when image is scaled to fit screen
         xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, imageW]);
@@ -308,35 +317,42 @@ export function visualize() {
         // y coordinates that will be offset when image is scaled to fit screen
         yOffset = d3.scaleLinear().domain([img.naturalHeight, 0]).range([imageH, 0]);
 
-        console.log("DATA GIVEN IS: ");
-        console.log(filteredData);
-
-        zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
         lines = zoomObjects.insert("g"); //inside this d3 object the lines will be drawn
 
         points = zoomObjects.insert("g"); //inside this d3 object the points will be drawn
 
+        drawScanpath();
+
         // create separate g for axes
-        let axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        let axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight) + ")");
 
         axes.append("rect")
             .attr("x", -margin.left)
-            .attr("y", -margin.top)
+            .attr("y", (-margin.top -1))
             .attr("width", containerW)
             .attr("height", margin.top)
             .attr("fill", "#d9edee");
-
-        axes.append("rect").attr("x", -margin.left).attr("y", imageH).attr("width", containerW).attr("height", margin.bottom).attr("fill", "#d9edee");
-
-        axes.append("rect").attr("x", imageW).attr("y", -margin.top).attr("width", margin.right).attr("height", containerH).attr("fill", "#d9edee");
-
+    
+        axes.append("rect")
+            .attr("x", -margin.left)
+            .attr("y", imageH)
+            .attr("width", containerW)
+            .attr("height", margin.bottom)
+            .attr("fill", "#d9edee");
+    
+        axes.append("rect")
+            .attr("x", imageW)
+            .attr("y", -margin.top)
+            .attr("width", margin.right)
+            .attr("height", containerH)
+            .attr("fill", "#d9edee");
+    
         axes.append("rect")
             .attr("x", -margin.left)
             .attr("y", -margin.top)
             .attr("width", margin.left)
             .attr("height", containerH)
-            .attr("fill", "#d9edee");
+             .attr("fill", "#d9edee");
 
         // Scaling
         let xScale = d3.scaleLinear().domain([0, this.width]).range([0, imageW]);
@@ -363,13 +379,12 @@ export function visualize() {
             .attr("transform", "translate(" + -5 + ", 0)")
             .call(yAxisPlacement);
 
-        drawScanpath();
-
         //first image is removed and then redrawn, so prevent overlapping images
         svg.selectAll(".img").remove();
         imgSvg = zoomObjects
             .insert("image", ":first-child")
             .attr("width", imageW)
+            .attr("height", imageH)
             .attr("xlink:href", `/stimuli/${window.stimulus}`)
             .attr("class", "img");
     };
