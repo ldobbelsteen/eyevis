@@ -200,6 +200,28 @@ function zoomBehavior() {
 }
 // --- end of Chiara's part
 
-$("#export").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[0], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+// ---> Juul Peters (1433741)
+//All export functions corresponding to the save buttons
+$("#exportScanpath").on("click", function () {
+    saveSvgAsPng(document.getElementsByTagName("svg")[3], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+});
+
+$("#exportHeatmap").on("click", function () {
+    saveSvgAsPng(document.getElementsByTagName("svg")[5], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+});
+
+$("#exportAOIGrid").on("click", function () {
+    saveSvgAsPng(document.getElementsByTagName("svg")[6], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+});
+
+$("#exportThemeRiver").on("click", function () {
+    saveSvgAsPng(document.getElementsByTagName("svg")[7], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+});
+
+$("#exportSankeyDiagram").on("click", function () {
+    saveSvgAsPng(document.getElementsByTagName("svg")[8], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+});
+
+$("#exportScarfPlot").on("click", function () {
+    saveSvgAsPng(document.getElementsByTagName("svg")[9], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });

@@ -102,8 +102,12 @@ $(document).ready(function(){
     const $home = $("#retHome"); // button to return to homepage
     $("#visualization").hide();
     $(".allVis").hide(); // visualization div starts out hidden
-    $("#export").hide(); // same for save vis button
-    
+    $("#exportScanpath").hide(); // same for save vis button
+    $("#exportHeatmap").hide();
+    $("#exportAOIGrid").hide();
+    $("#exportThemeRiver").hide();
+    $("#exportSankeyDiagram").hide();
+    $("#exportScarfPlot").hide();
     // when you go back to home, show section to upload and vis descriptions
     // but hide visualization div
     $home.on("click", () => {
@@ -112,7 +116,12 @@ $(document).ready(function(){
         $(".allVis").hide();
         $("#about").show();
         $("#visualization").hide();
-        $("#export").hide();
+        $("#exportScanpath").hide();
+        $("#exportHeatmap").hide();
+        $("#exportAOIGrid").hide();
+        $("#exportThemeRiver").hide();
+        $("#exportSankeyDiagram").hide();
+        $("#exportScarfPlot").hide();
         
     })
 
@@ -128,7 +137,12 @@ $(document).ready(function(){
             $("#vis-descr").hide();
             $("#about").hide();
             $("#visualization").show();
-            $("#export").show();
+            $("#exportScanpath").show();
+            $("#exportHeatmap").show();
+            $("#exportAOIGrid").show();
+            $("#exportThemeRiver").show();
+            $("#exportSankeyDiagram").show();
+            $("#exportScarfPlot").show();
             $(".grid-container").css("padding", "0")
         });
     })
@@ -140,7 +154,13 @@ $(document).ready(function(){
         $("#about").hide();
         $("#visualization").hide();
         $(".allVis").show();
-        $("#export").show();
+        $("#visualization").show();
+        $("#exportScanpath").show();
+        $("#exportHeatmap").show();
+        $("#exportAOIGrid").show();
+        $("#exportThemeRiver").show();
+        $("#exportSankeyDiagram").show();
+        $("#exportScarfPlot").show();
     });
 
     // ---> deals with menu and scrolling, fixed if collapsible open
