@@ -223,5 +223,9 @@ $("#exportSankeyDiagram").on("click", function () {
 });
 
 $("#exportScarfPlot").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[9], "scarf-plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    let scarfPlot = document.getElementsByTagName("svg")[9];
+    let viewBox = scarfPlot.viewBox.baseVal;
+    viewBox.height += 16;
+    viewBox.width += 32;
+    saveSvgAsPng(scarfPlot, "scarf-plot.png", { encoderOptions: 1, left: viewBox.x, top: viewBox.y, height: viewBox.height, width: viewBox.width, backgroundColor: "#FFFFFF", scale: 2 });
 });
