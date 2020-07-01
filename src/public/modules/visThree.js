@@ -31,6 +31,7 @@ export function visualize() {
     let data = filterData(window.data, {
         StimuliName: window.stimulus,
     });
+    console.log(data)
     
 
     // Load stimulus and make it change when something changes
@@ -116,8 +117,27 @@ export function visualize() {
         // Making array with the data
         let aoiInfo = [];
 
+
+        // ---> Chiara Liotta with inspiration from Lukas Dobbelsteen's code:
+        // cleaning of timestamps
+        let cleanData = [];
+
+        let users = [...new Set(data.map((item) => item.user))];
+        users.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach(user => {
+            let userData = filterData(data, {
+                user: user
+            });
+            let timestamps = userData.map(x => x.Timestamp);
+            let startTime = d3.min(timestamps);
+            userData.forEach(d => {
+                d.Timestamp = d.Timestamp - startTime; 
+                cleanData.push(d)
+            });
+        });
+        // --- end of Chiara's part
+
         // Sorting the timestamps to be linear
-        let sortedData = data.sort(compare);
+        let sortedData = cleanData.sort(compare);
 
         let i = 0,
             k = 0,
