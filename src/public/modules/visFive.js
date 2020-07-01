@@ -1,6 +1,7 @@
 // Lukas Dobbelsteen (1406264) - Scarf plot
 // Chiara Liotta: AOI highlight linking (exact parts mentioned)
 
+// Filter data given a filter
 function filterData(data, filter) {
     return data.filter((item) => {
         for (let key in filter) {
@@ -12,6 +13,7 @@ function filterData(data, filter) {
     });
 }
 
+// Main visualization function
 export function visualize() {
 
     // Find input fields and visualization container
