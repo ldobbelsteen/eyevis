@@ -203,27 +203,27 @@ function zoomBehavior() {
 // ---> Juul Peters (1433741)
 //All export functions corresponding to the save buttons
 $("#exportScanpath").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[3], "scanpath.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[2], "scanpath.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportHeatmap").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[5], "heatmap.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[3], "heatmap.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportAOIGrid").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[6], "aoi-grid.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[4], "aoi-grid.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportThemeRiver").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[7], "theme-river.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[5], "theme-river.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportSankeyDiagram").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[8], "sankey-diagram.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[6], "sankey-diagram.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportScarfPlot").on("click", function () {
-    let scarfPlot = document.getElementsByTagName("svg")[9];
+    let scarfPlot = document.getElementsByTagName("svg")[7];
     let viewBox = scarfPlot.viewBox.baseVal;
     viewBox.height += 16;
     viewBox.width += 32;
