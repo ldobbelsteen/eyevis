@@ -203,25 +203,25 @@ function zoomBehavior() {
 // ---> Juul Peters (1433741)
 //All export functions corresponding to the save buttons
 $("#exportScanpath").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[3], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[3], "scanpath.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportHeatmap").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[5], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[5], "heatmap.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportAOIGrid").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[6], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[6], "aoi-grid.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportThemeRiver").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[7], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[7], "theme-river.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportSankeyDiagram").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[8], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[8], "sankey-diagram.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
 
 $("#exportScarfPlot").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[9], "plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[9], "scarf-plot.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
 });
