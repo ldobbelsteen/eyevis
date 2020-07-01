@@ -167,7 +167,7 @@ $("#initialize").on("click", () => {
     visAOI.visualize();
 
     setTimeout(zoomBehavior, 1000);
-    setTimeout(hideLoading, 10);
+    setTimeout(hideLoading, 500);
 });
 
 function zoomBehavior() {
