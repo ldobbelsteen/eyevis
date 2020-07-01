@@ -47,7 +47,6 @@ export function visualize() {
     image.onload = () => {
         stimulusWidth = image.naturalWidth;
         stimulusHeight = image.naturalHeight;
-        
         stimulus.attr("viewBox", [0, 0, containerWidth, timelineHeight]);
         gridSizeInputX.on("change", updateTimelines);
         gridSizeInputY.on("change", updateTimelines);
@@ -127,9 +126,13 @@ export function visualize() {
                 AOIs.forEach(aoi => {
                     if (x >= aoi.x1 && x <= aoi.x2 && y >= aoi.y1 && y <= aoi.y2) {
                         color = aoi.color;
-                        aoiCoords = [aoi.x + 1, aoi.y + 1]
+                        aoiCoords = [aoi.x + 1, aoi.y + 1];
                     }
                 });
+                if (aoiCoords == undefined) {
+                    aoiCoords = "Outside grid"
+                    color = "red"
+                }
                 gazes.push({
                     user: gaze.user,
                     time: gaze.Timestamp - startTime,
