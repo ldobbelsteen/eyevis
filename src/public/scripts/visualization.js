@@ -129,13 +129,6 @@ function redraw(change) {
     }
 }
 
-$("#init-vis2").on("click", () => {
-    window.visualization = "two";
-    container.empty();
-    visTwo.initialize();
-    visTwo.visualize();
-});
-
 // ---> Chiara Liotta (1414755)
 
 // show the loading overlay
@@ -151,6 +144,7 @@ function hideLoading() {
     $("main").LoadingOverlay("hide", true);
 }
 
+// button that initializes linked view
 $("#initialize").on("click", () => {
     window.visualization = "linked";
 
@@ -170,6 +164,7 @@ $("#initialize").on("click", () => {
     setTimeout(hideLoading, 500);
 });
 
+// linked zoom scanpath/heatmap
 function zoomBehavior() {
     const heatmapZoom = visFour.svgHeatmap();
     const scanpathZoom = visOne.svgScanpath();
@@ -193,6 +188,7 @@ function zoomBehavior() {
     heatmapZoom[0].call(zoom);
     scanpathZoom[0].call(zoom);
 
+    // button to reset scanpath/heatmap zoom
     $("#reset4").on("click", () => {
         heatmapZoom[0].transition().duration(400).call(zoom.transform, d3.zoomIdentity);
         scanpathZoom[0].transition().duration(400).call(zoom.transform, d3.zoomIdentity);
@@ -203,11 +199,11 @@ function zoomBehavior() {
 // ---> Juul Peters (1433741)
 //All export functions corresponding to the save buttons
 $("#exportScanpath").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[2], "scanpath.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[2], "scanpath.png", { encoderOptions: 1, backgroundColor: "#d9edee", scale: 2 });
 });
 
 $("#exportHeatmap").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[3], "heatmap.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[3], "heatmap.png", { encoderOptions: 1, backgroundColor: "#d9edee", scale: 2 });
 });
 
 $("#exportAOIGrid").on("click", function () {
@@ -215,7 +211,7 @@ $("#exportAOIGrid").on("click", function () {
 });
 
 $("#exportThemeRiver").on("click", function () {
-    saveSvgAsPng(document.getElementsByTagName("svg")[5], "theme-river.png", { encoderOptions: 1, backgroundColor: "#FFFFFF", scale: 2 });
+    saveSvgAsPng(document.getElementsByTagName("svg")[5], "theme-river.png", { encoderOptions: 1, backgroundColor: "#d9edee", scale: 2 });
 });
 
 $("#exportSankeyDiagram").on("click", function () {

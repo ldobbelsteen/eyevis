@@ -42,6 +42,8 @@ $(document).ready(function(){
 
     // ---> this section deals with vis 4 sliders, loading animations and some button
 
+    $("#initialize").prop("disabled", true) // disabled until stimulus chosen
+
     function showLoading4() {
         $("#vis4").LoadingOverlay("show", {
             background  : "rgba(255,255,255,0.80)",
@@ -100,7 +102,6 @@ $(document).ready(function(){
     // ---> this section of code deals with elements being hidden or shown
 
     const $home = $("#retHome"); // button to return to homepage
-    $("#visualization").hide();
     $(".allVis").hide(); // visualization div starts out hidden
     $("#exportScanpath").hide(); // same for save vis button
     $("#exportHeatmap").hide();
@@ -108,6 +109,7 @@ $(document).ready(function(){
     $("#exportThemeRiver").hide();
     $("#exportSankeyDiagram").hide();
     $("#exportScarfPlot").hide();
+
     // when you go back to home, show section to upload and vis descriptions
     // but hide visualization div
     $home.on("click", () => {
@@ -115,7 +117,6 @@ $(document).ready(function(){
         $("#vis-descr").show();
         $(".allVis").hide();
         $("#about").show();
-        $("#visualization").hide();
         $("#exportScanpath").hide();
         $("#exportHeatmap").hide();
         $("#exportAOIGrid").hide();
@@ -125,34 +126,9 @@ $(document).ready(function(){
         
     })
 
-    // array of buttons to initialize the visualizations
-    const vis = [ $("#init-vis2")]
-    
-    // when you initialize a vis, hide section to upload and vis descriptions
-    // and show visualization div
-    vis.forEach( (d) => {
-        d.prop("disabled", true)
-        d.on("click", () => {
-            $(".allVis").hide();
-            $("#vis-descr").hide();
-            $("#about").hide();
-            $("#visualization").show();
-            $("#exportScanpath").show();
-            $("#exportHeatmap").show();
-            $("#exportAOIGrid").show();
-            $("#exportThemeRiver").show();
-            $("#exportSankeyDiagram").show();
-            $("#exportScarfPlot").show();
-            $(".grid-container").css("padding", "0")
-        });
-    })
-
-    $("#initialize").prop("disabled", true)
-
     $("#initialize").on("click", () => {
         $("#vis-descr").hide();
         $("#about").hide();
-        $("#visualization").hide();
         $(".allVis").show();
         $("#exportScanpath").show();
         $("#exportHeatmap").show();
