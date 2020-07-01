@@ -3,9 +3,10 @@
 var filteredData, densityData;
 var img, overlay, points, gradient, svgImg;
 var imageH, imageW, containerW, containerH, x, y, colorDomain;
-var svg, axes, zoomable, topInfo;
+var svg, topInfo, axes, zoomable ;
 var xAxis, xAxisT, yAxis, yAxisL;
 const margin = { top: 35, left: 50, right: 10, bottom: 10 };
+const rectHeight = 75;
 const container = $("#vis4");
 const $valueRad = $("#sliderRadius");
 const $valueBand = $("#sliderBand");
@@ -104,7 +105,12 @@ function updateData() {
 function initializeGradient() {
     var defs = topInfo.append("defs");
 
-    gradient = defs.append("linearGradient").attr("id", "svgGradient4").attr("x1", "0%").attr("x2", "100%").attr("y1", "0%").attr("y2", "0%");
+    gradient = defs.append("linearGradient")
+                   .attr("id", "svgGradient4")
+                   .attr("x1", "0%")
+                   .attr("x2", "100%")
+                   .attr("y1", "0%")
+                   .attr("y2", "0%");
 }
 
 // deal with overlay data
@@ -144,31 +150,33 @@ function overlayData() {
     topInfo.selectAll("text").remove();
     topInfo.selectAll("g.axis").remove();
 
-    topInfo.append("rect").attr("x", 0).attr("y", 0).attr("height", 75).attr("width", containerW).attr("fill", "black");
+    topInfo.append("rect")
+           .attr("x", 0)
+           .attr("y", 0)
+           .attr("height", rectHeight)
+           .attr("width", containerW)
+           .attr("fill", "black");
 
-    topInfo
-        .append("rect")
-        .attr("fill", "url(#svgGradient4)")
-        .attr("stroke", "white")
-        .attr("x", containerW * 0.15)
-        .attr("y", 25)
-        .attr("width", containerW * 0.7)
-        .attr("height", 20);
+    topInfo.append("rect")
+           .attr("fill", "url(#svgGradient4)")
+           .attr("stroke", "white")
+           .attr("x", containerW * 0.15)
+           .attr("y", 25)
+           .attr("width", containerW * 0.7)
+           .attr("height", 20);
+   
+    topInfo.append("text")
+           .attr("x", containerW * 0.5)
+           .attr("y", 18)
+           .style("fill", "white")
+           .style("text-anchor", "middle")
+           .text("Density scale");
 
-    topInfo
-        .append("text")
-        .attr("x", containerW * 0.5)
-        .attr("y", 18)
-        .style("fill", "white")
-        .style("text-anchor", "middle")
-        .text("Density scale");
-
-    topInfo
-        .append("g")
-        .attr("transform", "translate(" + containerW * 0.15 + "," + 50 + ")")
-        .attr("class", "axis")
-        .attr("color", "white")
-        .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")));
+    topInfo.append("g")
+           .attr("transform", "translate(" + containerW * 0.15 + "," + 50 + ")")
+           .attr("class", "axis")
+           .attr("color", "white")
+           .call(d3.axisBottom(densScale).tickValues(colorDomain).tickFormat(d3.format(".2f")));
 }
 
 // update heatmap overlay
@@ -257,9 +265,10 @@ function showOverlay() {
             var x = d.MappedFixationPointX;
             var y = d.MappedFixationPointY;
             d3.selectAll("circle.ptH" + x + "" + y)
-                .attr("stroke", "black")
-                .attr("fill", highlight);
-            d3.selectAll("circle.ptS" + x + "" + y).attr("stroke", "black");
+              .attr("stroke", "black")
+              .attr("fill", highlight);
+            d3.selectAll("circle.ptS" + x + "" + y)
+              .attr("stroke", "black");
             pop.transition().duration(100).style("opacity", "1");
             pop.html(
                 "<strong>x:</strong> " +
@@ -273,10 +282,9 @@ function showOverlay() {
                     "<strong>Fixation Duration:</strong> " +
                     d.FixationDuration
             );
-            var coordsH = d3
-                .selectAll("circle.ptH" + x + "" + y)
-                .node()
-                .getBoundingClientRect();
+            var coordsH = d3.selectAll("circle.ptH" + x + "" + y)
+                            .node()
+                            .getBoundingClientRect();
             pop.style("left", coordsH.left + 8 + "px");
             pop.style("top", coordsH.top + window.scrollY - 80 + "px");
             info.transition().duration(200).style("opacity", "1");
@@ -292,10 +300,9 @@ function showOverlay() {
                     "<strong>FixationIndex:</strong> " +
                     d.FixationIndex
             );
-            var coordsS = d3
-                .selectAll("circle.ptS" + x + "" + y)
-                .node()
-                .getBoundingClientRect();
+            var coordsS = d3.selectAll("circle.ptS" + x + "" + y)
+                            .node()
+                            .getBoundingClientRect();
             info.style("left", (coordsS.left + coordsS.right) / 2 + 20 + "px");
             info.style("top", (coordsS.top + coordsS.bottom) / 2 + window.scrollY - 40 + "px");
         })
@@ -303,9 +310,10 @@ function showOverlay() {
             var x = d.MappedFixationPointX;
             var y = d.MappedFixationPointY;
             d3.selectAll("circle.ptH" + x + "" + y)
-                .attr("stroke", "white")
-                .attr("fill", "black");
-            d3.selectAll("circle.ptS" + x + "" + y).attr("stroke", "none");
+              .attr("stroke", "white")
+              .attr("fill", "black");
+            d3.selectAll("circle.ptS" + x + "" + y)
+              .attr("stroke", "none");
             pop.transition().duration(200).style("opacity", 0);
             info.transition().duration(200).style("opacity", 0);
         });
@@ -390,33 +398,29 @@ export function visualize() {
         containerW = imageW + margin.right + margin.left;
         containerH = imageH + margin.top + margin.bottom;
 
-        topInfo = d3
-            .select("#vis4")
-            .append("svg")
-            .attr("viewBox", "0 0 " + containerW + " " + 75)
-            .append("g");
-
-        svg = d3
-            .select("#vis4")
-            .append("svg")
-            .attr("id", "svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 " + containerW + " " + containerH)
-            .append("g");
-
-        initializeGradient();
-
+        svg = d3.select("#vis4")
+                .append("svg")
+                .attr("id", "svg")
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 " + containerW + " " + (containerH + rectHeight))
+    
         // x coordinates
         x = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, imageW]);
 
         // y coordinates
         y = d3.scaleLinear().domain([img.naturalHeight, 0]).range([imageH, 0]);
 
+        // create separate g that contains all zoomable elements
+        zoomable = svg.append("g")
+                      .attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight) + ")");
+
+        // create g for gradient scale
+        topInfo = svg.append("g");
+        
+        initializeGradient();
+
         // deal with data needed for overlay
         overlayData();
-
-        // create separate g that contains all zoomable elements
-        zoomable = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // initialize zoomable heatmap overlays
         overlay = zoomable.append("g");
@@ -426,7 +430,8 @@ export function visualize() {
         showOverlay();
 
         // create separate g for axes
-        axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        axes = svg.append("g")
+                  .attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight)  + ")");
 
         axes.append("rect")
             .attr("x", -margin.left)
@@ -435,9 +440,19 @@ export function visualize() {
             .attr("height", margin.top)
             .attr("fill", "#d9edee");
 
-        axes.append("rect").attr("x", -margin.left).attr("y", imageH).attr("width", containerW).attr("height", margin.bottom).attr("fill", "#d9edee");
+        axes.append("rect")
+            .attr("x", -margin.left)
+            .attr("y", imageH)
+            .attr("width", containerW)
+            .attr("height", margin.bottom)
+            .attr("fill", "#d9edee");
 
-        axes.append("rect").attr("x", imageW).attr("y", -margin.top).attr("width", margin.right).attr("height", containerH).attr("fill", "#d9edee");
+        axes.append("rect")
+            .attr("x", imageW)
+            .attr("y", -margin.top)
+            .attr("width", margin.right)
+            .attr("height", containerH)
+            .attr("fill", "#d9edee");
 
         axes.append("rect")
             .attr("x", -margin.left)
@@ -451,24 +466,21 @@ export function visualize() {
         yAxisL = d3.axisLeft(y);
 
         // create axes
-        xAxis = axes
-            .append("g")
-            .attr("transform", "translate(0 ," + -5 + ")")
-            .attr("class", "x-axis")
-            .call(xAxisT);
+        xAxis = axes.append("g")
+                    .attr("transform", "translate(0 ," + -5 + ")")
+                    .attr("class", "x-axis")
+                    .call(xAxisT);
 
-        yAxis = axes
-            .append("g")
-            .attr("transform", "translate(" + -5 + ", 0)")
-            .attr("class", "y-axis")
-            .call(yAxisL);
-
+        yAxis = axes.append("g")
+                    .attr("transform", "translate(" + -5 + ", 0)")
+                    .attr("class", "y-axis")
+                    .call(yAxisL);
+     
         // add image to zoomable elements
-        svgImg = zoomable
-            .insert("image", ":first-child")
-            .attr("width", imageW)
-            .attr("height", imageH)
-            .attr("xlink:href", `/stimuli/${window.stimulus}`);
+        svgImg = zoomable.insert("image", ":first-child")
+                         .attr("width", imageW)
+                         .attr("height", imageH)
+                         .attr("xlink:href", `/stimuli/${window.stimulus}`);
     }
 
     // alert if image fails to load
