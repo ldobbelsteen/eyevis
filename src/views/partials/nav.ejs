@@ -178,59 +178,40 @@
                         </div>
                     </div> 
                 </li>
-                <li id="vis-two">
+                <li id="exportSection">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
-                        data-toggle="collapse" data-target="#navbar-collapse-vis2">
+                        data-toggle="collapse" data-target="#navbar-collapse-export">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
-                            class="menuText">Sankey diagram</span>
+                            class="menuText">Export</span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
-                        <div class="smallMargTop smallMargBottom">
-                            <span class="smallMargRight smallMargTop">Grid size:</span><input
-                                class="smallMargRight smallMargTop" type="number" min="2" max="10" value="3"><span
-                                class="smallMargRight">x</span><input type="number" min="2" max="10" value="3"><br>
-                        </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse-export">
+                        <!-- Buttons for exporting visualizations + related work. Juul Peters (1433741)--> 
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scanpath</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Heatmap</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> AOI Grid</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> ThemeRiver</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Sankey Diagram</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scarf Plot</span>
+                        </button>
                     </div>
-                </li>
-
-                <!-- Buttons for exporting visualizations + related work. Juul Peters (1433741)--> 
-
-                <li id="exportScanpath">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scanpath</span>
-                    </button>
-                </li>
-                <li id="exportHeatmap">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Heatmap</span>
-                    </button>
-                </li>
-                <li id="exportAOIGrid">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> AOI Grid</span>
-                    </button>
-                </li>
-                <li id="exportThemeRiver">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> ThemeRiver</span>
-                    </button>
-                </li>
-                <li id="exportSankeyDiagram">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Sankey Diagram</span>
-                    </button>
-                </li>
-                <li id="exportScarfPlot">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scarf Plot</span>
-                    </button>
                 </li>
             </ul>
         </div>

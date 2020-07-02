@@ -45,9 +45,9 @@ export function initialize() {
 }
 
 export function visualize() {
-    const gridSizeInputX = $("#vis-two input:eq(0)");
-    const gridSizeInputY = $("#vis-two input:eq(1)");
-    const colorInput = $("colorType");
+    const gridSizeInputX =  $("#vis-aoi input:eq(0)");
+    const gridSizeInputY =  $("#vis-aoi input:eq(1)");
+    const colorInput = $("#colorType");
 
     // Reset visualization container
     container.html("");
