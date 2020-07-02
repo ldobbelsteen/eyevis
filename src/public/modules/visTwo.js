@@ -239,23 +239,22 @@ export function visualize() {
         let graph = d3.sankey()
             .nodes(data.nodes)
             .links(data.links)
-            .nodeWidth(36)
-            .nodePadding(72)
-            .size([containerWidth, containerHeight/2])
+            .nodeWidth(48)
+            .nodePadding(10)
+            .size([containerWidth -100, containerHeight/2])
             .sinksRight(true)
             .layout(5);
 
+        // get color for node
         var color_node = (d) => {
             return colors(interval * (parseInt(d.name)-1));
         }
 
         let path = graph.link();
 
-        console.log(graph.nodes());
-        console.log(graph.links());
-
         // add in the links
         let link = sankeyDiagram.append("g")
+            // .attr("transform", `translate(${0.05 * containerWidth}, ${0.25 * containerHeight})`)
             .selectAll(".link")
             .data(graph.links())
             .enter()
@@ -265,7 +264,7 @@ export function visualize() {
                 .style("stroke-width", function(d) { return Math.max(1, d.dy); })
                 .style("fill", "none")
                 .style("stroke", "black")
-                .style("stroke-opacity", "0.5")
+                .style("stroke-opacity", "0.2")
                 .on("mouseover", (d) => {
                     info.transition().duration(200).style("opacity", 1);
                     info.html(
@@ -273,9 +272,45 @@ export function visualize() {
                         "Target AOI: " + d.target.name + "<br>" +
                         "Amount transitions: " + d.value
                     );
-                    info.style("left", d3.event.pageX + 8 + "px")
-                    info.style("top", d3.event.pageY + "px")
+                    info.style("left", d3.event.pageX + 8 + "px");
+                    info.style("top", d3.event.pageY + "px");
 
+                    this.parentNode.style("stroke-opacity", 0.5);
+                })
+                .on("mousemove", () => {
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mouseout", () => {
+                    info.transition().duration(200).style("opacity", 0)
+                })
+                .sort(function(a, b) { return b.dy - a.dy; });
+
+        // add in the nodes
+        let node = sankeyDiagram.append("g")
+            // .attr("transform", `translate( ${0.05 * containerWidth}, ${0.25 * containerHeight})`)
+            .selectAll(".node")
+            .data(graph.nodes())
+            .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                .call(d3.drag()
+                    .subject(function(d) { return d; })
+                    .on("start", function() { this.parentNode.appendChild(this); })
+                    .on("drag", dragmove));
+
+        // add the rectangles for the nodes
+        node
+            .append("rect")
+                .attr("height", function(d) { return d.dy; })
+                .attr("width", graph.nodeWidth())
+                .style("fill", function(d) { return d.color = color_node(d); })
+                .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
+                .attr("class", (d) => {
+                    return "sankey rgb" + colorcoding(d.color);
+                })
+                .on("mouseover", (d) => {
+                    info.transition().duration(200).style("opacity", 0);
                     // ---> Chiara Liotta (1414755): AOI highlight linking
                     if (d.color != undefined) {
                         // get numbers in rgb color
@@ -294,49 +329,14 @@ export function visualize() {
                     }
                     // --- end of Chiara's part
                 })
-                .on("mousemove", () => {
-                    info.style("left", d3.event.pageX + 8 + "px")
-                    info.style("top", d3.event.pageY - 48 + "px")
-                })
-                .on("mouseout", () => {
-                    info.transition().duration(200).style("opacity", 0)
+                .on("mouseout", (d) => {
                     // ---> Chiara Liotta (1414755): AOI highlight linking
                     // opacity and stroke back to normal
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)
                     d3.selectAll(".aoi").attr("stroke", "null")
                     // ---> end of Chiara's part
-                })
-                .sort(function(a, b) { return b.dy - a.dy; });
-
-        // add in the nodes
-        let node = sankeyDiagram.append("g")
-            .selectAll(".node")
-            .data(graph.nodes())
-            .enter().append("g")
-                .attr("class", "node")
-                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-                .call(d3.drag()
-                    .subject(function(d) { return d; })
-                    .on("start", function() { this.parentNode.appendChild(this); })
-                    .on("drag", dragmove));
-
-        // add the rectangles for the nodes
-        node
-            .append("rect")
-                .attr("height", function(d) { return d.dy; })
-                .attr("width", graph.nodeWidth())
-                .style("fill", function(d) { return d.color = color_node(d); })
-                .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
-                .on("mouseover", (d) => {
-                    info.transition().duration(200).style("opacity", 1)
-                    info.html(
-
-                    )
-                })
-          // Add hover text
-            // .append("title")
-            //     .text(function(d) { return d.name + "\n" + "There is " + d.value + " stuff in this node"; });
+                });
 
         // add in the title for the nodes
         node
@@ -346,6 +346,8 @@ export function visualize() {
                 .attr("dy", ".35em")
                 .attr("text-anchor", "end")
                 .attr("transform", null)
+                .attr("font-size", "2.5em")
+                .attr("fill", "black")
                 .text(function(d) { return d.name; })
             .filter(function(d) { return d.x < containerWidth / 2; })
                 .attr("x", 6 + graph.nodeWidth())
