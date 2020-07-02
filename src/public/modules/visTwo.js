@@ -45,9 +45,9 @@ export function initialize() {
 }
 
 export function visualize() {
-    const gridSizeInputX = $("#vis-two input:eq(0)");
-    const gridSizeInputY = $("#vis-two input:eq(1)");
-    const colorInput = $("colorType");
+    const gridSizeInputX = $("#vis-aoi input:eq(0)");
+    const gridSizeInputY = $("#vis-aoi input:eq(1)");
+    const colorInput = $("#colorType");
 
     // Reset visualization container
     container.html("");
@@ -82,6 +82,8 @@ export function visualize() {
     }
 
     function updateSankey() {
+        // Pop-up info box
+        let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
         // Get input values selected by user
         let gridSizeX = gridSizeInputX.val();
@@ -128,6 +130,7 @@ export function visualize() {
             default:
                 console.error("Color not found!");
         }
+
         let interval = 1 / (AOIs.length - 1);
         AOIs.forEach((aoi, index) => {
             aoi.color = colors(interval * index);
@@ -223,12 +226,12 @@ export function visualize() {
             .nodes(data.nodes)
             .links(data.links)
             .nodeWidth(36)
-            .nodePadding(300)
-            .size([containerWidth, containerHeight])
+            .nodePadding(72)
+            .size([containerWidth, containerHeight/2])
             .sinksRight(true)
-            .layout(1);
+            .layout(5);
 
-        var color_node = function color_node(d){
+        var color_node = (d) => {
             return colors(interval * (parseInt(d.name)-1));
         }
 
@@ -270,6 +273,12 @@ export function visualize() {
                 .attr("width", graph.nodeWidth())
                 .style("fill", function(d) { return d.color = color_node(d); })
                 .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
+                .on("mouseover", (d) => {
+                    info.transistion().dureation(200).style("opacity", 1);
+                    info.html(
+                        "AOI coords:"
+                    )
+                })
           // Add hover text
             .append("title")
                 .text(function(d) { return d.name + "\n" + "There is " + d.value + " stuff in this node"; });
@@ -286,44 +295,6 @@ export function visualize() {
             .filter(function(d) { return d.x < containerWidth / 2; })
                 .attr("x", 6 + graph.nodeWidth())
                 .attr("text-anchor", "start");
-
-        // // adjust viewBox to fit the bounds of our tree
-        // var s = d3.select(sankeyDiagram.node().parentNode);
-        // s.attr(
-        //     "viewBox",
-        //     [
-        //       d3.min(
-        //         s.selectAll('g').nodes().map(function(d){
-        //           return d.getBoundingClientRect().left
-        //         })
-        //     ) - s.node().getBoundingClientRect().left - 10,
-        //       d3.min(
-        //         s.selectAll('g').nodes().map(function(d){
-        //           return d.getBoundingClientRect().top
-        //         })
-        //     ) - s.node().getBoundingClientRect().top - 10,
-        //       d3.max(
-        //         s.selectAll('g').nodes().map(function(d){
-        //           return d.getBoundingClientRect().right
-        //         })
-        //       ) -
-        //       d3.min(
-        //         s.selectAll('g').nodes().map(function(d){
-        //           return d.getBoundingClientRect().left
-        //         })
-        //     )  + 10 + 10,
-        //       d3.max(
-        //         s.selectAll('g').nodes().map(function(d){
-        //           return d.getBoundingClientRect().bottom
-        //         })
-        //       ) -
-        //       d3.min(
-        //         s.selectAll('g').nodes().map(function(d){
-        //           return d.getBoundingClientRect().top
-        //         })
-        //     ) + 10 + 10
-        //     ].join(",")
-        //   );
 
         // the function for moving the nodes
         function dragmove(d) {
