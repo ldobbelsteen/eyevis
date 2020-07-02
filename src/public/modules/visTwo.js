@@ -38,15 +38,29 @@ function compare(a, b) {
     return a.Timestamp - b.Timestamp;
 }
 
-// Breaks circular links from
+// ---> Chiara Liotta (1414755): AOI highlight linking
+// function to get only the numbers in the rgb color definition
+function colorcoding(colorcode) {
+    if (colorcode != undefined) {
+        var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+        var colornumber = "";
+        for (var i=0; i < colorcode.length; i++) {
+            if (numbers.includes(colorcode.charAt(i))) {
+                colornumber = colornumber + colorcode.charAt(i)
+            }
+        }
+        return colornumber;
+    }
+}
+// --- end of Chiara's part
 
 export function initialize() {
     updateData();
 }
 
 export function visualize() {
-    const gridSizeInputX =  $("#vis-aoi input:eq(0)");
-    const gridSizeInputY =  $("#vis-aoi input:eq(1)");
+    const gridSizeInputX = $("#vis-aoi input:eq(0)");
+    const gridSizeInputY = $("#vis-aoi input:eq(1)");
     const colorInput = $("#colorType");
 
     // Reset visualization container
@@ -237,6 +251,9 @@ export function visualize() {
 
         let path = graph.link();
 
+        console.log(graph.nodes());
+        console.log(graph.links());
+
         // add in the links
         let link = sankeyDiagram.append("g")
             .selectAll(".link")
@@ -249,10 +266,48 @@ export function visualize() {
                 .style("fill", "none")
                 .style("stroke", "black")
                 .style("stroke-opacity", "0.5")
+                .on("mouseover", (d) => {
+                    info.transition().duration(200).style("opacity", 1);
+                    info.html(
+                        "Source AOI: " + d.source.name + "<br>" +
+                        "Target AOI: " + d.target.name + "<br>" +
+                        "Amount transitions: " + d.value
+                    );
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY + "px")
+
+                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    if (d.color != undefined) {
+                        // get numbers in rgb color
+                        var colornumber = colorcoding(d.color)
+                        // all AOI's decrease in opacity
+                        d3.selectAll(".scarf").attr("opacity", 0.2)
+                        d3.selectAll(".river").attr("opacity", 0.2)
+                        // full opacity for hovered-over AOI (found via color number)
+                        // stroke for grid
+                        d3.selectAll(".rgb" + colornumber).attr("opacity", 1)
+                        d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
+                            if (colornumber == "352327") return "white"
+                            else return "black"
+                        })
+                        .attr("stroke-width", "8px")
+                    }
+                    // --- end of Chiara's part
+                })
+                .on("mousemove", () => {
+                    info.style("left", d3.event.pageX + 8 + "px")
+                    info.style("top", d3.event.pageY - 48 + "px")
+                })
+                .on("mouseout", () => {
+                    info.transition().duration(200).style("opacity", 0)
+                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // opacity and stroke back to normal
+                    d3.selectAll(".scarf").attr("opacity",1)
+                    d3.selectAll(".river").attr("opacity",1)
+                    d3.selectAll(".aoi").attr("stroke", "null")
+                    // ---> end of Chiara's part
+                })
                 .sort(function(a, b) { return b.dy - a.dy; });
-            // .on("mousemove", (d) => {
-            //     let
-            // });
 
         // add in the nodes
         let node = sankeyDiagram.append("g")
@@ -274,14 +329,14 @@ export function visualize() {
                 .style("fill", function(d) { return d.color = color_node(d); })
                 .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
                 .on("mouseover", (d) => {
-                    info.transistion().dureation(200).style("opacity", 1);
+                    info.transition().duration(200).style("opacity", 1)
                     info.html(
-                        "AOI coords:"
+
                     )
                 })
           // Add hover text
-            .append("title")
-                .text(function(d) { return d.name + "\n" + "There is " + d.value + " stuff in this node"; });
+            // .append("title")
+            //     .text(function(d) { return d.name + "\n" + "There is " + d.value + " stuff in this node"; });
 
         // add in the title for the nodes
         node
