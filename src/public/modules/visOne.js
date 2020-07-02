@@ -87,6 +87,19 @@ function updateData() {
     });
 }
 
+
+// Filter the data
+function filterData(data, filter) {
+    return data.filter((item) => {
+        for (let key in filter) {
+            if (item[key] != filter[key]) {
+                return false;
+            }
+        }
+        return true;
+    });
+}
+
 export function userChange() {
     showLoading();
     setTimeout(drawScanpath, 10);
@@ -118,8 +131,31 @@ function drawScanpath() {
 
     colorGrandient();
 
-    //sorts data chronologically, needed for lines
-    let sortedData = filteredData.sort(compare);
+    // ---> Chiara Liotta with inspiration from Lukas Dobbelsteen's code:
+    // cleaning of timestamps based on user: for each user, time starts at 0
+    let cleanData = [];
+
+    let users = [...new Set(filteredData.map((item) => item.user))];
+    var lastI = -1;
+    var lastT = -1;
+    users.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach(user => {
+        let userData = filterData(data, {
+            user: user
+        });
+        let startTime = d3.min(userData, d => { return d.Timestamp })
+        let startIndex = d3.min(userData, d => { return d.FixationIndex})
+        userData.forEach(d => {
+            d.Timestamp = parseInt(d.Timestamp) + lastT - (-startTime) + 1;  
+            d.FixationIndex = lastI + parseInt(d.FixationIndex) + (-startIndex) + 1;
+            cleanData.push(d)
+        });
+        lastT = d3.max(cleanData, d => { return d.Timestamp })
+        lastI = d3.max(cleanData, d => { return d.FixationIndex })
+    });
+    // --- end of Chiara's part
+
+        // Sorting the timestamps to be linear
+        let sortedData = cleanData.sort(compare);
 
     //sets the scale for the gradient
     var scaleInterval = [parseInt(sortedData[0].FixationIndex), parseInt(sortedData[sortedData.length - 1].FixationIndex)];
@@ -191,11 +227,12 @@ function drawScanpath() {
 
     var pop = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
+
     //this creates circles with offset points, adds the hover pop-up interaction
     points
         .attr("class", "points")
         .selectAll("dot")
-        .data(filteredData)
+        .data(sortedData)
         .enter()
         .append("circle")
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
