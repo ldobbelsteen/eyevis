@@ -239,10 +239,10 @@ export function visualize() {
         let graph = d3.sankey()
             .nodes(data.nodes)
             .links(data.links)
-            .nodeWidth(48)
-            .nodePadding(10)
+            .nodeWidth(30)
+            .nodePadding(5)
             .size([containerWidth -100, containerHeight/2])
-            .sinksRight(true)
+            .sinksRight(false)
             .layout(5);
 
         // get color for node
@@ -254,7 +254,6 @@ export function visualize() {
 
         // add in the links
         let link = sankeyDiagram.append("g")
-            // .attr("transform", `translate(${0.05 * containerWidth}, ${0.25 * containerHeight})`)
             .selectAll(".link")
             .data(graph.links())
             .enter()
@@ -275,22 +274,20 @@ export function visualize() {
                     info.style("left", d3.event.pageX + 8 + "px");
                     info.style("top", d3.event.pageY + "px");
 
-                    d3.select(".l" + d.source.name + "" + d.target.name).style("stroke-opacity", 0.7)
-                    this.parentNode.style("stroke-opacity", 0.5);
+                    d3.select(".l" + d.source.name + "" + d.target.name).style("stroke-opacity", 0.7);
                 })
                 .on("mousemove", () => {
-                    info.style("left", d3.event.pageX + 8 + "px")
-                    info.style("top", d3.event.pageY - 48 + "px")
+                    info.style("left", d3.event.pageX + 8 + "px");
+                    info.style("top", d3.event.pageY - 48 + "px");
                 })
                 .on("mouseout", () => {
-                    info.transition().duration(200).style("opacity", 0)
-                    d3.selectAll(".link").style("stroke-opacity", 0.2)
+                    info.transition().duration(200).style("opacity", 0);
+                    d3.selectAll(".link").style("stroke-opacity", 0.2);
                 })
                 .sort(function(a, b) { return b.dy - a.dy; });
 
         // add in the nodes
         let node = sankeyDiagram.append("g")
-            // .attr("transform", `translate( ${0.05 * containerWidth}, ${0.25 * containerHeight})`)
             .selectAll(".node")
             .data(graph.nodes())
             .enter().append("g")
