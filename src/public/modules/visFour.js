@@ -1,13 +1,31 @@
 //Chiara Liotta 1414755 - heatmap
 
+// filtered data based on stimulus and user(s) chosen, density data computed by contour-2d-d3
 var filteredData, densityData;
+
+// variables for image element, heatmap overlay, dots, gradient, and image svg element
 var img, overlay, points, gradient, svgImg;
+
+// image height and width, container height and width (excluding info at the top), x and y scales,
+// and color domain (5 intervals) based on density
 var imageH, imageW, containerW, containerH, x, y, colorDomain;
+
+// main svg element, info box at the top with density scale, g element for axes, g element for zoomable elements (svgImg, overlay, points)
 var svg, topInfo, axes, zoomable ;
-var xAxis, xAxisT, yAxis, yAxisL;
+
+// initialized and drawn x and y axes
+var xAxisT, yAxisL, xAxis, yAxis;
+
+// margins to make space for x and y axes
 const margin = { top: 35, left: 50, right: 10, bottom: 10 };
+
+// height of info box at the top
 const rectHeight = 75;
+
+// element for heatmap container
 const container = $("#vis4");
+
+// input elements that give values for circle radius, bandwidth, opacity, heatmap type, and gradient color
 const $valueRad = $("#sliderRadius");
 const $valueBand = $("#sliderBand");
 const $valueAlpha = $("#sliderAlpha");
@@ -42,6 +60,7 @@ function hideLoading() {
     container.LoadingOverlay("hide", true);
 }
 
+// export elements needed for linked zooming
 export function svgHeatmap() {
     return [zoomable, svgImg, overlay, points];
 }
@@ -134,6 +153,7 @@ function initializeGradient() {
 function overlayData() {
     // compute the density data based on heatmap type
     if ($heatType.val() == "duration") {
+        // relative gaze duration heatmap: each point get weight based on fixation duration
         densityData = d3
             .contourDensity()
             .x((d) => x(d.MappedFixationPointX))
@@ -142,6 +162,7 @@ function overlayData() {
             .size([imageW, imageH])
             .bandwidth($valueBand.val())(filteredData);
     } else if ($heatType.val() == "count") {
+        // fixation count heatmap: each point gets same weight (500)
         densityData = d3
             .contourDensity()
             .x((d) => x(d.MappedFixationPointX))
@@ -221,7 +242,7 @@ function showOverlay() {
     // get selected gradient color on menu
     var type = $gradType.val();
 
-    // color domain for grandients based on 2 color values instead of 6 like classic gradient
+    // color domain for grandients based on 2 color/density values instead of 6 (like classic gradient)
     var twoColors = [ colorDomain[0], colorDomain[colorDomain.length - 1] ]
 
     // create color scale based on selected gradient
@@ -240,10 +261,12 @@ function showOverlay() {
     // add new heatmap density overlay
     overlay
         .selectAll("path")
+        // use computed density data
         .data(densityData)
         .enter()
         .append("path")
         .attr("d", d3.geoPath())
+        // color of path based on density/color scale
         .attr("fill", (d) => color(d.value))
         .attr("opacity", alpha)
         .on("mouseover", function (densityData) {
@@ -253,12 +276,13 @@ function showOverlay() {
             d3.select(this).style("opacity", "1");
             // pop-up with density value of this path
             pop.transition().duration(100).style("opacity", "1");
+            // density on hover has 3 digits after decimal point
             pop.html("<strong>density:</strong> " + densityData.value.toFixed(3));
             pop.style("left", d3.event.pageX + 8 + "px");
             pop.style("top", d3.event.pageY - 40 + "px");
         })
         .on("mousemove", function () {
-            // pop-up moves with mouse
+            // density pop-up moves with mouse
             pop.style("left", d3.event.pageX + 8 + "px");
             pop.style("top", d3.event.pageY - 40 + "px");
         })
@@ -278,6 +302,7 @@ function showOverlay() {
         .attr("cx", (d) => x(d.MappedFixationPointX))
         .attr("cy", (d) => y(d.MappedFixationPointY))
         .attr("r", $valueRad.val())
+        // give each point a class based on coordinates
         .attr("class", function (d) {
             return "ptH" + d.MappedFixationPointX + "" + d.MappedFixationPointY;
         })
@@ -313,7 +338,7 @@ function showOverlay() {
                     "<strong>Fixation Duration:</strong> " +
                     d.FixationDuration
             );
-            // coordinates of point in heatmap
+            // coordinates of point on screen in heatmap
             var coordsH = d3.selectAll("circle.ptH" + x + "" + y)
                             .node()
                             .getBoundingClientRect();
@@ -333,7 +358,7 @@ function showOverlay() {
                     "<strong>FixationIndex:</strong> " +
                     d.FixationIndex
             );
-            // coordinates of point in scanpath
+            // coordinates of point on screen in scanpath
             var coordsS = d3.selectAll("circle.ptS" + x + "" + y)
                             .node()
                             .getBoundingClientRect();
@@ -458,6 +483,7 @@ export function visualize() {
               .range([imageH, 0]);
 
         // create separate g that contains all zoomable elements
+        // zoomable elements: heatmap overlay, dots, image
         zoomable = svg.append("g")
                       .attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight) + ")");
 
@@ -469,7 +495,7 @@ export function visualize() {
         // deal with data needed for overlay
         overlayData();
 
-        // initialize zoomable heatmap overlays
+        // initialize heatmap overlays as zoomable elements
         overlay = zoomable.append("g");
         points = zoomable.append("g");
 
@@ -477,6 +503,7 @@ export function visualize() {
         showOverlay();
 
         // create separate g for axes
+        // axes are going to be scalable
         axes = svg.append("g")
                   .attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight)  + ")");
 

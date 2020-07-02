@@ -18,6 +18,8 @@ div.output {
 }
 
 /* from here on: Chiara Liotta (1414755)  */
+
+/* scroll bar in menu */
 html {
     --scrollbarBG: rgba(238, 238, 238, 0);
     --thumbBG: rgba(170,218,221,0.5);
@@ -44,6 +46,7 @@ html {
     border: 3px solid var(--scrollbarBG);
 }
 
+/* header style */
 header {
     display: flex;
     flex-direction: column;
@@ -66,6 +69,7 @@ header > h1 {
     margin-top: 10px;
 }
 
+/* main element style */
 main {
     width: 90vw;
     max-width: 90vw;
@@ -75,6 +79,7 @@ main {
     text-align: center;
 }
 
+/* menu style */
 nav {
     width: 250px;
     background-color: black;
@@ -88,7 +93,7 @@ nav {
     padding-right: 0 !important;
 }
 
-
+/* small icons in menu */
 .xsicon {
     font-size: 10px;
 }
@@ -101,6 +106,7 @@ button:focus {
     outline: 0;
 }
 
+/* menu buttons style */
 .btn-outline-dark {
     background-color: white;
     font-size: 14px;
@@ -126,6 +132,7 @@ button:focus {
     margin-top: 2.3px;
 }
 
+/* button for data format */
 .black-btn {
     color: white;
     height: 25px;
@@ -135,16 +142,19 @@ button:focus {
     margin-top: 2.3px;
 }
 
+/* menu dropdown buttons */
 .menulinks {
     margin-left: 0;
     margin-top: 6px;
     padding-bottom: 6px;
 }
 
+/* menu button text has left margin */
 .menuText {
     margin-left: 5px;
 }
 
+/* invisible link in header */
 .invisibleLink {
     text-decoration: none;
     color: black;
@@ -155,6 +165,7 @@ button:focus {
     color: black;
 }
 
+/* about section with upload button */
 #about {
     background-color: #d9edee;
     border: 1px solid black;
@@ -163,6 +174,12 @@ button:focus {
     padding: 5px 20px 5px 20px;
 }
 
+/* text in the section to upload */
+#description {
+    padding: 10px;
+}
+
+/* visualization descriptions section */
 #vis-descr {
     background-color: #d9edee;
     border: 1px solid black;
@@ -179,11 +196,6 @@ button:focus {
     text-align: center;
 }
 
-/* text in the section to upload */
-#description {
-    padding: 10px;
-}
-
 /* rotates glyphicons when the menu links are expanded */
 [data-toggle="collapse"][aria-expanded="true"] > .js-rotate-if-collapsed {
     -webkit-transform: rotate(90deg);
@@ -196,24 +208,7 @@ button:focus {
     transform: rotate(-90deg);
 }
 
-.view {
-    z-index: 100;
-}
-
-#visualization {
-    border: 1px solid black;
-    background-color: #d9edee;
-    text-align: center;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-#visualizationGrid {
-    text-align: center;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
+/* white butttons in menu */
 .init {
     width: 100%;
     margin-top: 7px;
@@ -222,6 +217,7 @@ button:focus {
     text-align: center;
 }
 
+/* actual initialize button for linked view */
 .init4 {
     display: inline-block;
     width: 100%;
@@ -229,6 +225,8 @@ button:focus {
     margin-bottom: 5px;
     text-align: center;
 }
+
+/* reset zoom/slider buttons */
 .reset {
     display: inline-block;
     width: 100%;
@@ -262,6 +260,7 @@ button:focus {
     margin-bottom: 10px;
 }
 
+/* grid for scanpath and heatmap */
 .grid-container {
     display: grid;
     grid-gap: 10px;
@@ -269,6 +268,7 @@ button:focus {
     grid: auto-flow dense / 1fr 1fr;
 }
 
+/* grid for AOI grid, themeriver, and sankey diagram */
 .grid-container2 {
     display: grid;
     grid-gap: 10px;
@@ -276,12 +276,14 @@ button:focus {
     grid: auto-flow dense / 1fr 1fr 1fr;
 }
 
+/* grid for visualization descriptions */
 .descr-grid {
     display: grid;
     grid-template-columns: auto;
     grid: auto-flow dense / 1fr;
 }
 
+/* image and description of vis in a row */
 .descr-row {
     display: flex;
     flex-direction: row;
@@ -289,6 +291,7 @@ button:focus {
     margin-bottom: 20px;
 }
 
+/* if window width too small rows become columns */
 @media (max-width: 900px) {
     .descr-row {
         display: flex;
@@ -298,17 +301,20 @@ button:focus {
     }
 }
 
+/* width of image in vis descriptions */
 img.descr {
     padding-right:10px;
     width: 400px;
 }
 
+/* vis containers */
 #vis1, #vis4, #vis3, #aoi, #vis5, #vis2 {
     border: 1px solid black;
     border-radius: 4px;
     background-color: #d9edee;
 }
 
+/* if window width too small all vis are in a columns */
 @media (max-width: 1000px) {
     .grid-container, .grid-container2 {
         display: grid;
@@ -325,6 +331,7 @@ img.descr {
     }
 }
 
+/* margin separating vis grids */
 .sep {
     margin-top: 10px;
 }

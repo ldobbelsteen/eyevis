@@ -1,6 +1,6 @@
 // Milou Henzen (1409107) - ThemeRiver
 // Eric Abraham: wrote the part that calculated the number of fixations within each AOI
-// Chiara Liotta: AOI highlight linking (exact parts mentioned)
+// Chiara Liotta: AOI highlight linking and timestamp cleaning (exact parts mentioned)
 
 // Compare function to sort chronologically
 function compare(a, b) {
@@ -117,7 +117,7 @@ export function visualize() {
 
 
         // ---> Chiara Liotta with inspiration from Lukas Dobbelsteen's code:
-        // cleaning of timestamps
+        // cleaning of timestamps based on user: for each user, time starts at 0
         let cleanData = [];
 
         let users = [...new Set(data.map((item) => item.user))];
@@ -252,6 +252,7 @@ export function visualize() {
         });
 
         // ---> Chiara Liotta (1414755): AOI highlight linking
+        // function to get only the numbers in the rgb color definition
         function colorcoding(colorcode) {
             if (colorcode != undefined) {
                 var numbers = ["0","1","2","3","4","5","6","7","8","9"]
@@ -277,6 +278,7 @@ export function visualize() {
                 return aoi.color
             })
             // ---> Chiara Liotta (1414755): AOI highlight linking
+            // give each path a class based on AOI rgb color numbers
             .attr("class", (d) => {
                 let aoi = aois.find(x => x.name === d.key)
                 var colornumber = colorcoding(aoi.color)
@@ -307,8 +309,12 @@ export function visualize() {
                 });
                 let aoi = aois.find(x => x.name === d.key)
                 // ---> Chiara Liotta (1414755): AOI highlight linking
+                // get this AOI's rgb color number
                 var colornumber = colorcoding(aoi.color)
+                // decrease opacity of all AOI's
                 d3.selectAll(".scarf").attr("opacity", 0.2)
+                // full opacity of this AOI found via rgb color number
+                // stroke in grid
                 d3.selectAll("rect.rgb" + colornumber).attr("opacity", 1)
                 d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
                     if (colornumber == "352327") return "white"
@@ -336,6 +342,7 @@ export function visualize() {
                 info.transition().duration(200).style("opacity", 0);
                 svg.selectAll("path").attr("opacity", 1);
                 // ---> Chiara Liotta (1414755): AOI highlight linking
+                // opacity and stroke back to normal
                 d3.selectAll(".aoi").attr("stroke", "null");
                 d3.selectAll(".scarf").attr("opacity", 1)
                 // --- end of Chiara's part

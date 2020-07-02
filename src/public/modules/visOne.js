@@ -201,7 +201,8 @@ function drawScanpath() {
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 4.5 - 20)
-        // ---> Chiara Liotta (1414755)
+        // ---> Chiara Liotta (1414755): linking with heatmap
+        // give point a class based on coordinates
         .attr("class", function (d) {
             return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY;
         })
@@ -219,6 +220,7 @@ function drawScanpath() {
             };
 
             // ---> Chiara Liotta (1414755): linking with heatmap
+            // highlight point both in scanpath and heatmap
             d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "black");
             d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
                 .attr("stroke", "black")
@@ -242,6 +244,8 @@ function drawScanpath() {
             );
             info.style("left", d3.event.pageX + 8 + "px");
             info.style("top", d3.event.pageY - 80 + "px");
+            // ---> Chiara Liotta (1414755): linking with heatmap
+            // linked pop-up in heatmap
             pop.transition().duration(100).style("opacity", "1");
             pop.html(
                 "<strong>x:</strong> " +
@@ -256,26 +260,27 @@ function drawScanpath() {
                     "<strong>Fixation Duration:</strong> " +
                     filteredData.FixationDuration
             );
-            // ---> Chiara Liotta (1414755): linking with heatmap
-            var coords = d3
-                .selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
-                .node()
-                .getBoundingClientRect();
-            // --- end of Chiara's part
+            // get coordinates of point on screen in heatmap
+            var coords = d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
+                           .node()
+                           .getBoundingClientRect();
             pop.style("left", coords.left + 10 + "px");
             pop.style("top", coords.top + window.scrollY - 80 + "px");
+            // --- end of Chiara's part
         })
         .on("mouseout", function (filteredData) {
             // ---> Chiara Liotta (1414755): linking with heatmap
+            // point style back to normal
             d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "none");
             d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
-                .attr("stroke", "white")
-                .attr("fill", "black")
-                .attr("r", $("#sliderRadius").val())
-                .attr("stroke-width", $("#sliderRadius").val() / 4);
+              .attr("stroke", "white")
+              .attr("fill", "black")
+              .attr("r", $("#sliderRadius").val())
+              .attr("stroke-width", $("#sliderRadius").val() / 4);
+            // linked pop-up in heatmap disappears
+            pop.transition().duration(200).style("opacity", 0);
             // --- end of Chiara's part
             info.transition().duration(200).style("opacity", 0);
-            pop.transition().duration(200).style("opacity", 0);
         });
 }
 

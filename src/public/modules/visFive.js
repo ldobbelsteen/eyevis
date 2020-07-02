@@ -164,6 +164,7 @@ export function visualize() {
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
         // ---> Chiara Liotta (1414755): AOI highlight linking
+        // function to get only the numbers in the rgb color definition
         function colorcoding(colorcode) {
             if (colorcode != undefined) {
                 var numbers = ["0","1","2","3","4","5","6","7","8","9"]
@@ -196,6 +197,7 @@ export function visualize() {
                 })
                 .attr("height", timelineHeight)
                 // ---> Chiara Liotta (1414755): AOI highlight linking
+                // give each rect a class based on numbers in rgb color
                 .attr("class", gaze => {
                     return "scarf rgb" + colorcoding(gaze.color);
                 })
@@ -212,9 +214,13 @@ export function visualize() {
                     info.style("top", d3.event.pageY - 48 + "px")
                     // ---> Chiara Liotta (1414755): AOI highlight linking
                     if (gaze.color != undefined) {
+                        // get numbers in rgb color
                         var colornumber = colorcoding(gaze.color)
+                        // all AOI's decrease in opacity
                         d3.selectAll(".scarf").attr("opacity", 0.2)
                         d3.selectAll(".river").attr("opacity", 0.2)
+                        // full opacity for hovered-over AOI (found via color number)
+                        // stroke for grid
                         d3.selectAll(".rgb" + colornumber).attr("opacity", 1)
                         d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
                             if (colornumber == "352327") return "white"
@@ -231,6 +237,7 @@ export function visualize() {
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
                     // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // opacity and stroke back to normal
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)
                     d3.selectAll(".aoi").attr("stroke", "null")
