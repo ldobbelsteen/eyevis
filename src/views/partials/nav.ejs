@@ -43,6 +43,7 @@
                     </div>
                 </li>
                 <li id="zoom">
+                    <!-- Reset zoom buttons -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-zoom">
@@ -59,6 +60,7 @@
                     </div>
                 </li>
                 <li id="vis-one">
+                    <!-- Scanpath tools -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-vis1">
@@ -67,13 +69,10 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-vis1">
                         <div class="smallMargTop smallMargBottom">
-
                             <span class="smallMargRight">Color Picker Line: </span><input
-                                class="jscolor  {closable:true,closeText:'Close'} smallMargTop smallMargBottom"
-                                value="ff0000" id="line"> <br>
+                                class="smallMargTop smallMargBottom" data-jscolor="{closeButton:true}" value="FF0000" id="line"><br>
                             <span class="smallMargRight">Color Picker Circle: </span><input
-                                class="jscolor {closable:true,closeText:'Close'} smallMargTop smallMargBottom"
-                                value="4682b4" id="circle"> <br>
+                                class="smallMargTop smallMargBottom" data-jscolor="{closeButton:true}" value="4682b4" id="circle"><br>
                             <span>Button changes both line and circle color if modified</span>
                             <button type="button" class="btn btn-default init smallMargTop" id="colorPick">Change
                                 color</button>
@@ -81,6 +80,7 @@
                     </div>
                 </li>
                 <li id="vis-four">
+                    <!-- Heatmap tools -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-vis4">
@@ -138,6 +138,7 @@
                     </div>
                 </li>
                 <li id="vis-aoi">
+                    <!-- AOI based visualizations tools -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-aoi">
@@ -162,8 +163,8 @@
                             <span class="smallMargTop">Time interval length</span>
                             <div class="d-flex justify-content-center my-4 w-100">
                                 <form class="range-field">
-                                    <input id="sliderInterval" class="border-0 slider" type="range" min="1000"
-                                        max="250000" value="50000" step="1000" />
+                                    <input id="sliderInterval" class="border-0 slider" type="range" min="100"
+                                        max="7000" value="800" step="100" />
                                 </form>
                                 <span class="font-weight-bold text-primary ml-2 mt-1 valueInterval val"></span>
                             </div>
@@ -177,61 +178,40 @@
                         </div>
                     </div> 
                 </li>
-                <li id="vis-two">
+                <li id="exportSection">
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
-                        data-toggle="collapse" data-target="#navbar-collapse-vis2">
+                        data-toggle="collapse" data-target="#navbar-collapse-export">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
-                            class="menuText">Sankey diagram</span>
+                            class="menuText">Export</span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbar-collapse-vis2">
-                        <div class="smallMargTop smallMargBottom">
-                            <button type="button" class="btn btn-default init" id="init-vis2">Initialize</button>
-                            <br>
-                            <span class="smallMargRight smallMargTop">Grid size:</span><input
-                                class="smallMargRight smallMargTop" type="number" min="2" max="10" value="3"><span
-                                class="smallMargRight">x</span><input type="number" min="2" max="10" value="3"><br>
-                        </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse-export">
+                        <!-- Buttons for exporting visualizations + related work. Juul Peters (1433741)--> 
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scanpath</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Heatmap</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> AOI Grid</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> ThemeRiver</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Sankey Diagram</span>
+                        </button>
+                        <button type="button" height='20px'
+                            class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
+                            <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scarf Plot</span>
+                        </button>
                     </div>
-                </li>
-
-                <!-- Buttons for exporting visualizations + related work. Juul Peters (1433741)--> 
-
-                <li id="exportScanpath">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scanpath</span>
-                    </button>
-                </li>
-                <li id="exportHeatmap">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Heatmap</span>
-                    </button>
-                </li>
-                <li id="exportAOIGrid">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> AOI Grid</span>
-                    </button>
-                </li>
-                <li id="exportThemeRiver">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> ThemeRiver</span>
-                    </button>
-                </li>
-                <li id="exportSankeyDiagram">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Sankey Diagram</span>
-                    </button>
-                </li>
-                <li id="exportScarfPlot">
-                    <button type="button" height='20px'
-                        class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse init">
-                        <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scarf Plot</span>
-                    </button>
                 </li>
             </ul>
         </div>

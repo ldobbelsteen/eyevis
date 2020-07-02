@@ -163,6 +163,22 @@ export function visualize() {
         // Pop-up box
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
+        // ---> Chiara Liotta (1414755): AOI highlight linking
+        // function to get only the numbers in the rgb color definition
+        function colorcoding(colorcode) {
+            if (colorcode != undefined) {
+                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+                var colornumber = "";
+                for (var i=0; i < colorcode.length; i++) {
+                    if (numbers.includes(colorcode.charAt(i))) {
+                        colornumber = colornumber + colorcode.charAt(i)
+                    }
+                }
+                return colornumber;
+            }
+        }
+        // --- end of Chiara's part
+
         // Add gazes to the svg
         timelines.selectAll("rect")
             .data(gazes)
@@ -181,18 +197,9 @@ export function visualize() {
                 })
                 .attr("height", timelineHeight)
                 // ---> Chiara Liotta (1414755): AOI highlight linking
+                // give each rect a class based on numbers in rgb color
                 .attr("class", gaze => {
-                    if (gaze.color != undefined) {
-                        var colorcode = gaze.color
-                        var numbers = ["0","1","2","3","4","5","6","7","8","9"]
-                        var colornumber = "";
-                        for (var i=0; i < colorcode.length; i++) {
-                            if (numbers.includes(colorcode.charAt(i))) {
-                                colornumber = colornumber + colorcode.charAt(i)
-                            }
-                        }
-                        return "scarf rgb" + colornumber;
-                    }  
+                    return "scarf rgb" + colorcoding(gaze.color);
                 })
                 // --- end of Chiara's part
                 .on("mouseover", gaze => {
@@ -206,17 +213,14 @@ export function visualize() {
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
                     // ---> Chiara Liotta (1414755): AOI highlight linking
-                    var colorcode = gaze.color
-                    if (colorcode != undefined) {
-                        var numbers = ["0","1","2","3","4","5","6","7","8","9"]
-                        var colornumber = "";
-                        for (var i=0; i < colorcode.length; i++) {
-                            if (numbers.includes(colorcode.charAt(i))) {
-                                colornumber = colornumber + colorcode.charAt(i)
-                            }
-                        }
+                    if (gaze.color != undefined) {
+                        // get numbers in rgb color
+                        var colornumber = colorcoding(gaze.color)
+                        // all AOI's decrease in opacity
                         d3.selectAll(".scarf").attr("opacity", 0.2)
                         d3.selectAll(".river").attr("opacity", 0.2)
+                        // full opacity for hovered-over AOI (found via color number)
+                        // stroke for grid
                         d3.selectAll(".rgb" + colornumber).attr("opacity", 1)
                         d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
                             if (colornumber == "352327") return "white"
@@ -233,6 +237,7 @@ export function visualize() {
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
                     // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // opacity and stroke back to normal
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)
                     d3.selectAll(".aoi").attr("stroke", "null")

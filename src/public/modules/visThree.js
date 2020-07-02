@@ -1,6 +1,6 @@
 // Milou Henzen (1409107) - ThemeRiver
-// Big thanks to Eric for writing the part that calculated the number of fixations within each AOI
-// Chiara Liotta: AOI highlight linking (exact parts mentioned)
+// Eric Abraham: wrote the part that calculated the number of fixations within each AOI
+// Chiara Liotta: AOI highlight linking and timestamp cleaning (exact parts mentioned)
 
 // Compare function to sort chronologically
 function compare(a, b) {
@@ -31,7 +31,6 @@ export function visualize() {
     let data = filterData(window.data, {
         StimuliName: window.stimulus,
     });
-    
 
     // Load stimulus and make it change when something changes
     const container = d3.select("#vis3");
@@ -116,8 +115,29 @@ export function visualize() {
         // Making array with the data
         let aoiInfo = [];
 
+
+        // ---> Chiara Liotta with inspiration from Lukas Dobbelsteen's code:
+        // cleaning of timestamps based on user: for each user, time starts at 0
+        let cleanData = [];
+
+        let users = [...new Set(data.map((item) => item.user))];
+        users.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach(user => {
+            let userData = filterData(data, {
+                user: user
+            });
+            let timestamps = userData.map(x => x.Timestamp);
+            let startTime = d3.min(timestamps);
+            userData.forEach(d => {
+                d.Timestamp = d.Timestamp - startTime; 
+                cleanData.push(d)
+            });
+        });
+        // --- end of Chiara's part
+
+        // ---> Eric Abraham's part
+
         // Sorting the timestamps to be linear
-        let sortedData = data.sort(compare);
+        let sortedData = cleanData.sort(compare);
 
         let i = 0,
             k = 0,
@@ -151,8 +171,12 @@ export function visualize() {
             aoiInfo.push(timestampInfo);
         }
         
+        // --- end of Eric's part
+
         // Removing empty last element from array
-        aoiInfo.pop();
+        if (aoiInfo.length != 2){
+            aoiInfo.pop();
+        }
 
         //Getting all the names of the aois to use as keys
         var keys = Object.keys(aoiInfo[0]);
@@ -226,6 +250,22 @@ export function visualize() {
             let aoi = aois.find(x => x.name === d.key)
             return aoi.color
         });
+
+        // ---> Chiara Liotta (1414755): AOI highlight linking
+        // function to get only the numbers in the rgb color definition
+        function colorcoding(colorcode) {
+            if (colorcode != undefined) {
+                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
+                var colornumber = "";
+                for (var i=0; i < colorcode.length; i++) {
+                    if (numbers.includes(colorcode.charAt(i))) {
+                        colornumber = colornumber + colorcode.charAt(i)
+                    }
+                }
+                return colornumber;
+            }
+        }
+        // --- end of Chiara's part
     
         var path = svg
             .selectAll("path")
@@ -238,16 +278,10 @@ export function visualize() {
                 return aoi.color
             })
             // ---> Chiara Liotta (1414755): AOI highlight linking
+            // give each path a class based on AOI rgb color numbers
             .attr("class", (d) => {
                 let aoi = aois.find(x => x.name === d.key)
-                var colorcode = aoi.color
-                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
-                var colornumber ="";
-                for (var i=0; i < colorcode.length; i++) {
-                    if (numbers.includes(colorcode.charAt(i))) {
-                        colornumber = colornumber + colorcode.charAt(i)
-                    }
-                }
+                var colornumber = colorcoding(aoi.color)
                 return "river rgb" + colornumber;
             });
             // --- end of Chiara's part
@@ -275,15 +309,12 @@ export function visualize() {
                 });
                 let aoi = aois.find(x => x.name === d.key)
                 // ---> Chiara Liotta (1414755): AOI highlight linking
-                var colorcode = aoi.color
-                var numbers = ["0","1","2","3","4","5","6","7","8","9"]
-                var colornumber = "";
-                for (var i=0; i < colorcode.length; i++) {
-                    if (numbers.includes(colorcode.charAt(i))) {
-                        colornumber = colornumber + colorcode.charAt(i)
-                    }
-                }
+                // get this AOI's rgb color number
+                var colornumber = colorcoding(aoi.color)
+                // decrease opacity of all AOI's
                 d3.selectAll(".scarf").attr("opacity", 0.2)
+                // full opacity of this AOI found via rgb color number
+                // stroke in grid
                 d3.selectAll("rect.rgb" + colornumber).attr("opacity", 1)
                 d3.selectAll(".aoirgb" + colornumber).attr("stroke", () => {
                     if (colornumber == "352327") return "white"
@@ -311,6 +342,7 @@ export function visualize() {
                 info.transition().duration(200).style("opacity", 0);
                 svg.selectAll("path").attr("opacity", 1);
                 // ---> Chiara Liotta (1414755): AOI highlight linking
+                // opacity and stroke back to normal
                 d3.selectAll(".aoi").attr("stroke", "null");
                 d3.selectAll(".scarf").attr("opacity", 1)
                 // --- end of Chiara's part

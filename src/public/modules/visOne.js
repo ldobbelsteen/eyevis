@@ -21,7 +21,8 @@ var gradientScale;
 var xScaleReference, yScaleReference;
 var xAxis, yAxis;
 var xAxisPlacement, yAxisPlacement;
-var margin = { top: 35, left: 50, right: 10, bottom: 10 };
+const margin = { top: 35, left: 50, right: 10, bottom: 10 };
+const rectHeight = 75;
 
 //loading animation functions
 function showLoading() {
@@ -72,7 +73,6 @@ function updateData() {
         StimuliName: window.stimulus,
         user: window.selectedUser,
     };
-    console.log(window.selectedUser);
 
     filteredData = window.data.filter((item) => {
         for (let key in filter) {
@@ -85,7 +85,6 @@ function updateData() {
         }
         return true;
     });
-    console.log(filteredData);
 }
 
 export function userChange() {
@@ -139,6 +138,14 @@ function drawScanpath() {
         .domain([sortedData[0].FixationIndex, sortedData[sortedData.length - 1].FixationIndex])
         .range([0, containerW * 0.7]);
 
+    topContainer
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("height", rectHeight)
+        .attr("width", containerW)
+        .attr("fill", "#d9edee");
+    
     topContainer
         .append("g")
         .attr("transform", "translate(" + containerW * 0.15 + "," + 50 + ")")
@@ -194,7 +201,8 @@ function drawScanpath() {
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 4.5 - 20)
-        // ---> Chiara Liotta (1414755)
+        // ---> Chiara Liotta (1414755): linking with heatmap
+        // give point a class based on coordinates
         .attr("class", function (d) {
             return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY;
         })
@@ -212,6 +220,7 @@ function drawScanpath() {
             };
 
             // ---> Chiara Liotta (1414755): linking with heatmap
+            // highlight point both in scanpath and heatmap
             d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "black");
             d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
                 .attr("stroke", "black")
@@ -235,6 +244,8 @@ function drawScanpath() {
             );
             info.style("left", d3.event.pageX + 8 + "px");
             info.style("top", d3.event.pageY - 80 + "px");
+            // ---> Chiara Liotta (1414755): linking with heatmap
+            // linked pop-up in heatmap
             pop.transition().duration(100).style("opacity", "1");
             pop.html(
                 "<strong>x:</strong> " +
@@ -249,31 +260,31 @@ function drawScanpath() {
                     "<strong>Fixation Duration:</strong> " +
                     filteredData.FixationDuration
             );
-            // ---> Chiara Liotta (1414755): linking with heatmap
-            var coords = d3
-                .selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
-                .node()
-                .getBoundingClientRect();
-            // --- end of Chiara's part
+            // get coordinates of point on screen in heatmap
+            var coords = d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
+                           .node()
+                           .getBoundingClientRect();
             pop.style("left", coords.left + 10 + "px");
             pop.style("top", coords.top + window.scrollY - 80 + "px");
+            // --- end of Chiara's part
         })
         .on("mouseout", function (filteredData) {
             // ---> Chiara Liotta (1414755): linking with heatmap
+            // point style back to normal
             d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "none");
             d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
-                .attr("stroke", "white")
-                .attr("fill", "black")
-                .attr("r", $("#sliderRadius").val())
-                .attr("stroke-width", $("#sliderRadius").val() / 4);
+              .attr("stroke", "white")
+              .attr("fill", "black")
+              .attr("r", $("#sliderRadius").val())
+              .attr("stroke-width", $("#sliderRadius").val() / 4);
+            // linked pop-up in heatmap disappears
+            pop.transition().duration(200).style("opacity", 0);
             // --- end of Chiara's part
             info.transition().duration(200).style("opacity", 0);
-            pop.transition().duration(200).style("opacity", 0);
         });
 }
 
 export function visualize() {
-    console.log("I AM CALLED ONCE!");
     container.html("");
     img = new Image();
     d3.selectAll(".output").remove();
@@ -281,26 +292,26 @@ export function visualize() {
     img.onload = function () {
         //onload function is needed to scale the image dynamically with the size, since the size is not known beforehand
         //image size variables
-        var ratio = 650 / this.width;
+        
         imageW = 650;
+        var ratio = imageW / this.width;
         imageH = this.height * ratio;
 
         containerH = imageH + margin.top + margin.bottom;
         containerW = imageW + margin.left + margin.right;
-
-        //CREATES CONTAINER TO SHOW GRADIENT SCALE
-        topContainer = d3
-            .select("#vis1")
-            .append("svg")
-            .attr("viewBox", "0 0 " + containerW + " " + 75);
-
-        initializeGradient();
-
+        
         svg = d3
             .select("#vis1")
             .append("svg")
-            .attr("viewBox", "0 0 " + containerW + " " + containerH)
+            .attr("viewBox", "0 0 " + containerW + " " + (containerH + rectHeight))
             .append("g");
+
+        zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight ) + ")");
+
+        //CREATES CONTAINER TO SHOW GRADIENT SCALE
+        topContainer = svg.append("g")
+
+        initializeGradient();
 
         // x coordinates that will be offset when image is scaled to fit screen
         xOffset = d3.scaleLinear().domain([0, img.naturalWidth]).range([0, imageW]);
@@ -308,35 +319,42 @@ export function visualize() {
         // y coordinates that will be offset when image is scaled to fit screen
         yOffset = d3.scaleLinear().domain([img.naturalHeight, 0]).range([imageH, 0]);
 
-        console.log("DATA GIVEN IS: ");
-        console.log(filteredData);
-
-        zoomObjects = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
         lines = zoomObjects.insert("g"); //inside this d3 object the lines will be drawn
 
         points = zoomObjects.insert("g"); //inside this d3 object the points will be drawn
 
+        drawScanpath();
+
         // create separate g for axes
-        let axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        let axes = svg.append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + rectHeight) + ")");
 
         axes.append("rect")
             .attr("x", -margin.left)
-            .attr("y", -margin.top)
+            .attr("y", (-margin.top -1))
             .attr("width", containerW)
             .attr("height", margin.top)
             .attr("fill", "#d9edee");
-
-        axes.append("rect").attr("x", -margin.left).attr("y", imageH).attr("width", containerW).attr("height", margin.bottom).attr("fill", "#d9edee");
-
-        axes.append("rect").attr("x", imageW).attr("y", -margin.top).attr("width", margin.right).attr("height", containerH).attr("fill", "#d9edee");
-
+    
+        axes.append("rect")
+            .attr("x", -margin.left)
+            .attr("y", imageH)
+            .attr("width", containerW)
+            .attr("height", margin.bottom)
+            .attr("fill", "#d9edee");
+    
+        axes.append("rect")
+            .attr("x", imageW)
+            .attr("y", -margin.top)
+            .attr("width", margin.right)
+            .attr("height", containerH)
+            .attr("fill", "#d9edee");
+    
         axes.append("rect")
             .attr("x", -margin.left)
             .attr("y", -margin.top)
             .attr("width", margin.left)
             .attr("height", containerH)
-            .attr("fill", "#d9edee");
+             .attr("fill", "#d9edee");
 
         // Scaling
         let xScale = d3.scaleLinear().domain([0, this.width]).range([0, imageW]);
@@ -363,13 +381,12 @@ export function visualize() {
             .attr("transform", "translate(" + -5 + ", 0)")
             .call(yAxisPlacement);
 
-        drawScanpath();
-
         //first image is removed and then redrawn, so prevent overlapping images
         svg.selectAll(".img").remove();
         imgSvg = zoomObjects
             .insert("image", ":first-child")
             .attr("width", imageW)
+            .attr("height", imageH)
             .attr("xlink:href", `/stimuli/${window.stimulus}`)
             .attr("class", "img");
     };
