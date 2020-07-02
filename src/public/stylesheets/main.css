@@ -217,6 +217,16 @@ button:focus {
     text-align: center;
 }
 
+/* export buttons */
+.init50 {
+    width: 49%;
+    height: 20px;
+    margin-top: 7px;
+    margin-bottom: 5px;
+    background-color: white;
+    text-align: center;
+}
+
 /* actual initialize button for linked view */
 .init4 {
     display: inline-block;
@@ -236,7 +246,7 @@ button:focus {
     text-align: center;
 }
 
-.init:hover, .reset:hover {
+.init:hover, .reset:hover, .init50:hover{
     box-shadow: 0 0 3px #f0e9ed inset;
     background-color: black;
     color: white;
