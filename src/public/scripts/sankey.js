@@ -59,7 +59,7 @@ d3.sankey = function() {
 
   // SVG path data generator, to be used as "d" attribute on "path" element selection.
   sankey.link = function() {
-    var curvature = .5;
+    var curvature = .25;
 
     function link(d) {
       var xs = d.source.x + d.source.dx,

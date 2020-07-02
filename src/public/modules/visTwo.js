@@ -357,7 +357,9 @@ export function visualize() {
             d3.select(this)
                 .attr("transform",
                     "translate("
-                        + d.x + ","
+                        + (d.x = Math.max(
+                          0, Math.min(containerWidth - d.dx, d3.event.x))
+                        ) + ","
                         + (d.y = Math.max(
                           0, Math.min(containerHeight - d.dy, d3.event.y))
                         ) + ")");
