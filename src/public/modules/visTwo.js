@@ -259,7 +259,7 @@ export function visualize() {
             .data(graph.links())
             .enter()
                 .append("path")
-                .attr("class", "link")
+                .attr("class", (d) => { return "link l" + d.source.name + ""+ d.target.name})
                 .attr("d", path)
                 .style("stroke-width", function(d) { return Math.max(1, d.dy); })
                 .style("fill", "none")
@@ -275,6 +275,7 @@ export function visualize() {
                     info.style("left", d3.event.pageX + 8 + "px");
                     info.style("top", d3.event.pageY + "px");
 
+                    d3.select(".l" + d.source.name + "" + d.target.name).style("stroke-opacity", 0.7)
                     this.parentNode.style("stroke-opacity", 0.5);
                 })
                 .on("mousemove", () => {
@@ -283,6 +284,7 @@ export function visualize() {
                 })
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
+                    d3.selectAll(".link").style("stroke-opacity", 0.2)
                 })
                 .sort(function(a, b) { return b.dy - a.dy; });
 
