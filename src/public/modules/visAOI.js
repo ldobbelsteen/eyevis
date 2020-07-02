@@ -67,9 +67,12 @@ export function visualize() {
         let AOIsizeY = stimulusHeight / gridSizeY;
 
         // Add the AOIs to the array
+        let iOfAOI = 0;
         for (let x = 0; x < gridSizeX; x++) {
             for (let y = 0; y < gridSizeY; y++) {
+                iOfAOI++;
                 AOIs.push({
+                    id: iOfAOI,
                     x1: AOIsizeX * x,
                     x2: AOIsizeX * (x + 1),
                     y1: AOIsizeY * y,
@@ -164,6 +167,15 @@ export function visualize() {
                     d3.selectAll(".river").attr("opacity", 1)
                     // --- end of Chiara's part
                 })
+            stimulus.append("text")
+                .attr("x", aoi.x1 * aoiScaleX + 10)
+                .attr("y", aoi.y1 * aoiScaleY + 60)
+                .attr("font-size", "5em")
+                .attr("fill", () => {
+                    if(selectedColorset == "blue") return "black";
+                    return "white";
+                })
+                .text(aoi.id);
         });
 
         // Pop-up box
