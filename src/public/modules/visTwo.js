@@ -240,7 +240,7 @@ export function visualize() {
             .nodes(data.nodes)
             .links(data.links)
             .nodeWidth(30)
-            .nodePadding(5)
+            .nodePadding(36)
             .size([containerWidth -100, containerHeight/2])
             .sinksRight(false)
             .layout(5);
