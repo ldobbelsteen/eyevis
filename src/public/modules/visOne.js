@@ -154,9 +154,9 @@ function drawScanpath() {
     });
     // --- end of Chiara's part
 
-        // Sorting the timestamps to be linear
-        let sortedData = cleanData.sort(compare);
-console.log(sortedData)
+    // Sorting the timestamps to be linear
+    let sortedData = cleanData.sort(compare);
+    
     //sets the scale for the gradient
     var scaleInterval = [parseInt(sortedData[0].FixationIndex), parseInt(sortedData[sortedData.length - 1].FixationIndex)];
     var interval = (scaleInterval[1] - scaleInterval[0]) / 5;
