@@ -142,10 +142,10 @@ function drawScanpath() {
         let userData = filterData(data, {
             user: user
         });
-        let startTime = d3.min(userData, d => { return d.Timestamp })
-        let startIndex = d3.min(userData, d => { return d.FixationIndex})
+        let startTime = d3.min(userData, d => { return parseInt(d.Timestamp) })
+        let startIndex = d3.min(userData, d => { return parseInt(d.FixationIndex)})
         userData.forEach(d => {
-            d.Timestamp = parseInt(d.Timestamp) + lastT - (-startTime) + 1;  
+            d.Timestamp = parseInt(d.Timestamp) + lastT + (-startTime) + 1;  
             d.FixationIndex = lastI + parseInt(d.FixationIndex) + (-startIndex) + 1;
             cleanData.push(d)
         });
@@ -156,7 +156,7 @@ function drawScanpath() {
 
         // Sorting the timestamps to be linear
         let sortedData = cleanData.sort(compare);
-
+console.log(sortedData)
     //sets the scale for the gradient
     var scaleInterval = [parseInt(sortedData[0].FixationIndex), parseInt(sortedData[sortedData.length - 1].FixationIndex)];
     var interval = (scaleInterval[1] - scaleInterval[0]) / 5;
