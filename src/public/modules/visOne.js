@@ -1,5 +1,5 @@
 //Eric Abraham 1408828 scanpath visualization
-// Chiara Liotta: linking with heatmap (exact parts mentioned)
+// Chiara Liotta: linking with heatmap and index/timestamp cleaning (exact parts mentioned)
 
 var filteredData;
 var container = $("#vis1");
@@ -131,15 +131,20 @@ function drawScanpath() {
 
     colorGrandient();
 
-    // ---> Chiara Liotta with inspiration from Lukas Dobbelsteen's code:
-    // cleaning of timestamps based on user: for each user, time starts at 0
+    // ---> Chiara Liotta: cleaning of timestamps
+    // cleaning of timestamps based on user
+    // points are ordered based on user
+    // first user has first point with index 1 and timestamp 0, then all their fixation points in order
+    // timestamps are calculated by removing the smallest timestamp
+    // user after gets the previous user's last index/timestamp + their timestamps/indices - 
+    // - their smallest timestamp/index + 1 
     let cleanData = [];
 
     let users = [...new Set(filteredData.map((item) => item.user))];
-    var lastI = -1;
+    var lastI = 0;
     var lastT = -1;
     users.sort((a, b) => { return a.slice(1) - b.slice(1) }).forEach(user => {
-        let userData = filterData(data, {
+        let userData = filterData(filteredData, {
             user: user
         });
         let startTime = d3.min(userData, d => { return parseInt(d.Timestamp) })
