@@ -8,16 +8,19 @@
             <div class="descr-row"> 
                 <img src="images/scanpath.png" alt="Scanpath image" class="descr">
                 <p>
-                    The word 'scanpath' is used to describe a sequence of fixation points and saccades, visualized over a static stimulus.
+                    The word 'scanpath' is used to describe a sequence of fixation points and saccades, visualized over a static stimulus. 
                     A fixation point is defined as an aggregation of gaze points, based on a specified area and time span, usually between 200 and 300 ms. 
-                    Between consecutive fixation points, in chronological order, there are saccades, which describe rapid eye movement from one fixation point to another. <br>
-                    
+                    Between consecutive fixation points, in chronological order, there are saccades, which describe rapid eye movement from one fixation point to another.
+                    <br>
                     Scanpath visualizations are useful because they provide a spatio-temporal overview of the eye tracking data, making it easy to identify patterns and paths taken by different study subjects. 
-                    However, one great drawback is their tendency to have too much visual clutter, therefore, to offset such a problem, a per study subject view has been added. <br>
-                    
-                    Our visualization takes the standard approach  of having each circle represent a fixation point, where the radius corresponds to a logarithmic scale of the fixation duration and lines represent saccades between fixations. 
-                    In addition, it provides a luminescence gradient for the fixation points, which varies from the lowest to the highest possible luminescence, indicating the start and finish of the observations (low luminescence corresponds to the start of the observations and high luminescence corresponds to the end), thereby also giving a temporal representation.
-                    Upon clicking on a paint, a pop-up displays information, such as the coordinates of the point on the x-y plane and the fixation duration. 
+                    However, one great drawback of scanpaths is their tendency to have too much visual clutter, therefore, to offset such a problem, a per-study-subject view has been added.
+                    <br>
+                    Our visualization takes the standard approach of having each circle represent a fixation point, where the radius corresponds to the fixation duration and lines represent saccades between fixations. 
+                    It is also possible to only focus on one study subject at a time, in order to minimize clutter.
+                    <br>
+                    In order to offset the possible drawback of having a crowded set of points, which causes fixation durations to not be easily distinguished, the visualization has been linked with a heatmap. 
+                    This linked view was developed because the heatmap clearly displays, through the calculation of densities, which areas have been observed the longest (relative gaze duration heatmap) or which have been observed the most often (fixation count heatmap) overall. 
+                    Moreover, the heatmap shows fixation points of a small and constant size, making it easier for them to be hovered over and trigger the pop-ups displaying the fixation duration and fixation index.
                </p>
             </div>
             
@@ -28,16 +31,20 @@
                 <img src="images/heatmapFrankfurt.png" alt="Heatmap image" class="descr">
                 <p>
                     Heatmaps, also called attention maps, are a great tool to intuitively display the points that were observed the longest. 
-                    This type of visualization usually aggregates fixation points over time in one static color coded density ﬁeld which highlights the hot-spots of attention.
-                    The usefulness and convenience of this visualization technique lies in the little effort required to read and understand it. 
-                    The intuitive color scale and the positioning of the data over the stimulus allow the user to identify the most commonly gazed points in just one glance. <br>
-
-                    The ability of heatmaps to provide a clean depiction of aggregated gaze fixations, even when visualizing multiple users, represents one of its main advantages over scanpaths.
-                    However, it is to be noted that heatmaps sacrifice the displaying of the order of the fixation points. This issue is the reason why our tool offers a linked and simultaneous view that includes scanpaths and other temporal-based visualizations. <br>
-                    
-                    In order to maximize the value of this kind of visualization, we offer two types of heatmap: relative gaze duration and fixation count. The former calculates the fixation-point density in a given area by weighing the points based on their duration, whereas the latter assigns the same weight to all points regardless. 
-                    Furthermore, in both types, the gradient is programmed in such a way that the lower end assumes the minimum value among all the densities calculated, while the higher end assumes the maximum value. This decision was taken because having an absolute duration heatmap with a fixed linear gradient drastically decreases the color variety within single visualizations. 
-                    Moreover, the adoption of a gradient-density legend  allows the uncovering of disparities between the relative scales of different data.
+                    This visualization technique usually aggregates fixation points over time in one static color-coded density field which highlights the hot-spots of attention. 
+                    The intuitive color scale and the positioning of the data over the stimulus allow the user to identify the most commonly gazed points in just one glance.
+                    <br>
+                    The ability of heatmaps to provide a clean depiction of aggregated gaze fixations, even when visualizing multiple study subjects, represents one of its main advantages over scanpaths. 
+                    However, it is to be noted that heatmaps sacrifice displaying the order of the fixation points. 
+                    This issue is the reason why our tool offers a linked and simultaneous view that includes scanpaths and other temporal-based visualizations.
+                    <br>
+                    In order to maximize the value of this kind of visualization, a decision was made to let the user switch between two types of heatmap: relative gaze duration and fixation count. 
+                    The former calculates the fixation-point density in a given area by weighing the points based on their duration, whereas the latter assigns the same weight to all points regardless. 
+                    Furthermore, in both types, the gradient is programmed in such a way that the lower end assumes the minimum value among all the densities calculated, while the higher end assumes the maximum value. 
+                    <br>
+                    Re-sizeable circles offer the user the opportunity to uncover the fixation points left out by the heatmap overlay due to a low-density area. 
+                    Moreover, information about the fixation duration is available on hover, together with XY-coordinates and a specific study subject. 
+                    Furthermore, to solve the issue related to the color transitions not being sharp enough, a hover-over pop-up paired with the highlighting of the hovered-over path displays the exact density value of it.
                 </p>
             </div>
         </div>
@@ -46,19 +53,17 @@
             <div class="descr-row"> 
                 <img src="images/themeriver.png" alt="ThemeRiver image" class="descr">
                 <p>
-                    ThemeRivers, sometimes called streamgraphs, are stacked graphs that portrays thematic change over time. 
-                    On the topic of eye tracking visualization, a ThemeRiver visualization allows for area of interest information in relation to time. 
-                    The streams of the graph show the number of fixations within each AOI at a defined time interval. 
-                    This allows us to observe the flow of the relative proportions of each area of interest and to search for trends, patterns and relationships 
-                    Besides, up to a certain degree it also gives insight into the mean time it took users to complete the task when there was no strict time limit given. 
-                    This conclusion could be drawn from the graph, since there will be more fixations within each AOI within a certain time span. 
+                    ThemeRivers, sometimes called streamgraphs, are stacked graphs that portray thematic change over time. 
+                    On the topic of eye tracking visualization, a ThemeRiver visualization gives information on areas of interest in relation to time. 
+                    The streams of the graph show the number of fixations within each AOI in a defined time interval, allowing users to observe the flow of the relative proportions of each area of interest and to search for trends, patterns, and relationships. 
+                    Moreover, up to a certain degree ThemeRivers can also give insights into the mean time taken by users to complete the task when there was no strict time limit given. 
+                    This information can be drawn from the graph, as more fixations will be present within each AOI within a certain time span. 
                     <br>
-                    Several interactive possibilities were added to improve user interactivity. 
-                    For one, users are able to decide on the grid size to select the number of AOIs in which the stimulus will be divided. 
-                    The slider option is available to adjust the length of the time intervals in which the number of fixations within each area of interest are calculated. 
-                    While data with all study subjects benefits more from a higher time interval length, the single participants are able to display more information when given a smaller time interval length. 
-                    Another user-selectable option is to change the graph from standard to a normalized graph. 
-                    The "silhouette" offset is what distinguishes ThemeRivers from other streamgraphs, which use a "wiggle" offset.                    
+                    Several interactive options were added to improve user interactivity. 
+                    For one, users are able to decide on the grid size to select the number of AOIs based on which the stimulus will be divided. 
+                    The slider option is available to adjust the length of the time intervals used to calculate the number of fixations within each area of interest. 
+                    Another user-selectable option is to change the graph from standard to normalized. 
+                    Lastly, the graph responds to hovering, zooming, and panning. Hovering over a river will lower the opacity of the other rivers and display a tooltip with the name of the AOI, the number of fixations in it at that time, and the timestamp.
                 </p>
             </div>
         </div>
@@ -68,13 +73,13 @@
                 <img src="images/scarfplot.png" alt="Scarf plot image" class="descr">
                 <p>
                     Scarf plots offer a way to visualize the AOIs of a study subject over time. 
-                    It shows a timeline of gazes inside an AOI by color coding every AOI and changing color whenever the gaze of a study participant enters a different AOI. 
+                    It shows a timeline of gazes inside an AOI by color-coding every AOI and changing color whenever the gaze of a study participant enters a different AOI. 
                     <br>
-                    The strength of the scarf plot is that, for a single participant, it has a single dimension, thus it is possible to add multiple study subjects vertically as a second dimension on the y-axis. 
-                    This provides an intuitive and clear way of comparing different participants by their areas of interest. 
-                    Larger areas of interest are desired, as with smaller areas the amount of transitions from one AOI to the other is higher, which would decrease readability. 
+                    The strength of the scarf plot is that, for a single participant, it has a single dimension based on time, thus it is possible to add multiple study subjects vertically as a second dimension. 
+                    This provides an intuitive and clear way of comparing different participants based on the areas of interest they observed over time. 
+                    Larger areas of interest are desired, as smaller areas increase the number of transitions from one AOI to the other, thereby decreasing readability. 
                     <br>
-                    Compared to the ThemeRiver visualization, which offers similar insights, a scarf plot allows for the identification of single participants: while the former groups study subjects together, the latter keeps them separate.                    
+                    Compared to the ThemeRiver visualization, which offers similar insights, the scarf plots allow identification of single participants: while the ThemeRiver groups study subjects together, the scarf plot keeps them separate.
                 </p>
             </div>
         </div>
@@ -83,11 +88,17 @@
             <div class="descr-row"> 
                 <img src="images/sankey-diagram.png" alt="Sankey diagram image" class="descr">
                 <p>
-                    Sankey diagrams have been used for a long time to illustrate the flow of people or objects. For example, the Minard mapshows the movement of soldiers in an army, encoding the number as differently thick rivers and subrivers. The movement direction and the splitting and merging behavior is indicated by typical intuitive visual variables.
+                    Sankey diagrams have been used for a long time to illustrate the flow of people or objects. 
+                    For example, the Minard map shows the movement of soldiers in an army, encoding the number as differently thick rivers and subrivers. 
+                    The movement direction and the splitting and merging behavior is indicated by typical intuitive visual variables.
                     <br>
-                    A Sankey diagram offers a clear visualization of the transitioning of area of interests (AOIs), which are automatically computed by applying a grid onto the stimulus, with parameters specified by the user, and are represented in Sankey diagrams as color coded vertical bars. In the case that multiple AOIs are located on the same layer, these will be stacked vertically on each other. The thickness of alink between two AOIs visually encodes the number of transitions between them. 
+                    A Sankey diagram offers a clear visualization of the transitioning of areas of interest (AOIs), which are automatically computed by applying a grid onto the stimulus, with parameters specified by the user, and are then represented as color-coded vertical bars. 
+                    In the case that multiple AOIs are located on the same layer, these will be stacked vertically on each other. 
+                    Moreover, the user is granted the ability to move the vertical bars around the visualization container.
+                    The thickness of a link between two AOIs visually encodes the number of transitions between them. 
                     <br>
-                    This visualization is quite powerful since it can clearly show people's attention behavior specifically regarding the transition between areas of interest. However, there exists a limit to the number of areas of interest that can be displayed, as an excessive amount can quickly produce a lot of visual clutter.
+                    This visualization is quite powerful since it can clearly show people's attention behavior specifically regarding the transition between areas of interest. 
+                    However, there exists a limit to the number of areas of interest that can be displayed, as an excessive amount can quickly produce a lot of visual clutter.
                 </p>
             </div>
         </div>

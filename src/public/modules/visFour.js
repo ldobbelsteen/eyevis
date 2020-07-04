@@ -154,22 +154,20 @@ function overlayData() {
     // compute the density data based on heatmap type
     if ($heatType.val() == "duration") {
         // relative gaze duration heatmap: each point get weight based on fixation duration
-        densityData = d3
-            .contourDensity()
-            .x((d) => x(d.MappedFixationPointX))
-            .y((d) => y(d.MappedFixationPointY))
-            .weight((d) => d.FixationDuration)
-            .size([imageW, imageH])
-            .bandwidth($valueBand.val())(filteredData);
+        densityData = d3.contourDensity()
+                        .x((d) => x(d.MappedFixationPointX))
+                        .y((d) => y(d.MappedFixationPointY))
+                        .weight((d) => d.FixationDuration)
+                        .size([imageW, imageH])
+                        .bandwidth($valueBand.val())(filteredData);
     } else if ($heatType.val() == "count") {
         // fixation count heatmap: each point gets same weight (500)
-        densityData = d3
-            .contourDensity()
-            .x((d) => x(d.MappedFixationPointX))
-            .y((d) => y(d.MappedFixationPointY))
-            .weight(() => 500)
-            .size([imageW, imageH])
-            .bandwidth($valueBand.val())(filteredData);
+        densityData = d3.contourDensity()
+                        .x((d) => x(d.MappedFixationPointX))
+                        .y((d) => y(d.MappedFixationPointY))
+                        .weight(() => 500)
+                        .size([imageW, imageH])
+                        .bandwidth($valueBand.val())(filteredData);
     }
 
     // compute array with min and max density in dataset

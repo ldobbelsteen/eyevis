@@ -135,7 +135,7 @@ function drawScanpath() {
     // cleaning of timestamps based on user
     // points are ordered based on user
     // first user has first point with index 1 and timestamp 0, then all their fixation points in order
-    // timestamps are calculated by removing the smallest timestamp
+    // timestamps are calculated by subtract the smallest timestamp
     // user after gets the previous user's last index/timestamp + their timestamps/indices - 
     // - their smallest timestamp/index + 1 
     let cleanData = [];

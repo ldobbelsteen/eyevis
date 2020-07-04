@@ -324,7 +324,7 @@ img.descr {
     background-color: #d9edee;
 }
 
-/* if window width too small all vis are in a columns */
+/* if window width too small all vis are in a column */
 @media (max-width: 1000px) {
     .grid-container, .grid-container2 {
         display: grid;
