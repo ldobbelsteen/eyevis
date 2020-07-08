@@ -1,4 +1,4 @@
-// Milou Henzen (1409107) - ThemeRiver
+// Milou Henzen - ThemeRiver
 // Eric Abraham: wrote the part that calculated the number of fixations within each AOI
 // Chiara Liotta: AOI highlight linking and timestamp cleaning (exact parts mentioned)
 
@@ -251,7 +251,7 @@ export function visualize() {
             return aoi.color
         });
 
-        // ---> Chiara Liotta (1414755): AOI highlight linking
+        // ---> Chiara Liotta : AOI highlight linking
         // function to get only the numbers in the rgb color definition
         function colorcoding(colorcode) {
             if (colorcode != undefined) {
@@ -277,7 +277,7 @@ export function visualize() {
                 let aoi = aois.find(x => x.name === d.key)
                 return aoi.color
             })
-            // ---> Chiara Liotta (1414755): AOI highlight linking
+            // ---> Chiara Liotta : AOI highlight linking
             // give each path a class based on AOI rgb color numbers
             .attr("class", (d) => {
                 let aoi = aois.find(x => x.name === d.key)
@@ -308,7 +308,7 @@ export function visualize() {
                     }
                 });
                 let aoi = aois.find(x => x.name === d.key)
-                // ---> Chiara Liotta (1414755): AOI highlight linking
+                // ---> Chiara Liotta : AOI highlight linking
                 // get this AOI's rgb color number
                 var colornumber = colorcoding(aoi.color)
                 // decrease opacity of all AOI's
@@ -341,7 +341,7 @@ export function visualize() {
             .on("mouseout", () => {
                 info.transition().duration(200).style("opacity", 0);
                 svg.selectAll("path").attr("opacity", 1);
-                // ---> Chiara Liotta (1414755): AOI highlight linking
+                // ---> Chiara Liotta : AOI highlight linking
                 // opacity and stroke back to normal
                 d3.selectAll(".aoi").attr("stroke", "null");
                 d3.selectAll(".scarf").attr("opacity", 1)

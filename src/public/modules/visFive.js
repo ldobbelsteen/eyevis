@@ -1,4 +1,4 @@
-// Lukas Dobbelsteen (1406264) - Scarf plot
+// Lukas Dobbelsteen - Scarf plot
 // Chiara Liotta: AOI highlight linking (exact parts mentioned)
 
 // Filter data given a filter
@@ -163,7 +163,7 @@ export function visualize() {
         // Pop-up box
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
-        // ---> Chiara Liotta (1414755): AOI highlight linking
+        // ---> Chiara Liotta : AOI highlight linking
         // function to get only the numbers in the rgb color definition
         function colorcoding(colorcode) {
             if (colorcode != undefined) {
@@ -196,7 +196,7 @@ export function visualize() {
                     return xScale(gaze.duration);
                 })
                 .attr("height", timelineHeight)
-                // ---> Chiara Liotta (1414755): AOI highlight linking
+                // ---> Chiara Liotta : AOI highlight linking
                 // give each rect a class based on numbers in rgb color
                 .attr("class", gaze => {
                     return "scarf rgb" + colorcoding(gaze.color);
@@ -212,7 +212,7 @@ export function visualize() {
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
-                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // ---> Chiara Liotta : AOI highlight linking
                     if (gaze.color != undefined) {
                         // get numbers in rgb color
                         var colornumber = colorcoding(gaze.color)
@@ -236,7 +236,7 @@ export function visualize() {
                 })
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
-                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // ---> Chiara Liotta : AOI highlight linking
                     // opacity and stroke back to normal
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)

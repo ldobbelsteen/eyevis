@@ -1,4 +1,4 @@
-// Lukas Dobbelsteen (1406264)
+// Lukas Dobbelsteen
 
 const data = require("./data");
 const upload = require("express-fileupload");

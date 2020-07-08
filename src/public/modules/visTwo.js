@@ -1,4 +1,4 @@
-// Tristan Tummers 1330713 - Sankey diagram
+// Tristan Tummers- Sankey diagram
 var filteredData;
 
 // Select visualization container
@@ -38,7 +38,7 @@ function compare(a, b) {
     return a.Timestamp - b.Timestamp;
 }
 
-// ---> Chiara Liotta (1414755): AOI highlight linking
+// ---> Chiara Liotta : AOI highlight linking
 // function to get only the numbers in the rgb color definition
 function colorcoding(colorcode) {
     if (colorcode != undefined) {
@@ -310,7 +310,7 @@ export function visualize() {
                 })
                 .on("mouseover", (d) => {
                     info.transition().duration(200).style("opacity", 0);
-                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // ---> Chiara Liotta : AOI highlight linking
                     if (d.color != undefined) {
                         // get numbers in rgb color
                         var colornumber = colorcoding(d.color)
@@ -329,7 +329,7 @@ export function visualize() {
                     // --- end of Chiara's part
                 })
                 .on("mouseout", (d) => {
-                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // ---> Chiara Liotta : AOI highlight linking
                     // opacity and stroke back to normal
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)

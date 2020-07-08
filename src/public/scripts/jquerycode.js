@@ -1,4 +1,4 @@
-// Chiara Liotta 1414755 GUI code and vis4
+// Chiara Liotta GUI code and vis4
 
 import * as visFour from "/modules/visFour.js";
 

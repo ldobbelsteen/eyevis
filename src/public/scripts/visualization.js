@@ -129,7 +129,7 @@ function redraw(change) {
     }
 }
 
-// ---> Chiara Liotta (1414755)
+// ---> Chiara Liotta 
 
 // show the loading overlay
 function showLoading() {
@@ -196,7 +196,7 @@ function zoomBehavior() {
 }
 // --- end of Chiara's part
 
-// ---> Juul Peters (1433741)
+// ---> Juul Peters
 //All export functions corresponding to the save buttons
 $("#exportScanpath").on("click", function () {
     saveSvgAsPng(document.getElementsByTagName("svg")[2], "scanpath.png", { encoderOptions: 1, backgroundColor: "#d9edee", scale: 2 });

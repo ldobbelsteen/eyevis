@@ -1,4 +1,4 @@
-//Chiara Liotta 1414755 - heatmap
+//Chiara Liotta  - heatmap
 
 // filtered data based on stimulus and user(s) chosen, density data computed by contour-2d-d3
 var filteredData, densityData;

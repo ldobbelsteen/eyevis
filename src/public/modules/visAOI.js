@@ -1,4 +1,4 @@
-// Lukas Dobbelsteen (1406264) - AOI Color Grid
+// Lukas Dobbelsteen - AOI Color Grid
 // Chiara Liotta: AOI highlight linking (exact parts mentioned)
 
 function filterData(data, filter) {
@@ -110,7 +110,7 @@ export function visualize() {
         let aoiScaleX = viewBox[2] / stimulusWidth;
         let aoiScaleY = viewBox[3] / stimulusHeight;
         AOIs.forEach(aoi => {
-            // ---> Chiara Liotta (1414755): AOI highlight linking
+            // ---> Chiara Liotta: AOI highlight linking
             // function to get only the numbers in the rgb color definition
             var colorcode = aoi.color
                     var numbers = ["0","1","2","3","4","5","6","7","8","9"]
@@ -127,7 +127,7 @@ export function visualize() {
                 .attr("width", (aoi.x2 - aoi.x1) * aoiScaleX)
                 .attr("height", (aoi.y2 - aoi.y1) * aoiScaleY)
                 .attr("fill", aoi.color)
-                // Chiara Liotta (1414755) --- AOI highlight linking
+                // Chiara Liotta --- AOI highlight linking
                 // give each cell class based on rgb color numbers
                 .attr("class", () => {
                     return "aoi aoirgb" + colornumber;
@@ -141,7 +141,7 @@ export function visualize() {
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
-                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // ---> Chiara Liotta: AOI highlight linking
                     // opacity of all AOI's decreased
                     d3.selectAll(".scarf").attr("opacity", 0.2)
                     d3.selectAll(".river").attr("opacity", 0.2)
@@ -160,7 +160,7 @@ export function visualize() {
                 })
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
-                    // ---> Chiara Liotta (1414755): AOI highlight linking
+                    // ---> Chiara Liotta: AOI highlight linking
                     // opacity and stroke back to normal
                     d3.selectAll(".aoirgb" + colornumber).attr("stroke", "null")
                     d3.selectAll(".scarf").attr("opacity", 1)
