@@ -1,5 +1,3 @@
-// Lukas Dobbelsteen
-
 const fs = require("fs");
 const path = require("path");
 const admzip = require("adm-zip");

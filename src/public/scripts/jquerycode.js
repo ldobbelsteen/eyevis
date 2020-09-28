@@ -1,7 +1,4 @@
-// Chiara Liotta GUI code and vis4
-
 import * as visFour from "/modules/visFour.js";
-
 
 $(document).ready(function(){
 
@@ -157,6 +154,4 @@ $(document).ready(function(){
         }
     
     });
-
-    
 })

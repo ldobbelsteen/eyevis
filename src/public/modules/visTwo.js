@@ -1,4 +1,3 @@
-// Tristan Tummers- Sankey diagram
 var filteredData;
 
 // Select visualization container
@@ -38,8 +37,6 @@ function compare(a, b) {
     return a.Timestamp - b.Timestamp;
 }
 
-// ---> Chiara Liotta : AOI highlight linking
-// function to get only the numbers in the rgb color definition
 function colorcoding(colorcode) {
     if (colorcode != undefined) {
         var numbers = ["0","1","2","3","4","5","6","7","8","9"]
@@ -52,7 +49,6 @@ function colorcoding(colorcode) {
         return colornumber;
     }
 }
-// --- end of Chiara's part
 
 export function initialize() {
     updateData();
@@ -68,7 +64,6 @@ export function visualize() {
 
     // Create SVG for stimulus and sankey sankeydiagram
     let sankeyDiagram = container.append("svg");
-    // let stimulus = container.append("svg");
 
     sankeyDiagram.style("margin", "0.5em");
 
@@ -310,7 +305,6 @@ export function visualize() {
                 })
                 .on("mouseover", (d) => {
                     info.transition().duration(200).style("opacity", 0);
-                    // ---> Chiara Liotta : AOI highlight linking
                     if (d.color != undefined) {
                         // get numbers in rgb color
                         var colornumber = colorcoding(d.color)
@@ -326,15 +320,12 @@ export function visualize() {
                         })
                         .attr("stroke-width", "8px")
                     }
-                    // --- end of Chiara's part
                 })
                 .on("mouseout", (d) => {
-                    // ---> Chiara Liotta : AOI highlight linking
                     // opacity and stroke back to normal
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)
                     d3.selectAll(".aoi").attr("stroke", "null")
-                    // ---> end of Chiara's part
                 });
 
         // add in the title for the nodes

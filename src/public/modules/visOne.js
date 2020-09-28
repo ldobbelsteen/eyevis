@@ -1,6 +1,3 @@
-//Eric Abraham scanpath visualization
-// Chiara Liotta: linking with heatmap and index/timestamp cleaning (exact parts mentioned)
-
 var filteredData;
 var container = $("#vis1");
 var colorPickerLine = $("#line");
@@ -131,7 +128,6 @@ function drawScanpath() {
 
     colorGrandient();
 
-    // ---> Chiara Liotta: cleaning of timestamps
     // cleaning of timestamps based on user
     // points are ordered based on user
     // first user has first point with index 1 and timestamp 0, then all their fixation points in order
@@ -157,7 +153,6 @@ function drawScanpath() {
         lastT = d3.max(cleanData, d => { return d.Timestamp })
         lastI = d3.max(cleanData, d => { return d.FixationIndex })
     });
-    // --- end of Chiara's part
 
     // Sorting the timestamps to be linear
     let sortedData = cleanData.sort(compare);
@@ -243,12 +238,10 @@ function drawScanpath() {
         .attr("cx", (row) => xOffset(row.MappedFixationPointX))
         .attr("cy", (row) => yOffset(row.MappedFixationPointY))
         .attr("r", (row) => Math.log2(row.FixationDuration) * 4.5 - 20)
-        // ---> Chiara Liotta : linking with heatmap
         // give point a class based on coordinates
         .attr("class", function (d) {
             return "ptS" + d.MappedFixationPointX + "" + d.MappedFixationPointY;
         })
-        // ---> end of Chiara's part
 
         .style("fill", function (d, i) {
             return "hsl(" + colorHSL[0] + "," + (i / filteredData.length) * 100 + "%," + colorHSL[2] + "%)";
@@ -261,7 +254,6 @@ function drawScanpath() {
                 else return "#fc971c";
             };
 
-            // ---> Chiara Liotta : linking with heatmap
             // highlight point both in scanpath and heatmap
             d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "black");
             d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
@@ -269,7 +261,6 @@ function drawScanpath() {
                 .attr("fill", highlight)
                 .attr("stroke-width", $("#sliderRadius").val() / 2)
                 .attr("r", $("#sliderRadius").val() * 2.5);
-            // --- end of Chiara's part
             info.transition().duration(200).style("opacity", "1");
             info.html(
                 "<strong>x:</strong> " +
@@ -286,7 +277,6 @@ function drawScanpath() {
             );
             info.style("left", d3.event.pageX + 8 + "px");
             info.style("top", d3.event.pageY - 80 + "px");
-            // ---> Chiara Liotta : linking with heatmap
             // linked pop-up in heatmap
             pop.transition().duration(100).style("opacity", "1");
             pop.html(
@@ -308,10 +298,8 @@ function drawScanpath() {
                            .getBoundingClientRect();
             pop.style("left", coords.left + 10 + "px");
             pop.style("top", coords.top + window.scrollY - 80 + "px");
-            // --- end of Chiara's part
         })
         .on("mouseout", function (filteredData) {
-            // ---> Chiara Liotta : linking with heatmap
             // point style back to normal
             d3.selectAll("circle.ptS" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY).attr("stroke", "none");
             d3.selectAll("circle.ptH" + filteredData.MappedFixationPointX + "" + filteredData.MappedFixationPointY)
@@ -321,7 +309,6 @@ function drawScanpath() {
               .attr("stroke-width", $("#sliderRadius").val() / 4);
             // linked pop-up in heatmap disappears
             pop.transition().duration(200).style("opacity", 0);
-            // --- end of Chiara's part
             info.transition().duration(200).style("opacity", 0);
         });
 }

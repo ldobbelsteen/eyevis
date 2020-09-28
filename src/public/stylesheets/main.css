@@ -17,8 +17,6 @@ div.output {
     pointer-events: none;
 }
 
-/* from here on: Chiara Liotta */
-
 /* scroll bar in menu */
 html {
     --scrollbarBG: rgba(238, 238, 238, 0);

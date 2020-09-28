@@ -129,8 +129,6 @@ function redraw(change) {
     }
 }
 
-// ---> Chiara Liotta 
-
 // show the loading overlay
 function showLoading() {
     $("main").LoadingOverlay("show", {
@@ -194,9 +192,7 @@ function zoomBehavior() {
         scanpathZoom[0].transition().duration(400).call(zoom.transform, d3.zoomIdentity);
     });
 }
-// --- end of Chiara's part
 
-// ---> Juul Peters
 //All export functions corresponding to the save buttons
 $("#exportScanpath").on("click", function () {
     saveSvgAsPng(document.getElementsByTagName("svg")[2], "scanpath.png", { encoderOptions: 1, backgroundColor: "#d9edee", scale: 2 });

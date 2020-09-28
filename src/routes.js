@@ -1,5 +1,3 @@
-// Lukas Dobbelsteen
-
 const data = require("./data");
 const upload = require("express-fileupload");
 const routes = require("express").Router();

@@ -1,7 +1,3 @@
-// Milou Henzen - ThemeRiver
-// Eric Abraham: wrote the part that calculated the number of fixations within each AOI
-// Chiara Liotta: AOI highlight linking and timestamp cleaning (exact parts mentioned)
-
 // Compare function to sort chronologically
 function compare(a, b) {
     return a.Timestamp - b.Timestamp;
@@ -115,8 +111,6 @@ export function visualize() {
         // Making array with the data
         let aoiInfo = [];
 
-
-        // ---> Chiara Liotta with inspiration from Lukas Dobbelsteen's code:
         // cleaning of timestamps based on user: for each user, time starts at 0
         let cleanData = [];
 
@@ -132,9 +126,6 @@ export function visualize() {
                 cleanData.push(d)
             });
         });
-        // --- end of Chiara's part
-
-        // ---> Eric Abraham's part
 
         // Sorting the timestamps to be linear
         let sortedData = cleanData.sort(compare);
@@ -170,8 +161,6 @@ export function visualize() {
             });
             aoiInfo.push(timestampInfo);
         }
-        
-        // --- end of Eric's part
 
         // Removing empty last element from array
         if (aoiInfo.length != 2){
@@ -251,7 +240,6 @@ export function visualize() {
             return aoi.color
         });
 
-        // ---> Chiara Liotta : AOI highlight linking
         // function to get only the numbers in the rgb color definition
         function colorcoding(colorcode) {
             if (colorcode != undefined) {
@@ -265,7 +253,6 @@ export function visualize() {
                 return colornumber;
             }
         }
-        // --- end of Chiara's part
     
         var path = svg
             .selectAll("path")
@@ -277,14 +264,12 @@ export function visualize() {
                 let aoi = aois.find(x => x.name === d.key)
                 return aoi.color
             })
-            // ---> Chiara Liotta : AOI highlight linking
             // give each path a class based on AOI rgb color numbers
             .attr("class", (d) => {
                 let aoi = aois.find(x => x.name === d.key)
                 var colornumber = colorcoding(aoi.color)
                 return "river rgb" + colornumber;
             });
-            // --- end of Chiara's part
 
         // Function to get the value corresponding to the aoi at a certain timestamp for the tooltip
         function valueCalc(name, currentTime){
@@ -308,7 +293,6 @@ export function visualize() {
                     }
                 });
                 let aoi = aois.find(x => x.name === d.key)
-                // ---> Chiara Liotta : AOI highlight linking
                 // get this AOI's rgb color number
                 var colornumber = colorcoding(aoi.color)
                 // decrease opacity of all AOI's
@@ -321,7 +305,6 @@ export function visualize() {
                     else return "black"
                 })
                 .attr("stroke-width", "8px")
-                // --- end of Chiara's part
             })
             .on("mousemove", function (d) {
                     var mouseX = d3.mouse(this)[0];
@@ -341,11 +324,9 @@ export function visualize() {
             .on("mouseout", () => {
                 info.transition().duration(200).style("opacity", 0);
                 svg.selectAll("path").attr("opacity", 1);
-                // ---> Chiara Liotta : AOI highlight linking
                 // opacity and stroke back to normal
                 d3.selectAll(".aoi").attr("stroke", "null");
                 d3.selectAll(".scarf").attr("opacity", 1)
-                // --- end of Chiara's part
             });
 
 

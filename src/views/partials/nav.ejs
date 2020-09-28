@@ -1,19 +1,11 @@
-<!-- Chiara Liotta: menu structure and style -->
-<!-- individual elements related to each vis belong to its author -->
-
 <nav class="navbar position-absolute" id="navigation" role="navigation">
-
     <div class="container-fluid">
-
-        <!-- Menu header  -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-clr"
                 data-toggle="collapse" data-target="#navbar-collapse-1" id="menu" height="40px">
                 <span class="glyphicon glyphicon-align-justify"></span> <span class="menuText"> Menu</span>
             </button>
         </div>
-
-        <!-- Menu links  -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1" ss-container>
             <ul class="nav navbar-nav menulinks">
                 <li id="home">
@@ -23,14 +15,12 @@
                     </button>
                 </li>
                 <li>
-                    <!--Dataset-->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-files">
                         <span class="glyphicon glyphicon-chevron-right xsicon js-rotate-if-collapsed"></span> <span
                             class="menuText"> Dataset</span>
                     </button>
-                    <!--Dataset: tools-->
                     <div class="collapse navbar-collapse" id="navbar-collapse-files">
                         <div class="smallMargTop smallMargBottom">
                             <span>Select dataset, stimulus, and user</span><br>
@@ -43,7 +33,6 @@
                     </div>
                 </li>
                 <li id="zoom">
-                    <!-- Reset zoom buttons -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-zoom">
@@ -60,7 +49,6 @@
                     </div>
                 </li>
                 <li id="vis-one">
-                    <!-- Scanpath tools -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-vis1">
@@ -80,7 +68,6 @@
                     </div>
                 </li>
                 <li id="vis-four">
-                    <!-- Heatmap tools -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-brd"
                         data-toggle="collapse" data-target="#navbar-collapse-vis4">
@@ -138,7 +125,6 @@
                     </div>
                 </li>
                 <li id="vis-aoi">
-                    <!-- AOI based visualizations tools -->
                     <button type="button"
                         class="navbar-toggle collapsed navbar-toggler .collapse.navbar-collapse blue-btn"
                         data-toggle="collapse" data-target="#navbar-collapse-aoi">
@@ -186,7 +172,6 @@
                             class="menuText">Export</span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbar-collapse-export">
-                        <!-- Buttons for exporting visualizations + related work. Juul Peters --> 
                         <button type="button" height='20px' id="exportScanpath" class="btn btn-default init50 smallMargTop">
                             <span class="glyphicon glyphicon-save xsicon"></span><span class="menuText"> Scanpath</span>
                         </button>

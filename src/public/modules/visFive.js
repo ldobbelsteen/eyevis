@@ -1,6 +1,3 @@
-// Lukas Dobbelsteen - Scarf plot
-// Chiara Liotta: AOI highlight linking (exact parts mentioned)
-
 // Filter data given a filter
 function filterData(data, filter) {
     return data.filter((item) => {
@@ -163,7 +160,6 @@ export function visualize() {
         // Pop-up box
         let info = d3.select("body").append("div").attr("class", "output").style("opacity", 0);
 
-        // ---> Chiara Liotta : AOI highlight linking
         // function to get only the numbers in the rgb color definition
         function colorcoding(colorcode) {
             if (colorcode != undefined) {
@@ -177,7 +173,6 @@ export function visualize() {
                 return colornumber;
             }
         }
-        // --- end of Chiara's part
 
         // Add gazes to the svg
         timelines.selectAll("rect")
@@ -196,12 +191,10 @@ export function visualize() {
                     return xScale(gaze.duration);
                 })
                 .attr("height", timelineHeight)
-                // ---> Chiara Liotta : AOI highlight linking
                 // give each rect a class based on numbers in rgb color
                 .attr("class", gaze => {
                     return "scarf rgb" + colorcoding(gaze.color);
                 })
-                // --- end of Chiara's part
                 .on("mouseover", gaze => {
                     info.transition().duration(200).style("opacity", 1)
                     info.html(
@@ -212,7 +205,6 @@ export function visualize() {
                     )
                     info.style("left", d3.event.pageX + 8 + "px")
                     info.style("top", d3.event.pageY - 48 + "px")
-                    // ---> Chiara Liotta : AOI highlight linking
                     if (gaze.color != undefined) {
                         // get numbers in rgb color
                         var colornumber = colorcoding(gaze.color)
@@ -228,7 +220,6 @@ export function visualize() {
                         })
                         .attr("stroke-width", "8px")
                     }
-                    // --- end of Chiara's part
                 })
                 .on("mousemove", () => {
                     info.style("left", d3.event.pageX + 8 + "px")
@@ -236,12 +227,10 @@ export function visualize() {
                 })
                 .on("mouseout", () => {
                     info.transition().duration(200).style("opacity", 0)
-                    // ---> Chiara Liotta : AOI highlight linking
                     // opacity and stroke back to normal
                     d3.selectAll(".scarf").attr("opacity",1)
                     d3.selectAll(".river").attr("opacity",1)
                     d3.selectAll(".aoi").attr("stroke", "null")
-                    // ---> end of Chiara's part
                 })
 
         // Add y-axis for users

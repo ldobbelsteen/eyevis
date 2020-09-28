@@ -1,8 +1,8 @@
 FROM node:alpine
-WORKDIR /data
-COPY package.json .
-RUN npm install
+WORKDIR /eyevis
+COPY package*.json .
+RUN npm install --production
 COPY src .
-VOLUME /data/public/datasets /data/public/stimuli
-EXPOSE 8181
-CMD node main.js
+VOLUME /eyevis/public/datasets /eyevis/public/stimuli
+EXPOSE 8080
+CMD ["node", "main.js"]
