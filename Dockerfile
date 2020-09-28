@@ -1,6 +1,6 @@
 FROM node:alpine
 WORKDIR /eyevis
-COPY package*.json .
+COPY package.json package-lock.json ./
 RUN npm install --production
 COPY src .
 VOLUME /eyevis/public/datasets /eyevis/public/stimuli
